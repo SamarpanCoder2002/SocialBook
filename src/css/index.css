@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@300&family=Montserrat&family=Mulish&family=Nunito&family=Open+Sans+Condensed:wght@300&family=Poppins:wght@300&family=Roboto&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    font-family: "Nunito", sans-serif;
+  scroll-behavior: smooth;
+}
+
+@layer components {
+    .menu-item{
+       @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
+    }
+  }
+  

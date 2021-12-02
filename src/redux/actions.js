@@ -1,0 +1,3 @@
+export const START_LOADING = 'START_LOADING';
+export const STOP_LOADING = 'STOP_LOADING';
+export const CHANGE_MODE = 'CHANGE_THEME_MODE';
