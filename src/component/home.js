@@ -59,7 +59,7 @@ const HomePage = () => {
     },
     {
       id: 1,
-      type: PostTypes.Text,
+      type: PostTypes.Video,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
         Lorem Ipsum has been the industry's standard dummy text ever since the
@@ -69,6 +69,7 @@ const HomePage = () => {
         unchanged. It was popularised in the 1960s with the release of Letraset
         sheets containing Lorem Ipsum passages, and more recently with desktop
         publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+        video: "https://www.youtube.com/embed/ZO6RGhYAhuc",
       },
       engagement: {
         likes: 17,
