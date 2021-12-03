@@ -13,4 +13,21 @@ body{
        @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
     }
   }
+
+
+  /* For Mansory Grid */
+.my-masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 10px;
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 30px;
+}
   
