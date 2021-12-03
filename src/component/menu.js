@@ -25,7 +25,7 @@ const MenuHeading = () => {
   return (
     <div className="mr-4 md:mr-8">
       <Link to="/">
-        <span className="text-xl 2xl:text-4xl text-black dark:text-white font-semibold">
+        <span className="text-xl 2xl:text-4xl text-black dark:text-white font-semibold tracking-wider">
           SocialBook
         </span>
       </Link>
