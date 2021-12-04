@@ -1,6 +1,7 @@
 import { Fragment } from "react";
-import parse from "html-react-parser";
 import Masonry from "react-masonry-css";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 
 export const TextPost = ({ postData }) => {
   return (
@@ -75,6 +76,42 @@ export const VideoPost = ({ postData }) => {
           allowfullscreen
         ></iframe>
       </div>
+    </Fragment>
+  );
+};
+
+export const SliderPost = ({ postData }) => {
+  return (
+    <Fragment>
+      <TextPost postData={postData} />
+      <Carousel
+        infiniteLoop={true}
+        dynamicHeight={true}
+        renderThumbs={() => {}}
+      >
+        {postData.content.sliderContent.map((particularSlider, index) => {
+          if (particularSlider.type === "image") {
+            return (
+              <div key={index}>
+                <img
+                  src={particularSlider.data}
+                  alt={particularSlider.alt}
+                  className="mx-auto object-cover mb-2 cursor-pointer"
+                  onClick={() =>
+                    window.open(particularSlider.content, "_blank")
+                  }
+                />
+              </div>
+            );
+          }
+
+          return (
+            <div className="text-justify p-2 bg-blue-600" key={index}>
+              {particularSlider.data}
+            </div>
+          );
+        })}
+      </Carousel>
     </Fragment>
   );
 };

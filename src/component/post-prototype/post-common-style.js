@@ -1,5 +1,5 @@
 import PostTypes from "../../posttypes";
-import {ImagePost, TextPost, VideoPost} from "./post-type";
+import {ImagePost, SliderPost, TextPost, VideoPost} from "./post-type";
 
 const CommonPostStyle = ({ item }) => {
   return (
@@ -84,6 +84,8 @@ const PostMiddleSection = ({ postData }) => {
   }
   else if(postData.type === PostTypes.Video){
     return <VideoPost postData={postData} />;
+  }else if(postData.type === PostTypes.Slide){
+    return <SliderPost postData={postData} />;
   }
 
   return <h1>Not found</h1>;
