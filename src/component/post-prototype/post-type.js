@@ -1,7 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Masonry from "react-masonry-css";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
+import React from "react";
+import { LeafPoll, Result } from "react-leaf-polls";
+import "react-leaf-polls/dist/index.css";
+import { useSelector } from "react-redux";
 
 export const TextPost = ({ postData }) => {
   return (
@@ -112,6 +116,55 @@ export const SliderPost = ({ postData }) => {
           );
         })}
       </Carousel>
+    </Fragment>
+  );
+};
+
+export const PdfPost = ({ postData }) => {
+  return (
+    <Fragment>
+      <TextPost postData={postData} />
+      <iframe
+        src={postData.content.pdfSrc}
+        style={{ width: "100%", height: "500px" }}
+        frameborder="0"
+        title="PDF Reader"
+        allowfullscreen
+      ></iframe>
+    </Fragment>
+  );
+};
+
+export const PollPost = ({ postData }) => {
+  const { darkMode } = useSelector((state) => state);
+
+  const customTheme = {
+    textColor: darkMode ? "#fff" : "#303338",
+    mainColor: "#00B87B",
+    backgroundColor: darkMode ? "#242B2E" : "#e9e9e9",
+    alignment: "center",
+  };
+
+  const vote = (item, results) => {
+    // Here you probably want to manage
+    // and return the modified data to the server.
+  };
+
+  return (
+    <Fragment>
+      <TextPost postData={postData} />
+      <div
+        className="p-3"
+        style={{ background: darkMode ? "#2a353a" : "#e0e0e0" }}
+      >
+        <LeafPoll
+          type="multiple"
+          question={postData.content.pollItems.question}
+          results={postData.content.pollItems.prevResults}
+          theme={customTheme}
+          onVote={vote}
+        />
+      </div>
     </Fragment>
   );
 };
