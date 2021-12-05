@@ -251,7 +251,7 @@ const HomePage = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-auto bg-lightBgColor dark:bg-darkBgColor">
+      <div className="h-auto bg-lightBgColor dark:bg-darkBgColor pt-3">
         <div className="container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1">
           {testing.map((item, index) => {
             return <CommonPostStyle key={index} item={item} />;

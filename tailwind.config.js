@@ -14,10 +14,10 @@ module.exports = {
         darkPostTextStyleColor: "#e4e6eb",
 
         // For Light Mode
-        lightBgColor: "#ffffff",
+        lightBgColor: "#f3f3f3",
         lightPrimaryFgColor: "#2299ff",
         lightSecondaryFgColor: "#595959",
-        lightElevationColor: "#f3f3f3",
+        lightElevationColor: "#ffffff",
         lightSpecificIconsColor: "#606060",
         lightTextFieldInnerColor: "#DCE0DF",
         lightPostTextStyleColor: "#000000",
@@ -34,7 +34,6 @@ module.exports = {
 
         "2xl": "2550px",
       },
-
     },
   },
   variants: {

@@ -12,6 +12,10 @@ body{
     .menu-item{
        @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
     }
+
+    /* .middle-screen-size{
+      @apply container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1
+    } */
   }
 
 
@@ -29,5 +33,13 @@ body{
 
 .my-masonry-grid_column > div {
   margin-bottom: 30px;
+}
+
+.suggested-profiles-container::-webkit-scrollbar{
+  width: 0px;
+}
+
+.discover-connection-card:hover{
+  box-shadow: 0 10px 5px rgba(25,36,40, 0.3);
 }
   

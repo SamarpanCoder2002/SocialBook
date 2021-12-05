@@ -34,7 +34,8 @@ export const ImagePost = ({ postData }) => {
           <img
             src={postData.content.image[0]}
             alt="post"
-            className="max-h-screen mx-auto object-cover w-full"
+            className="max-h-screen mx-auto object-cover w-full cursor-pointer"
+            onClick={() => {window.open(postData.content.image[0], "_blank")}}
           />
         )) || (
           <Masonry
@@ -110,7 +111,7 @@ export const SliderPost = ({ postData }) => {
           }
 
           return (
-            <div className="text-justify p-2 bg-blue-600" key={index}>
+            <div className="text-justify p-2 bg-blue-600 text-white" key={index}>
               {particularSlider.data}
             </div>
           );
@@ -141,7 +142,7 @@ export const PollPost = ({ postData }) => {
   const customTheme = {
     textColor: darkMode ? "#fff" : "#303338",
     mainColor: "#00B87B",
-    backgroundColor: darkMode ? "#242B2E" : "#e9e9e9",
+    backgroundColor: darkMode ? "#2E363E" : "#e9e9e9",
     alignment: "center",
   };
 

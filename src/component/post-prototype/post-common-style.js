@@ -92,7 +92,7 @@ const PostMiddleSection = ({ postData }) => {
     return <PollPost postData={postData} />;
   }
 
-  return <h1>Not found</h1>;
+  return <h1 className="p-2">Not found</h1>;
 };
 
 export default CommonPostStyle;

@@ -37,7 +37,7 @@ const MenuToggleButton = () => {
   const menuToggle = () => {
     const menu = document.getElementById("menu");
 
-    menu.classList.toggle("h-40");
+    menu.classList.toggle("h-64");
   };
 
   return (
@@ -67,27 +67,27 @@ const MenuCollection = () => {
   return (
     <div
       id="menu"
-      className="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible"
+      className="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible "
     >
       <ul className="flex flex-col duration-300 ease-out sm:transition-none mt-5 mx-4 md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
-        <li>
+        <li className={`py-3`}>
           <Link className={menuStatus("/")} to="/">
-            <i class="fas fa-home fa-md"></i> Home
+            <i className="fas fa-home fa-md"></i> Home
           </Link>
         </li>
-        <li>
+        <li className={`py-3`}>
           <Link className={menuStatus("/connection")} to="/connection">
-            <i class="fas fa-user-friends fa-md"></i> Connection
+            <i className="fas fa-user-friends fa-md"></i> Connection
           </Link>
         </li>
-        <li>
+        <li className={`py-3`}>
           <Link className={menuStatus("/post")} to="/post">
-            <i class="far fa-plus-square fa-md"></i> Post
+            <i className="far fa-plus-square fa-md"></i> Post
           </Link>
         </li>
-        <li>
+        <li className={`py-3`}>
           <Link className={menuStatus("/notification")} to="/notification">
-            <i class="far fa-bell fa-md"></i> Notification
+            <i className="far fa-bell fa-md"></i> Notification
           </Link>
         </li>
       </ul>
