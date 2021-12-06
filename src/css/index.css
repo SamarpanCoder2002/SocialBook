@@ -13,6 +13,10 @@ body{
        @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
     }
 
+    .special-text a{
+      @apply text-blue-500 dark:text-blue-400 hover:text-blue-800 transition-all duration-200 font-semibold
+    }
+
     .invitation-tab-bar-item{
       @apply text-green-400 cursor-pointer px-4 py-2 font-semibold
     }
@@ -25,9 +29,13 @@ body{
       @apply transition-all duration-300 tracking-wider px-2 py-1 rounded-3xl w-full
     }
 
-    /* .middle-screen-size{
-      @apply container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1
-    } */
+    .post-options{
+      @apply p-3 text-center cursor-pointer hover:bg-green-400 hover:bg-opacity-30 rounded-full
+    }
+
+    .post-option-tooltip{
+      @apply hidden md:block text-sm 2xl:text-lg pt-1
+    }
   }
 
 

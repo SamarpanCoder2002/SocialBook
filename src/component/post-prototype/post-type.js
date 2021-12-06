@@ -6,11 +6,13 @@ import React from "react";
 import { LeafPoll, Result } from "react-leaf-polls";
 import "react-leaf-polls/dist/index.css";
 import { useSelector } from "react-redux";
+import linkify from "react-tiny-linkify";
 
 export const TextPost = ({ postData }) => {
   return (
-    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 mb-1">
-      {postData.content.text}
+    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 mb-1 special-text">
+      {linkify(postData.content.text)}
+      {/* <ReactLinkify className="text-blue-600"> {postData.content.text} </ReactLinkify> */}
     </div>
   );
 };

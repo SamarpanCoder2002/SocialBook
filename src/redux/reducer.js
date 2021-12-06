@@ -10,7 +10,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, isLoading: false };
 
     case CHANGE_MODE:
-        return { ...state, darkMode: !state.darkMode };
+      return { ...state, darkMode: !state.darkMode };
 
     default:
       return state;
