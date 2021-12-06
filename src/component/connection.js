@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import BaseCommonPart from "./base";
-import SuggestedProfileCollection from "./connection/suggested-connection-list";
+import SuggestedProfileCollection from "./connection/suggestions/suggested-connection-list";
 
 const ConnectionScreen = () => {
   const [selected, setselected] = useState(0);

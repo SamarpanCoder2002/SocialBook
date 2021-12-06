@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import NoProfileImage from "../../image/no_profile_picture.png";
+import NoProfileImage from "../../../image/no_profile_picture.png";
 
 const ProfileCard = ({ user }) => {
   const { darkMode } = useSelector((state) => state);
