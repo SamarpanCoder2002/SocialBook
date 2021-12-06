@@ -13,6 +13,18 @@ body{
        @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
     }
 
+    .invitation-tab-bar-item{
+      @apply text-green-400 cursor-pointer px-4 py-2 font-semibold
+    }
+
+    .invitation-tab-bar-item-underbar{
+      @apply h-1 bg-green-600 rounded-full
+    }
+
+    .connection-screens-common-button-layout{
+      @apply transition-all duration-300 tracking-wider px-2 py-1 rounded-3xl w-full
+    }
+
     /* .middle-screen-size{
       @apply container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1
     } */
@@ -42,4 +54,5 @@ body{
 .discover-connection-card:hover{
   box-shadow: 0 10px 5px rgba(25,36,40, 0.3);
 }
-  
+
+

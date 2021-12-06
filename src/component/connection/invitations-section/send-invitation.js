@@ -1,41 +1,9 @@
-import { Fragment, useState, useEffect } from "react";
+import { useState } from "react";
 import { ConnectionType } from "../../../types/posttypes";
 import ConnectionCollectionItem from "../connection-common-layout";
 
-const ConnectedUsers = () => {
-  const [searchArgument, setsearchArgument] = useState("");
-
-  return (
-    <Fragment>
-      <SearchBar setsearchArgument={setsearchArgument} />
-      <ConnectedUsersList searchArgument={searchArgument} />
-    </Fragment>
-  );
-};
-
-const SearchBar = ({ setsearchArgument }) => {
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    setsearchArgument(e.target.value);
-  };
-
-  return (
-    <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3">
-      <input
-        type="text"
-        placeholder="enter connection name"
-        className="rounded-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-lightBgColor dark:bg-darkBgColor"
-        onChange={(e) => handleChange(e)}
-      />
-    </div>
-  );
-};
-
-const ConnectedUsersList = ({ searchArgument }) => {
-  const [searchResultUsersCollection, setsearchResultUsersCollection] =
-    useState([]);
-
-  const [connectedUsersCollection, setconnectedUsersCollection] = useState([
+const SendInvitation = () => {
+  const [sentConnectionRequestList, setsentConnectionRequestList] = useState([
     {
       profileImage:
         "https://scontent.fccu11-1.fna.fbcdn.net/v/t39.30808-6/259421087_415860160126125_4208309959930398235_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=dLYwzdzsotIAX8qRZvj&_nc_ht=scontent.fccu11-1.fna&oh=96b3aca7d3b0a6a14e1bb72505a9afe4&oe=61B2688C",
@@ -96,47 +64,25 @@ const ConnectedUsersList = ({ searchArgument }) => {
     },
   ]);
 
-  useEffect(() => {
-    setsearchResultUsersCollection([]);
-
-    if (searchArgument) {
-      const sortedList = [];
-
-      connectedUsersCollection.map((user) => {
-        if (user.name.toLowerCase().includes(searchArgument.toLowerCase())) {
-          sortedList.push(user);
-        }
-      });
-
-      setsearchResultUsersCollection(sortedList);
-    } else {
-      setsearchResultUsersCollection(connectedUsersCollection);
-    }
-  }, [searchArgument]);
-
-  
-
   return (
-    <div className="h-screen w-full overflow-y-scroll suggested-profiles-container">
-      {(searchResultUsersCollection &&
-        searchResultUsersCollection.length > 0 &&
-        searchResultUsersCollection.map((user, index) => {
+    <div className="h-screen overflow-y-scroll suggested-profiles-container">
+      {(sentConnectionRequestList &&
+        sentConnectionRequestList.length > 0 &&
+        sentConnectionRequestList.map((user, index) => {
           return (
             <ConnectionCollectionItem
               key={index}
               user={user}
-              
-              connectionType={ConnectionType.AlreadyConnected}
+              connectionType={ConnectionType.RequestSent}
             />
           );
         })) || (
         <h1 className="w-full text-center text-red-600 text-2xl mt-10 tracking-wide">
-          You Have No Connection Yet
+          No Pending Sent Requests
         </h1>
       )}
     </div>
   );
 };
 
-
-export default ConnectedUsers;
+export default SendInvitation;

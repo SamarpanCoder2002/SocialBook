@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import BaseCommonPart from "./base";
 import ConnectedUsers from "./connection/already_connected/connected_users";
+import InvitationTabsCollection from "./connection/invitations-section/tab-collection";
 import SuggestedProfileCollection from "./connection/suggestions/suggested-connection-list";
 
 const ConnectionScreen = () => {
@@ -66,6 +67,8 @@ const SelectedOption = ({ selected }) => {
     return <SuggestedProfileCollection />;
   } else if (selected === 1) {
     return <ConnectedUsers />;
+  }else if (selected === 2){
+    return <InvitationTabsCollection />;
   }
 
   return <h1>Samarpan Dasgupta</h1>;

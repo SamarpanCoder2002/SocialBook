@@ -1,4 +1,5 @@
-import PostTypes from "../../posttypes";
+
+import { PostTypes } from "../../types/posttypes";
 import {ImagePost, PdfPost, PollPost, SliderPost, TextPost, VideoPost} from "./post-type";
 
 const CommonPostStyle = ({ item }) => {

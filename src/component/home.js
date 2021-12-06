@@ -1,4 +1,4 @@
-import PostTypes from "../posttypes";
+import {PostTypes} from "../types/posttypes";
 import BaseCommonPart from "./base";
 import CommonPostStyle from "./post-prototype/post-common-style";
 
