@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { CHANGE_MODE } from "../redux/actions";
 import LoadingBar from "./loading/loadingbar";
 
 const MenuComponent = ({ isLoading }) => {
@@ -34,21 +37,30 @@ const MenuHeading = () => {
 };
 
 const MenuToggleButton = () => {
+  const [isMenuOpen, setisMenuOpen] = useState(false);
   const menuToggle = () => {
     const menu = document.getElementById("menu");
 
     menu.classList.toggle("h-64");
+    setisMenuOpen(!isMenuOpen);
   };
 
   return (
-    <div className="ml-auto md:hidden">
-      <button
-        onClick={() => menuToggle()}
-        className="flex items-center p-2"
-        type="button"
-      >
-        <i className="fas fa-bars fa-md text-black dark:text-white "></i>
-      </button>
+    <div className="ml-auto md:hidden flex">
+      {<ModeToggle />}
+      <div className="">
+        <button
+          onClick={() => menuToggle()}
+          className="flex items-center p-2"
+          type="button"
+        >
+          {isMenuOpen ? (
+            <i className="fas fa-times fa-md 2xl:fa-lg text-black dark:text-white"></i>
+          ) : (
+            <i className="fas fa-bars fa-md 2xl:fa-lg text-black dark:text-white"></i>
+          )}
+        </button>
+      </div>
     </div>
   );
 };
@@ -70,6 +82,7 @@ const MenuCollection = () => {
       className="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible "
     >
       <ul className="flex flex-col duration-300 ease-out sm:transition-none mt-5 mx-4 md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
+        <li className="hidden md:block">{<ModeToggle />}</li>
         <li className={`py-3`}>
           <Link className={menuStatus("/")} to="/">
             <i className="fas fa-home fa-md"></i> Home
@@ -93,6 +106,30 @@ const MenuCollection = () => {
       </ul>
     </div>
   );
+};
+
+const ModeToggle = () => {
+  const { darkMode } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  return (
+    <div
+      className="px-3 py-1 mr-3 bg-lightElevationColor dark:bg-darkElevationColor rounded-full cursor-pointer transition-all duration-500 dark:border-gray-300"
+      onClick={() => makeToggleLightAndDarkMode(dispatch)}
+    >
+      <button className="text-darkElevationColor dark:text-lightElevationColor">
+        {darkMode ? (
+          <i class="far fa-lightbulb fa-md 2xl:fa-lg"></i>
+        ) : (
+          <i class="far fa-moon fa-md 2xl:fa-lg"></i>
+        )}
+      </button>
+    </div>
+  );
+};
+
+const makeToggleLightAndDarkMode = (dispatch) => {
+  dispatch({ type: CHANGE_MODE });
 };
 
 export default MenuComponent;
