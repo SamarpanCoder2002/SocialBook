@@ -10,7 +10,7 @@ import linkify from "react-tiny-linkify";
 
 export const TextPost = ({ postData }) => {
   return (
-    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 mb-1 special-text">
+    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text">
       {linkify(postData.content.text)}
       {/* <ReactLinkify className="text-blue-600"> {postData.content.text} </ReactLinkify> */}
     </div>
@@ -78,8 +78,8 @@ export const VideoPost = ({ postData }) => {
           height="315"
           src={postData.content.video}
           title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
       </div>

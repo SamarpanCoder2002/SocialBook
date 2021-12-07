@@ -1,4 +1,4 @@
-import {PostTypes} from "../types/posttypes";
+import { PostTypes } from "../types/posttypes";
 import BaseCommonPart from "./base";
 import CommonPostStyle from "./post-prototype/post-common-style";
 
@@ -83,7 +83,9 @@ const HomePage = () => {
           },
           {
             type: "text",
-            data: ` Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the
+            data: ` 
+            
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the
             1500s, when an unknown printer took a galley of type and scrambled it to
             make a type specimen book. It has survived not only five centuries, but
             also the leap into electronic typesetting, remaining essentially
@@ -95,7 +97,9 @@ const HomePage = () => {
             also the leap into electronic typesetting, remaining essentially
             unchanged. It was popularised in the 1960s with the release of Letraset
             sheets containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            
+            `,
           },
           {
             type: "image",
@@ -136,10 +140,6 @@ const HomePage = () => {
           "https://images.pexels.com/photos/9902092/pexels-photo-9902092.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
           "https://images.pexels.com/photos/9697495/pexels-photo-9697495.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
           "https://images.pexels.com/photos/8654494/pexels-photo-8654494.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-          "https://images.pexels.com/photos/8741306/pexels-photo-8741306.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-          "https://images.pexels.com/photos/4715325/pexels-photo-4715325.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-          "https://images.pexels.com/photos/9467320/pexels-photo-9467320.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-          "https://images.pexels.com/photos/1641813/pexels-photo-1641813.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
         ],
       },
       engagement: {
