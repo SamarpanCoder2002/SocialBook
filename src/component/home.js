@@ -17,12 +17,12 @@ const HomePage = () => {
         sheets containing Lorem Ipsum passages, and more recently with desktop
         publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
         pollItems: {
+          question: "Do you like this?",
           prevResults: [
             { text: "Yes", votes: 2 },
             { text: "No", votes: 0 },
             { text: "Fucking You", votes: 1 },
           ],
-          question: "Do you like this?",
         },
       },
       engagement: {
