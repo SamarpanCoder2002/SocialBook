@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import BaseCommonPart from "./base";
 import { useSelector } from "react-redux";
+import { Carousel } from "react-responsive-carousel";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);
@@ -13,7 +14,10 @@ const PostScreen = () => {
           <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg">
             <HeadingSection setmediaOptions={setmediaOptions} />
             <MiddleSidePostWritingSection />
-            <LowerExtraMediaSection mediaOptions={mediaOptions} />
+            <LowerExtraMediaSection
+              mediaOptions={mediaOptions}
+              setmediaOptions={setmediaOptions}
+            />
           </div>
 
           <CreatePostButtonComponent />
@@ -69,22 +73,39 @@ const MiddleSidePostWritingSection = () => {
   return (
     <div className="mt-3 h-60 md:h-72">
       <textarea
-        className="w-full bg-lightBgColor dark:bg-darkBgColor focus:outline-none rounded-lg p-3 resize-none min-h-full"
+        className="w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none rounded-lg p-3 resize-none min-h-full"
         placeholder="Write Something Here"
       ></textarea>
     </div>
   );
 };
 
-const LowerExtraMediaSection = ({ mediaOptions }) => {
-  if (mediaOptions === 0) return <PictureSection />;
-  else if (mediaOptions === 1 || mediaOptions === 2)
-    return <YTVideoAndPdfComponent mediaOptions={mediaOptions} />;
+const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
+  return (
+    <div>
+      {mediaOptions >= 0 && (
+        <div className="w-full mt-3">
+          {/* For Cancel Media Section */}
+          <div
+            className="float-right p-3 cursor-pointer"
+            onClick={() => setmediaOptions(-1)}
+          >
+            <i className="fas fa-times fa-md 2xl:fa-lg text-black dark:text-white"></i>
+          </div>
 
-  return <></>;
+          {/* Media Content */}
+          {(mediaOptions === 0 && <PictureSection />) ||
+            ((mediaOptions === 1 || mediaOptions === 2) && (
+              <YTVideoAndPdfComponent mediaOptions={mediaOptions} />
+            )) ||
+            (mediaOptions === 3 && <CreateSlide />)}
+        </div>
+      )}
+    </div>
+  );
 };
 
-const PictureSection = () => {
+const PictureSection = ({ maxFiles }) => {
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
   const { darkMode } = useSelector((state) => state);
@@ -103,19 +124,18 @@ const PictureSection = () => {
   };
 
   return (
-    <div className="mt-10">
+    <div className="">
       <Dropzone
         onChange={updateFiles}
         value={files}
         clickable={"true"}
-        maxFiles={8}
+        maxFiles={maxFiles || 8}
         maxFileSize={1048576}
         onClean={() => setFiles([])}
         accept={"image/jpeg,png"}
         label={"Drop Files here or click to browse"}
-        minHeight={"195px"}
-        maxHeight={"500px"}
         backgroundColor={darkMode ? "#192428" : "#f3f3f3"}
+        className="z-50"
       >
         {files.map((file) => (
           <FileItem
@@ -176,9 +196,9 @@ const YTVideoAndPdfComponent = ({ mediaOptions }) => {
 
   return (
     <div>
-      <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3 mt-5">
+      <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3">
         <input
-          type="text"
+          type="url"
           placeholder={
             mediaOptions === 1 ? "Enter Youtube Video Link" : "Enter Pdf Link"
           }
@@ -254,6 +274,148 @@ const CreatePostButtonComponent = () => {
       >
         Create Post
       </button>
+    </div>
+  );
+};
+
+const CreateSlide = () => {
+  let [postData, setpostData] = useState([]);
+  const [showImgUploadBtn, setshowImgUploadBtn] = useState(false);
+
+  return (
+    <Fragment>
+      <div className="w-full">
+        <div className="w-full  container mx-auto md:px-10 lg:px-60 2xl:px-96">
+          <div className="md:flex md:flex-wrap w-full md:items-center justify-between">
+            {/* To activate image button */}
+            <button
+              className="px-3 py-2 dark:bg-green-600 bg-green-400 text-white rounded-lg shadow-md block mb-5 w-full md:w-auto"
+              onClick={() => {
+                setshowImgUploadBtn(true);
+              }}
+            >
+              Add Image
+            </button>
+
+            {/* For Image Upload Button */}
+            {showImgUploadBtn && (
+              <input
+                type="file"
+                name="pickedImage"
+                accept="image/png, image/jpeg"
+                className="block mb-5 "
+                onChange={(e) => {
+                  if (e.target.files[0].size <= 2097152) {
+                    postData.push({ type: "image", file: e.target.files[0] });
+                    setpostData([...postData]);
+
+                    setshowImgUploadBtn(false);
+
+                    console.log(postData);
+                  } else {
+                    alert(
+                      "Image Size is too large. Please upload image less than 2MB"
+                    );
+                  }
+                }}
+              />
+            )}
+
+            {/* To add text section */}
+            <button
+              className="px-3 py-2 dark:bg-green-600 bg-green-400 text-white rounded-lg shadow-md block w-full md:w-auto"
+              onClick={() => {
+                const temp = [];
+                temp.push({ type: "text" });
+                setpostData([...postData, ...temp]);
+              }}
+            >
+              Add Text
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <SlideDataShowCase postData={postData} setpostData={setpostData} />
+    </Fragment>
+  );
+};
+
+const SlideDataShowCase = ({ postData, setpostData }) => {
+  return (
+    <div className="mt-5 container mx-auto md:px-10 lg:px-80 2xl:px-96">
+      <Carousel dynamicHeight={true} renderThumbs={() => {}}>
+        {postData.map((particularSlider, index) => {
+          if (particularSlider.type === "image") {
+            return (
+              <SliderImageSection
+                key={index}
+                postData={postData}
+                particularSlider={particularSlider}
+                setpostData={setpostData}
+              />
+            );
+          }
+
+          return (
+            <SliderTextSection
+              key={index}
+              postData={postData}
+              particularSlider={particularSlider}
+              setpostData={setpostData}
+              index={index}
+            />
+          );
+        })}
+      </Carousel>
+    </div>
+  );
+};
+
+const SliderImageSection = ({ postData, setpostData, particularSlider }) => {
+  return (
+    <div>
+      <button
+        className="absolute p-3 px-10 top-0 left-0"
+        onClick={() => {
+          setpostData(postData.filter((item) => item !== particularSlider));
+        }}
+      >
+        <i class="far fa-trash-alt fa-lg z-50" style={{ color: "red" }}></i>
+      </button>
+      <img src={URL.createObjectURL(particularSlider.file)} alt="local file" />
+    </div>
+  );
+};
+
+const SliderTextSection = ({
+  postData,
+  setpostData,
+  particularSlider,
+  index,
+}) => {
+  return (
+    <div className="text-justify p-2 text-white h-60 md:h-72">
+      <button
+        className="absolute p-3 px-10 top-0 right-0 "
+        onClick={() => {
+          setpostData(postData.filter((item) => item !== particularSlider));
+        }}
+      >
+        <i class="far fa-trash-alt fa-lg z-50" style={{ color: "red" }}></i>
+      </button>
+      <textarea
+        className="w-full bg-lightBgColor dark:bg-darkBgColor focus:outline-none rounded-lg p-3 resize-none min-h-full text-black dark:text-white"
+        defaultValue={particularSlider.text || ""}
+        placeholder="Write Something Here"
+        onChange={(e) => {
+          /// Add Changed text in postData
+          postData[index].text = e.target.value;
+          setpostData([...postData]);
+
+          console.log(postData);
+        }}
+      />
     </div>
   );
 };

@@ -119,7 +119,7 @@ const ModeToggle = () => {
     >
       <button className="text-darkElevationColor dark:text-lightElevationColor">
         {darkMode ? (
-          <i class="far fa-lightbulb fa-md 2xl:fa-lg"></i>
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/sun--v1.png" alt="light mode indicator" width="25" className="md:pt-1"/>
         ) : (
           <i class="far fa-moon fa-md 2xl:fa-lg"></i>
         )}

@@ -3,6 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-file-upload-button {
+  background: rgb(5, 150, 105);
+  color: #fff;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 0.5rem;
+  border: none;
+}
+
 body{
     font-family: "Nunito", sans-serif;
   scroll-behavior: smooth;
