@@ -70,8 +70,6 @@ const HeadingSection = ({ setmediaOptions }) => {
 };
 
 const MiddleSidePostWritingSection = () => {
- 
-
   return (
     <div
       className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3"
@@ -95,10 +93,15 @@ const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
         <div className="w-full">
           {/* For Cancel Media Section */}
           <div
-            className="float-right p-3 cursor-pointer"
+            className="p-3 w-full flex flex-wrap justify-between items-center"
             onClick={() => setmediaOptions(-1)}
           >
-            <i className="fas fa-times fa-md 2xl:fa-lg text-black dark:text-white"></i>
+            <div className="font-semibold tracking-wider text-green-600 dark:text-green-400">
+              Add External Content
+            </div>
+            <div className="px-3">
+              <i className="fas fa-times fa-md 2xl:fa-lg text-black dark:text-white"></i>
+            </div>
           </div>
 
           {/* Media Content */}
@@ -106,7 +109,8 @@ const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
             ((mediaOptions === 1 || mediaOptions === 2) && (
               <YTVideoAndPdfComponent mediaOptions={mediaOptions} />
             )) ||
-            (mediaOptions === 3 && <CreateSlide />)}
+            (mediaOptions === 3 && <CreateSlide />) ||
+            (mediaOptions === 4 && <CreatePoll />)}
         </div>
       )}
     </div>
@@ -204,7 +208,7 @@ const YTVideoAndPdfComponent = ({ mediaOptions }) => {
 
   return (
     <div>
-      <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3">
+      <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3 w-full">
         <input
           type="url"
           placeholder={
@@ -424,6 +428,69 @@ const SliderTextSection = ({
           console.log(postData);
         }}
       />
+    </div>
+  );
+};
+
+const CreatePoll = () => {
+  const [pollContainer, setpollContainer] = useState({
+    question: "",
+    options: [],
+  });
+
+  return (
+    <div className="w-full container mx-auto md:px-10 lg:px-60 2xl:px-96">
+      <input
+        type="text"
+        placeholder={"Enter Question Here"}
+        className="rounded-3xl flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-lightBgColor dark:bg-darkBgColor w-full"
+        onChange={(e) => {
+          pollContainer.question = e.target.value;
+          setpollContainer({ ...pollContainer });
+        }}
+      />
+
+      <div className="flex flex-wrap mt-3 justify-center">
+        {pollContainer.options.map((option, index) => {
+          return (
+            <div className="w-full md:w-1/2 p-2">
+              <input
+                type="text"
+                placeholder={"Enter Option Here"}
+                className="rounded-3xl flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-lightBgColor dark:bg-darkBgColor w-full"
+                onChange={(e) => {
+                  pollContainer.options[index] = e.target.value;
+                  setpollContainer({ ...pollContainer });
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="w-full p-2 flex flex-wrap justify-between mt-5">
+        <button
+          className="px-3 py-2 dark:bg-green-600 bg-green-400 text-white rounded-lg shadow-md block w-full md:w-auto"
+          onClick={() => {
+            pollContainer.options.push("");
+            setpollContainer({ ...pollContainer });
+          }}
+        >
+          Add Option
+        </button>
+
+        {pollContainer.options.length > 0 && (
+          <button
+            className="px-3 py-2 dark:bg-red-600 bg-red-400 text-white rounded-lg shadow-md block w-full md:w-auto mt-5 md:mt-0"
+            onClick={() => {
+              pollContainer.options.pop();
+              setpollContainer({ ...pollContainer });
+            }}
+          >
+            Delete Last Option
+          </button>
+        )}
+      </div>
     </div>
   );
 };
