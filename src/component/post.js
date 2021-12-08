@@ -70,13 +70,21 @@ const HeadingSection = ({ setmediaOptions }) => {
 };
 
 const MiddleSidePostWritingSection = () => {
+ 
+
   return (
-    <div className="mt-3 h-60 md:h-72">
-      <textarea
-        className="w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none rounded-lg p-3 resize-none min-h-full"
-        placeholder="Write Something Here"
-      ></textarea>
-    </div>
+    <div
+      className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3"
+      contenteditable="true"
+      style={{ minHeight: "200px" }}
+    ></div>
+
+    // <div className="mt-3 h-60 md:h-72">
+    //   <textarea
+    //     className="w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none rounded-lg p-3 resize-none min-h-full"
+    //     placeholder="Write Something Here"
+    //   ></textarea>
+    // </div>
   );
 };
 
@@ -84,7 +92,7 @@ const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
   return (
     <div>
       {mediaOptions >= 0 && (
-        <div className="w-full mt-3">
+        <div className="w-full">
           {/* For Cancel Media Section */}
           <div
             className="float-right p-3 cursor-pointer"
@@ -269,7 +277,7 @@ const CreatePostButtonComponent = () => {
   return (
     <div className="w-full text-center mt-5">
       <button
-        className="bg-green-600 hover:bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
+        className="dark:bg-green-600 bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
         style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.4)" }}
       >
         Create Post
