@@ -6,13 +6,24 @@ import React from "react";
 import { LeafPoll, Result } from "react-leaf-polls";
 import "react-leaf-polls/dist/index.css";
 import { useSelector } from "react-redux";
-import linkify from "react-tiny-linkify";
+import Linkify from "react-linkify";
+import ShowMoreText from "react-show-more-text";
 
 export const TextPost = ({ postData }) => {
   return (
     <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text">
-      {linkify(postData.content.text)}
-      {/* <ReactLinkify className="text-blue-600"> {postData.content.text} </ReactLinkify> */}
+      <Linkify>
+        <ShowMoreText
+          lines={3}
+          more="Show more"
+          less="Show less"
+          className="content-css"
+          anchorClass="my-anchor-css-class"
+          expanded={false}
+        >
+          {postData.content.text}
+        </ShowMoreText>
+      </Linkify>
     </div>
   );
 };
@@ -37,7 +48,9 @@ export const ImagePost = ({ postData }) => {
             src={postData.content.image[0]}
             alt="post"
             className="max-h-screen mx-auto object-cover w-full cursor-pointer"
-            onClick={() => {window.open(postData.content.image[0], "_blank")}}
+            onClick={() => {
+              window.open(postData.content.image[0], "_blank");
+            }}
           />
         )) || (
           <Masonry
@@ -113,7 +126,10 @@ export const SliderPost = ({ postData }) => {
           }
 
           return (
-            <div className="text-justify p-2 bg-blue-600 text-white" key={index}>
+            <div
+              className="text-justify p-2 bg-blue-600 text-white"
+              key={index}
+            >
               {particularSlider.data}
             </div>
           );

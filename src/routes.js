@@ -17,6 +17,7 @@ const RoutesEntryPoint = () => {
         <Route path="/connection" element={AuthenticatedDecider(ConnectionScreen)} />
         <Route path="/post" element={AuthenticatedDecider(PostScreen)} />
         <Route path="/notification" element={AuthenticatedDecider(NotificationScreen)} />
+        {/* <Route path="/post/:postId" element={AuthenticatedDecider(NotificationScreen)} /> */}
       </Routes>
     </Router>
   );
