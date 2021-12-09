@@ -365,6 +365,7 @@ const SlideDataShowCase = ({ postData, setpostData }) => {
                 postData={postData}
                 particularSlider={particularSlider}
                 setpostData={setpostData}
+                index={index}
               />
             );
           }
@@ -384,13 +385,18 @@ const SlideDataShowCase = ({ postData, setpostData }) => {
   );
 };
 
-const SliderImageSection = ({ postData, setpostData, particularSlider }) => {
+const SliderImageSection = ({
+  postData,
+  setpostData,
+  particularSlider,
+  index,
+}) => {
   return (
     <div>
       <button
         className="absolute p-3 px-10 top-0 left-0"
         onClick={() => {
-          setpostData(postData.filter((item) => item !== particularSlider));
+          setpostData(postData.filter((item, i) => i !== index));
         }}
       >
         <i class="far fa-trash-alt fa-lg z-50" style={{ color: "red" }}></i>
@@ -411,7 +417,7 @@ const SliderTextSection = ({
       <button
         className="absolute p-3 px-10 top-0 right-0 "
         onClick={() => {
-          setpostData(postData.filter((item) => item !== particularSlider));
+          setpostData(postData.filter((item, i) => i !== index));
         }}
       >
         <i class="far fa-trash-alt fa-lg z-50" style={{ color: "red" }}></i>
