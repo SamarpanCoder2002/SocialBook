@@ -15,8 +15,8 @@ export const TextPost = ({ postData }) => {
       <Linkify>
         <ShowMoreText
           lines={3}
-          more="Show more"
-          less="Show less"
+          more="show more"
+          less="show less"
           className="content-css"
           anchorClass="my-anchor-css-class"
           expanded={false}

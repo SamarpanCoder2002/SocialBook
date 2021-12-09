@@ -32,7 +32,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 2,
       type: PostTypes.Pdf,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -53,7 +53,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 3,
       type: PostTypes.Slide,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -120,7 +120,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 3,
+      id: 4,
       type: PostTypes.Image,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -149,7 +149,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 5,
       type: PostTypes.Image,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -171,7 +171,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 6,
       type: PostTypes.Video,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -191,7 +191,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 7,
       type: PostTypes.Text,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -210,7 +210,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 8,
       type: PostTypes.Text,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -229,7 +229,7 @@ const HomePage = () => {
       },
     },
     {
-      id: 1,
+      id: 9,
       type: PostTypes.Text,
       content: {
         text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
@@ -254,7 +254,8 @@ const HomePage = () => {
       <div className="h-auto bg-lightBgColor dark:bg-darkBgColor pt-3">
         <div className="container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1">
           {testing.map((item, index) => {
-            return <CommonPostStyle key={index} item={item} />;
+            console.log("item", item);
+            return <CommonPostStyle key={index} item={item} fromHomePage={true} />;
           })}
         </div>
       </div>

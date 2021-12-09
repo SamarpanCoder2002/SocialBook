@@ -1,12 +1,27 @@
 import { PostTypes } from "../../types/posttypes";
-import {ImagePost, PdfPost, PollPost, SliderPost, TextPost, VideoPost} from "./post-type";
+import {
+  ImagePost,
+  PdfPost,
+  PollPost,
+  SliderPost,
+  TextPost,
+  VideoPost,
+} from "./post-type";
+import Linkify from "react-linkify";
+import ShowMoreText from "react-show-more-text";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
-const CommonPostStyle = ({ item }) => {
+const CommonPostStyle = ({ item, fromHomePage }) => {
+  console.log(fromHomePage);
+
   return (
-    <div className="w-full lg:w-4/6 mx-auto bg-lightElevationColor dark:bg-darkElevationColor mb-3 text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl">
+    <div
+      className={`w-full lg:w-4/6 mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3`}
+    >
       <PostUpperSection />
       <PostMiddleSection postData={item} />
-      <PostLowerSection />
+      <PostLowerSection fromHomePage={fromHomePage} postData={item} />
     </div>
   );
 };
@@ -31,13 +46,16 @@ const PostUpperSection = () => {
 
       {/* Post Upper Right Side */}
       <div className="text-lightPrimaryFgColor dark:text-darkPrimaryFgColor ">
-        <button className="font-semibold">+ Follow</button>
+        <button className="font-semibold tracking-wide">Connect</button>
       </div>
     </div>
   );
 };
 
-const PostLowerSection = () => {
+const PostLowerSection = ({ fromHomePage, postData }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <div className="p-2 text-xs">
       {/* Engagement View Section */}
@@ -54,24 +72,35 @@ const PostLowerSection = () => {
         <div>
           <button className="px-2">
             <i class="far fa-heart fa-lg"></i>
+            <span className="pl-2 font-semibold">Love</span>
           </button>
         </div>
         <div>
-          <button className="px-2">
+          <button
+            className="px-2"
+            onClick={() => {
+              if (location.pathname === "/") navigate(`/post/${postData.id}`);
+            }}
+          >
             <i class="far fa-comment fa-lg"></i>
+            <span className="pl-2 font-semibold">Comment</span>
           </button>
         </div>
         <div>
           <button>
             <i class="fas fa-share fa-lg"></i>
+            <span className="pl-2 font-semibold">Share</span>
           </button>
         </div>
         <div>
           <button>
             <i class="far fa-paper-plane fa-lg"></i>
+            <span className="pl-2 font-semibold">Send</span>
           </button>
         </div>
       </div>
+
+      {!fromHomePage && <CommentCollection postData={postData} />}
     </div>
   );
 };
@@ -79,20 +108,88 @@ const PostLowerSection = () => {
 const PostMiddleSection = ({ postData }) => {
   if (postData.type === PostTypes.Text) {
     return <TextPost postData={postData} />;
-  }else if(postData.type === PostTypes.Image){
+  } else if (postData.type === PostTypes.Image) {
     return <ImagePost postData={postData} />;
-  }
-  else if(postData.type === PostTypes.Video){
+  } else if (postData.type === PostTypes.Video) {
     return <VideoPost postData={postData} />;
-  }else if(postData.type === PostTypes.Slide){
+  } else if (postData.type === PostTypes.Slide) {
     return <SliderPost postData={postData} />;
-  }else if(postData.type === PostTypes.Pdf){
+  } else if (postData.type === PostTypes.Pdf) {
     return <PdfPost postData={postData} />;
-  }else if(postData.type === PostTypes.Poll){
+  } else if (postData.type === PostTypes.Poll) {
     return <PollPost postData={postData} />;
   }
 
   return <h1 className="p-2">Not found</h1>;
+};
+
+const CommentCollection = ({ postData }) => {
+  const [comments, setcomments] = useState(postData.comments);
+  const [commentText, setcommentText] = useState("");
+
+  return (
+    <div className="mt-5">
+      <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3">
+        <input
+          type="text"
+          placeholder="comment here"
+          className="rounded-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-lightBgColor dark:bg-darkBgColor text-sm"
+          value={commentText}
+          onChange={(e) => setcommentText(e.target.value)}
+        />
+
+        <button
+          className="px-10 bg-indigo-600 text-sm rounded-3xl"
+          onClick={() => {
+            if (commentText.length > 0) {
+              setcomments([commentText, ...comments]);
+              setcommentText("");
+            }
+          }}
+        >
+          Post
+        </button>
+      </div>
+
+      {comments.map((comment, index) => {
+        return (
+          <div className="flex mb-2">
+            {/* Profile Image */}
+            <div className="mr-5">
+              <img
+                src="https://avatars.githubusercontent.com/u/66327336?v=4"
+                alt="profile"
+                className="w-12 rounded-full"
+              />
+            </div>
+
+            {/* Comment With User Details */}
+            <div className="bg-lightBgColor dark:bg-darkBgColor mb-2 p-2 rounded-lg text-sm w-full">
+              {/* User Details */}
+              <div className="font-semibold">Samarpan Dasgupta</div>
+              <div className="text-xs">Samarpan Dasgupta</div>
+
+              {/* Post Comment  */}
+              <div className="pt-2 special-text">
+                <Linkify>
+                  <ShowMoreText
+                    lines={3}
+                    more="show more"
+                    less="show less"
+                    className="content-css"
+                    anchorClass="my-anchor-css-class"
+                    expanded={false}
+                  >
+                    {comment}
+                  </ShowMoreText>
+                </Linkify>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default CommonPostStyle;
