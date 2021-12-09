@@ -12,3 +12,8 @@ export const ConnectionType = {
     RequestSent: "requestSent",
     RequestReceived: "requestReceived",
 }
+
+export const NotificationType = {
+    unread: "unread",
+    read: "read",
+}

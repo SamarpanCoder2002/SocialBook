@@ -2,11 +2,10 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import ConnectionScreen from "./component/connection";
 import HomePage from "./component/home";
-import NotificationScreen from "./component/notification";
+import NotificationScreen from "./component/notification/main";
 import PostScreen from "./component/post";
 import AuthenticatedDecider from "./decider";
 
