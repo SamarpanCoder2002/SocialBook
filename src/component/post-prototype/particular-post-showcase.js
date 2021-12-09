@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PostTypes } from "../../types/posttypes";
 import BaseCommonPart from "../base";
@@ -11,11 +11,15 @@ const ParticularPostShowcase = () => {
   console.log(postId);
 
   useEffect(() => {
-    setpostData({
-      id: 1,
-      type: PostTypes.Poll,
-      content: {
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+    //// TODO: Replace conditioning with API call here. If no data return, then show error message.
+
+    /// * postId coming as param which is string not number
+    if (postId == 1) {
+      setpostData({
+        id: 1,
+        type: PostTypes.Poll,
+        content: {
+          text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry.
               Lorem Ipsum has been the industry's standard dummy text ever since the
               1500s, when an unknown printer took a galley of type and scrambled it to
               make a type specimen book. It has survived not only five centuries, but
@@ -23,25 +27,26 @@ const ParticularPostShowcase = () => {
               unchanged. My Website: https://samarpandasgupta.com It was popularised in the 1960s with the release of Letraset
               sheets containing Lorem Ipsum passages, and more recently with desktop
               publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-        pollItems: {
-          question: "Do you like this?",
-          prevResults: [
-            { text: "Yes", votes: 2 },
-            { text: "No", votes: 0 },
-            { text: "Fucking You", votes: 1 },
-          ],
+          pollItems: {
+            question: "Do you like this?",
+            prevResults: [
+              { text: "Yes", votes: 2 },
+              { text: "No", votes: 0 },
+              { text: "Fucking You", votes: 1 },
+            ],
+          },
         },
-      },
-      engagement: {
-        likes: 17,
-        shares: 30,
-        comments: 100,
-      },
-      comments: [
-        "Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘",
-        "One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩",
-      ],
-    });
+        engagement: {
+          likes: 17,
+          shares: 30,
+          comments: 100,
+        },
+        comments: [
+          "Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘Love you 💘",
+          "One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩One of the best 🤩",
+        ],
+      });
+    }
   }, [postId]);
 
   return (
@@ -57,11 +62,7 @@ const ParticularPostShowcase = () => {
 
 const GetPostData = ({ postData }) => {
   if (postData.type) {
-    return (
-      <Fragment>
-        <CommonPostStyle item={postData} />
-      </Fragment>
-    );
+    return <CommonPostStyle item={postData} />;
   }
 
   return (
