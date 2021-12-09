@@ -17,11 +17,13 @@ const NotificationContainer = () => {
       id: 1,
       title: "Samarpan Dasgupta react to your post",
       status: NotificationType.unread,
+      link: "",
     },
     {
       id: 2,
       title: "Sukannya Paul comment to your post",
       status: NotificationType.read,
+      link: "",
     },
   ]);
 
