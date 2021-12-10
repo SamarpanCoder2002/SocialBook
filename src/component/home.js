@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { PostTypes } from "../types/posttypes";
 import BaseCommonPart from "./base";
 import CommonPostStyle from "./post-prototype/post-common-style";
@@ -251,15 +252,66 @@ const HomePage = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-auto bg-lightBgColor dark:bg-darkBgColor pt-3">
-        <div className="container mx-auto px-4 sm:px-6 md:px-24 lg:px-52 2xl:px-96 py-1">
-          {testing.map((item, index) => {
-            console.log("item", item);
-            return <CommonPostStyle key={index} item={item} fromHomePage={true} />;
-          })}
+      <div className="h-auto min-h-screen bg-lightBgColor dark:bg-darkBgColor pt-3">
+        <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-0 2xl:px-96 py-1">
+          <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor justify-center">
+            <LeftProfileShortSection />
+            <RightFeedSection testing={testing} />
+          </div>
         </div>
       </div>
     </BaseCommonPart>
+  );
+};
+
+const LeftProfileShortSection = () => {
+  const desc = "Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman, and former professional wrestler. Regarded as one of the greatest professional wrestlers of all time, he wrestled for WWE for eight years prior to pursuing an acting career. ";
+
+  const {darkMode} = useSelector(state => state);
+
+  return (
+    <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
+      <div className="w-full ">
+        <div className="relative w-16 h-16 lg:w-24 lg:h-24 mx-auto">
+          <img
+            className="rounded-full border-2 border-gray-100 shadow-sm"
+            src="https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg"
+            alt="profile pic"
+          />
+        </div>
+      </div>
+
+      <div>
+        <div className="flex flex-col justify-center items-center">
+          <div className="text-center">
+            <h1 className="text-xl font-semibold">Dwayne Johnson</h1>
+            <h2 className="text-sm mt-3">{desc}</h2>
+          </div>
+        </div>
+      </div>
+
+      <div>
+      <button
+        className={`${
+          darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
+        } mt-5 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
+        style={{ borderWidth: "0.2px" }}
+      >
+        Visit Profile
+      </button>
+      </div>
+    </div>
+  );
+};
+
+const RightFeedSection = ({ testing }) => {
+  return (
+    <div className="h-screen overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
+      {testing.map((item, index) => {
+        console.log("item", item);
+        return <CommonPostStyle key={index} item={item} fromHomePage={true} />;
+      })}
+    </div>
   );
 };
 

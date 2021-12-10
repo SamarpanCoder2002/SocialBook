@@ -17,7 +17,7 @@ const CommonPostStyle = ({ item, fromHomePage }) => {
 
   return (
     <div
-      className={`w-full lg:w-4/6 mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3`}
+      className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3`}
     >
       <PostUpperSection />
       <PostMiddleSection postData={item} />
@@ -27,6 +27,8 @@ const CommonPostStyle = ({ item, fromHomePage }) => {
 };
 
 const PostUpperSection = () => {
+  const desc = `Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman. Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman.`;
+
   return (
     <div className="flex items-center justify-between h-auto  text-sm p-2">
       {/* Post Upper Left Side */}
@@ -38,16 +40,29 @@ const PostUpperSection = () => {
         />
 
         <div className="my-auto">
-          <div className="font-semibold">Samarpan Dasgupta</div>
-          <div>Lorem Ipsum is simply dummy text of the printing</div>
-          <div>10h</div>
+          <div className="font-semibold tracking-wide">Samarpan Dasgupta</div>
+          <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
+            <Linkify>
+            <ShowMoreText
+                    lines={2}
+                    more="show more"
+                    less="show less"
+                    className="content-css"
+                    anchorClass="my-anchor-css-class"
+                    expanded={false}
+                  >
+                    {desc}
+                  </ShowMoreText>
+            </Linkify>
+          </div>
+          <div className="mt-1 dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">10h</div>
         </div>
       </div>
 
-      {/* Post Upper Right Side */}
+      {/* Post Upper Right Side
       <div className="text-lightPrimaryFgColor dark:text-darkPrimaryFgColor ">
         <button className="font-semibold tracking-wide">Connect</button>
-      </div>
+      </div> */}
     </div>
   );
 };
