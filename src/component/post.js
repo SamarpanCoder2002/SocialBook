@@ -11,7 +11,7 @@ const PostScreen = () => {
     <BaseCommonPart>
       <div className="h-screen bg-lightBgColor dark:bg-darkBgColor pt-3 overflow-y-scroll suggested-profiles-container pb-10">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
-          <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg">
+          <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg shadow-lg">
             <HeadingSection setmediaOptions={setmediaOptions} />
             <MiddleSidePostWritingSection />
             <LowerExtraMediaSection

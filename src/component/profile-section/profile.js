@@ -11,11 +11,11 @@ const ProfileSection = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-screen bg-lightBgColor dark:bg-darkBgColor  overflow-y-scroll">
+      <div className="h-screen bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-60 2xl:px-96 py-1">
           <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor justify-center  p-3 mt-5 flex flex-col rounded-lg">
             <div className="w-full ">
-              <div className="relative w-16 h-16 lg:w-32 lg:h-32 mx-auto">
+              <div className="relative w-16 h-16 lg:w-32 lg:h-32 mx-auto cursor-pointer">
                 <img
                   className="rounded-full border-2 border-gray-100 shadow-sm"
                   src="https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg"

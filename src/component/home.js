@@ -272,7 +272,7 @@ const LeftProfileShortSection = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
+    <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor shadow-lg">
       <div className="w-full ">
         <div className="relative w-16 h-16 lg:w-24 lg:h-24 mx-auto">
           <img

@@ -32,7 +32,7 @@ const NotificationContainer = () => {
   return (
     <div className="h-screen bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor p-5">
       <div className="container mx-auto sm:px-6 md:px-24 lg:px-52 2xl:px-96">
-        <div className="bg-lightElevationColor dark:bg-darkElevationColor rounded-lg">
+        <div className="bg-lightElevationColor dark:bg-darkElevationColor rounded-lg shadow-md">
           {notificationContainer.map((notification, index) => {
             return (
               <div

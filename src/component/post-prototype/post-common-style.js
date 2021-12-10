@@ -107,12 +107,12 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
             <span className="pl-2 font-semibold">Comment</span>
           </button>
         </div>
-        <div>
+        {/* <div>
           <button>
             <i class="fas fa-share fa-lg"></i>
             <span className="pl-2 font-semibold">Share</span>
           </button>
-        </div>
+        </div> */}
         <div>
           <button>
             <i class="far fa-paper-plane fa-lg"></i>

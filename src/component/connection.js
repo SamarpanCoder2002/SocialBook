@@ -28,7 +28,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
   const { darkMode } = useSelector((state) => state);
 
   return (
-    <div className="h-2/6 w-full lg:w-1/6 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5">
+    <div className="h-2/6 w-full lg:w-1/6 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 shadow-lg">
       <ul className="h-auto">
         {types.map((type, index) => {
           return (
@@ -54,7 +54,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
 
 const RightSideSelector = ({ selected }) => {
   return (
-    <div className="h-screen w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg">
+    <div className="h-screen w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-2xl">
       <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg transition-all duration-300 ease-in-out">
         {<SelectedOption selected={selected} />}
       </div>

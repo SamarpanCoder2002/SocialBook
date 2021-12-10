@@ -41,7 +41,7 @@ const MenuToggleButton = () => {
   const menuToggle = () => {
     const menu = document.getElementById("menu");
 
-    menu.classList.toggle("h-64");
+    menu.classList.toggle("h-72");
     setisMenuOpen(!isMenuOpen);
   };
 
@@ -103,6 +103,11 @@ const MenuCollection = () => {
             <i className="far fa-bell fa-md"></i> Notification
           </Link>
         </li>
+        <li className={`py-3`}>
+          <Link className={menuStatus("/messaging")} to="/messaging">
+            <i class="far fa-comment fa-md"></i> Chat
+          </Link>
+        </li>
       </ul>
     </div>
   );
@@ -119,7 +124,12 @@ const ModeToggle = () => {
     >
       <button className="text-darkElevationColor dark:text-lightElevationColor">
         {darkMode ? (
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/sun--v1.png" alt="light mode indicator" width="25" className="md:pt-1"/>
+          <img
+            src="https://img.icons8.com/ios-filled/50/ffffff/sun--v1.png"
+            alt="light mode indicator"
+            width="25"
+            className="md:pt-1"
+          />
         ) : (
           <i class="far fa-moon fa-md 2xl:fa-lg"></i>
         )}

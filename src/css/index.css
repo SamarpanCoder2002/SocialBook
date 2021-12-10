@@ -76,6 +76,22 @@ body{
   width: 0px;
 }
 
+.chat-profile-collection::-webkit-scrollbar {
+  width: 15px;
+}
+
+.chat-profile-collection::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 0px;
+}
+
+.chat-profile-collection::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
 .discover-connection-card:hover{
   box-shadow: 0 10px 5px rgba(25,36,40, 0.3);
 }
