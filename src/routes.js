@@ -8,6 +8,7 @@ import HomePage from "./component/home";
 import NotificationScreen from "./component/notification/main";
 import PostScreen from "./component/post";
 import ParticularPostShowcase from "./component/post-prototype/particular-post-showcase";
+import ProfileSection from "./component/profile-section/profile";
 import AuthenticatedDecider from "./decider";
 
 const RoutesEntryPoint = () => {
@@ -19,6 +20,7 @@ const RoutesEntryPoint = () => {
         <Route path="/post" element={AuthenticatedDecider(PostScreen)} />
         <Route path="/notification" element={AuthenticatedDecider(NotificationScreen)} />
         <Route path="/post/:postId" element={AuthenticatedDecider(ParticularPostShowcase)} />
+        <Route path="/:connectionId/profile" element={AuthenticatedDecider(ProfileSection)} />
       </Routes>
     </Router>
   );

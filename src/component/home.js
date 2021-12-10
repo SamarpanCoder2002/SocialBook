@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../types/posttypes";
 import BaseCommonPart from "./base";
 import CommonPostStyle from "./post-prototype/post-common-style";
@@ -268,6 +269,7 @@ const LeftProfileShortSection = () => {
   const desc = "Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman, and former professional wrestler. Regarded as one of the greatest professional wrestlers of all time, he wrestled for WWE for eight years prior to pursuing an acting career. ";
 
   const {darkMode} = useSelector(state => state);
+  const navigate = useNavigate();
 
   return (
     <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
@@ -296,6 +298,9 @@ const LeftProfileShortSection = () => {
           darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
         } mt-5 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
         style={{ borderWidth: "0.2px" }}
+        onClick={() => {
+          navigate("/2458dj48/profile");
+        }}
       >
         Visit Profile
       </button>
@@ -309,7 +314,7 @@ const RightFeedSection = ({ testing }) => {
     <div className="h-screen overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
       {testing.map((item, index) => {
         console.log("item", item);
-        return <CommonPostStyle key={index} item={item} fromHomePage={true} />;
+        return <CommonPostStyle key={index} item={item} allowCommentSection={false} />;
       })}
     </div>
   );

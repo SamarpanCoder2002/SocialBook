@@ -62,7 +62,7 @@ const ParticularPostShowcase = () => {
 
 const GetPostData = ({ postData }) => {
   if (postData.type) {
-    return <CommonPostStyle item={postData} />;
+    return <CommonPostStyle item={postData} allowCommentSection={true} />;
   }
 
   return (

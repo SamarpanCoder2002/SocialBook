@@ -12,8 +12,8 @@ import ShowMoreText from "react-show-more-text";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
-const CommonPostStyle = ({ item, fromHomePage }) => {
-  console.log(fromHomePage);
+const CommonPostStyle = ({ item, allowCommentSection }) => {
+  console.log(allowCommentSection);
 
   return (
     <div
@@ -21,7 +21,7 @@ const CommonPostStyle = ({ item, fromHomePage }) => {
     >
       <PostUpperSection />
       <PostMiddleSection postData={item} />
-      <PostLowerSection fromHomePage={fromHomePage} postData={item} />
+      <PostLowerSection allowCommentSection={allowCommentSection} postData={item} />
     </div>
   );
 };
@@ -43,19 +43,21 @@ const PostUpperSection = () => {
           <div className="font-semibold tracking-wide">Samarpan Dasgupta</div>
           <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
             <Linkify>
-            <ShowMoreText
-                    lines={2}
-                    more="show more"
-                    less="show less"
-                    className="content-css"
-                    anchorClass="my-anchor-css-class"
-                    expanded={false}
-                  >
-                    {desc}
-                  </ShowMoreText>
+              <ShowMoreText
+                lines={2}
+                more="show more"
+                less="show less"
+                className="content-css"
+                anchorClass="my-anchor-css-class"
+                expanded={false}
+              >
+                {desc}
+              </ShowMoreText>
             </Linkify>
           </div>
-          <div className="mt-1 dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">10h</div>
+          <div className="mt-1 dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
+            10h
+          </div>
         </div>
       </div>
 
@@ -67,7 +69,7 @@ const PostUpperSection = () => {
   );
 };
 
-const PostLowerSection = ({ fromHomePage, postData }) => {
+const PostLowerSection = ({ allowCommentSection, postData }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -94,7 +96,11 @@ const PostLowerSection = ({ fromHomePage, postData }) => {
           <button
             className="px-2"
             onClick={() => {
-              if (location.pathname === "/") navigate(`/post/${postData.id}`);
+              if (
+                location.pathname === "/" ||
+                location.pathname.endsWith("/profile")
+              )
+                navigate(`/post/${postData.id}`);
             }}
           >
             <i class="far fa-comment fa-lg"></i>
@@ -115,7 +121,7 @@ const PostLowerSection = ({ fromHomePage, postData }) => {
         </div>
       </div>
 
-      {!fromHomePage && <CommentCollection postData={postData} />}
+      {allowCommentSection && <CommentCollection postData={postData} />}
     </div>
   );
 };
@@ -166,7 +172,7 @@ const CommentCollection = ({ postData }) => {
         </button>
       </div>
 
-      {comments.map((comment, index) => {
+      {comments && comments.map((comment, index) => {
         return (
           <div className="flex mb-2">
             {/* Profile Image */}
