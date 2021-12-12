@@ -413,7 +413,8 @@ const ImageMessage = ({ messagesEndRef, participantCollection, message }) => {
           <img
             src={message.msg}
             alt="sentimag"
-            className="border-4 rounded-2xl border-slate-300 dark:border-white"
+            className="border-4 rounded-2xl border-slate-300 dark:border-white cursor-pointer"
+            onClick={() => window.open(message.msg)}
           />
         </div>
       </div>
