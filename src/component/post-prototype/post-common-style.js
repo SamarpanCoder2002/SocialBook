@@ -40,11 +40,11 @@ const PostUpperSection = () => {
         />
 
         <div className="my-auto">
-          <div className="font-semibold tracking-wide">Samarpan Dasgupta</div>
+          <div className="font-semibold tracking-wide text-md">Samarpan Dasgupta</div>
           <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
             <Linkify>
               <ShowMoreText
-                lines={2}
+                lines={1}
                 more="show more"
                 less="show less"
                 className="content-css"
