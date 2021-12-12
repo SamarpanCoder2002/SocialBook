@@ -5,6 +5,7 @@ import { CHANGE_MODE } from "../redux/actions";
 import LoadingBar from "./loading/loadingbar";
 
 const MenuComponent = ({ isLoading }) => {
+  const [isMenuOpen, setisMenuOpen] = useState(false);
   return (
     <nav
       id="nav"
@@ -17,8 +18,11 @@ const MenuComponent = ({ isLoading }) => {
         style={{ width: "100%" }}
       >
         <MenuHeading />
-        <MenuToggleButton />
-        <MenuCollection />
+        <MenuToggleButton
+          isMenuOpen={isMenuOpen}
+          setisMenuOpen={setisMenuOpen}
+        />
+        <MenuCollection isMenuOpen={isMenuOpen} />
       </div>
     </nav>
   );
@@ -36,14 +40,8 @@ const MenuHeading = () => {
   );
 };
 
-const MenuToggleButton = () => {
-  const [isMenuOpen, setisMenuOpen] = useState(false);
-  const menuToggle = () => {
-    const menu = document.getElementById("menu");
-
-    menu.classList.toggle("h-72");
-    setisMenuOpen(!isMenuOpen);
-  };
+const MenuToggleButton = ({ isMenuOpen, setisMenuOpen }) => {
+  const menuToggle = () => setisMenuOpen(!isMenuOpen);
 
   return (
     <div className="ml-auto md:hidden flex">
@@ -65,7 +63,7 @@ const MenuToggleButton = () => {
   );
 };
 
-const MenuCollection = () => {
+const MenuCollection = ({ isMenuOpen }) => {
   const location = useLocation();
 
   const menuStatus = (path) => {
@@ -79,7 +77,8 @@ const MenuCollection = () => {
   return (
     <div
       id="menu"
-      className="w-full h-0 transition-all ease-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible "
+      style={{ height: isMenuOpen ? "18rem" : "0" }}
+      className="w-full transition-all transform ease-in-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible"
     >
       <ul className="flex flex-col duration-300 ease-out sm:transition-none mt-5 mx-4 md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
         <li className="hidden md:block">{<ModeToggle />}</li>
