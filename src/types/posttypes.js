@@ -17,3 +17,8 @@ export const NotificationType = {
     unread: "unread",
     read: "read",
 }
+
+export const ChatMsgTypes = {
+    text: "text",
+    image: "image",
+}

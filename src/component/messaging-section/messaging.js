@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
+import { ChatMsgTypes } from "../../types/posttypes";
 import BaseCommonPart from "../base";
 
 const MessageComponent = () => {
@@ -107,8 +108,8 @@ const MessageComponent = () => {
   return (
     <BaseCommonPart>
       <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor overflow-y-scroll suggested-profiles-container shadow-lg shadow-zinc-900">
-        <div className="px-2 lg:px-60 2xl:px-96 py-1 w-full pb-3">
-          <div className="bg-lightElevationColor dark:bg-darkElevationColor mt-3 rounded-lg flex w-full">
+        <div className="px-2 lg:px-60 2xl:px-96 py-1 w-full pb-2">
+          <div className="bg-lightElevationColor dark:bg-darkElevationColor mt-3 rounded-lg flex w-full shadow-lg ">
             {/* Left Side */}
             <ProfileConnectionCollection
               chatCollections={chatCollections}
@@ -116,7 +117,7 @@ const MessageComponent = () => {
             />
 
             {/* Right Side */}
-            <AllChatMessages />
+            <AllChatMessages darkMode={darkMode} />
           </div>
         </div>
       </div>
@@ -126,7 +127,7 @@ const MessageComponent = () => {
 
 const ProfileConnectionCollection = ({ chatCollections, darkMode }) => {
   return (
-    <div className="h-[92vh] w-full sm:w-1/3 overflow-y-scroll scroller ">
+    <div className="h-[90vh] w-full sm:w-1/3 overflow-y-scroll scroller ">
       {chatCollections.map((chat) => {
         return (
           <div
@@ -156,122 +157,20 @@ const ProfileConnectionCollection = ({ chatCollections, darkMode }) => {
   );
 };
 
-const AllChatMessages = () => {
+const AllChatMessages = ({ darkMode }) => {
   const desc =
     "Explorer | Freelance Full Stack Developer | Content Creator 💻  Building Dots to Connect Later! 💡";
 
   const [messages, setmessages] = useState([
     {
       msgOf: 0,
-      msg: "Hi, How are you?",
+      msg: "Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?",
+      type: ChatMsgTypes.text,
     },
     {
       msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
-    },
-    {
-      msgOf: 0,
-      msg: "Hi, How are you?",
-    },
-    {
-      msgOf: 1,
-      msg: "Hey, I am fine. What about you?",
+      msg: "https://images.pexels.com/photos/3763771/pexels-photo-3763771.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      type: ChatMsgTypes.image,
     },
   ]);
   const [messageWritten, setmessageWritten] = useState("");
@@ -288,7 +187,7 @@ const AllChatMessages = () => {
   }, [messages]);
 
   return (
-    <div className="h-[92vh] hidden sm:block sm:w-2/3">
+    <div className="h-[90vh] hidden sm:block sm:w-2/3">
       <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md">
         <div className="text-base">Samarpan Dasgupta</div>
         <div className="text-xs">{desc}</div>
@@ -302,6 +201,29 @@ const AllChatMessages = () => {
       </div>
 
       <div className="w-full mt-3 px-3 py-auto flex">
+        <button
+          className="bg-[#E6E6E6] dark:bg-darkBgColor rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300 mr-3 shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
+          onClick={() => {
+            if (messageWritten !== "") {
+              setmessages([
+                ...messages,
+                {
+                  msgOf: preference,
+                  msg: messageWritten,
+                  type: ChatMsgTypes.text,
+                },
+              ]);
+              setpreference(preference === 0 ? 1 : 0);
+              setmessageWritten("");
+            }
+          }}
+        >
+          <i
+            class="fas fa-camera"
+            style={{ color: darkMode ? "#fff" : "rgb(55, 65, 81)" }}
+          ></i>
+        </button>
+
         <input
           type="text"
           placeholder="Write a message..."
@@ -313,7 +235,11 @@ const AllChatMessages = () => {
               if (messageWritten !== "") {
                 setmessages([
                   ...messages,
-                  { msgOf: preference, msg: messageWritten },
+                  {
+                    msgOf: preference,
+                    msg: messageWritten,
+                    type: ChatMsgTypes.text,
+                  },
                 ]);
                 setpreference(preference === 0 ? 1 : 0);
                 setmessageWritten("");
@@ -322,12 +248,16 @@ const AllChatMessages = () => {
           }}
         />
         <button
-          className="bg-[#3DBE29] dark:bg-[#14202E] rounded-full w-10 h-10 my-auto shadow-md dark:shadow-darkElevationColor text-white"
+          className="bg-[#3DBE29] dark:bg-gray-800 rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300  shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
           onClick={() => {
             if (messageWritten !== "") {
               setmessages([
                 ...messages,
-                { msgOf: preference, msg: messageWritten },
+                {
+                  msgOf: preference,
+                  msg: messageWritten,
+                  type: ChatMsgTypes.text,
+                },
               ]);
               setpreference(preference === 0 ? 1 : 0);
               setmessageWritten("");
@@ -337,9 +267,70 @@ const AllChatMessages = () => {
           <i class="far fa-paper-plane"></i>
         </button>
       </div>
+
+      {/* <Modal /> */}
     </div>
   );
 };
+
+const Modal = () => {
+  return (
+    <>
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">
+                    Modal Title
+                  </h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    ///onClick={() => setShowModal(false)}
+                  >
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+                    I always felt like I could do anything. That’s the main
+                    thing people are controlled by! Thoughts- their perception
+                    of themselves! They're slowed down by their perception of
+                    themselves. If you're taught you can’t do anything, you
+                    won’t do anything. I was taught I could do everything.
+                  </p>
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    //onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    //onClick={() => setShowModal(false)}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      );
+  
+}
 
 const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
   const participantCollection = {
@@ -359,25 +350,73 @@ const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
     <div>
       {messages.map((message, index) => {
         console.log(participantCollection[message.msgOf].profile);
+        if (message.type === ChatMsgTypes.text)
+          return (
+            <TextMessage
+              messagesEndRef={messagesEndRef}
+              participantCollection={participantCollection}
+              message={message}
+            />
+          );
         return (
-          <div className="flex mb-3" ref={messagesEndRef}>
-            <div className="w-12 h-12 rounded-full overflow-hidden">
-              <img
-                src={participantCollection[message.msgOf].profile}
-                alt="profile"
-                className="w-full h-full"
-              />
-            </div>
-            <div className="ml-3">
-              <div className="font-semibold text-md">
-                {participantCollection[message.msgOf].name}
-              </div>
-              <div className="text-sm">{message.msg}</div>
-            </div>
-          </div>
+          <ImageMessage
+            messagesEndRef={messagesEndRef}
+            participantCollection={participantCollection}
+            message={message}
+          />
         );
       })}
-      {/* <div ref={messagesEndRef} /> */}
+    </div>
+  );
+};
+
+const TextMessage = ({ messagesEndRef, participantCollection, message }) => {
+  return (
+    <div className=" mb-3 flex" ref={messagesEndRef}>
+      <div>
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <img
+            src={participantCollection[message.msgOf].profile}
+            alt="profile"
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+      <div className="ml-3 w-5/6">
+        <div className="font-semibold text-md">
+          {participantCollection[message.msgOf].name}
+        </div>
+        <div className="text-sm">{message.msg}</div>
+      </div>
+    </div>
+  );
+};
+
+const ImageMessage = ({ messagesEndRef, participantCollection, message }) => {
+  return (
+    <div className="flex mb-3" ref={messagesEndRef}>
+      <div>
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <img
+            src={participantCollection[message.msgOf].profile}
+            alt="profile"
+            className="w-12 h-12"
+          />
+        </div>
+      </div>
+      <div className="ml-3">
+        <div className="font-semibold text-md">
+          {participantCollection[message.msgOf].name}
+        </div>
+
+        <div className="w-10/12 md:w-1/2 mt-1">
+          <img
+            src={message.msg}
+            alt="sentimag"
+            className="border-4 rounded-2xl border-slate-300 dark:border-white"
+          />
+        </div>
+      </div>
     </div>
   );
 };
