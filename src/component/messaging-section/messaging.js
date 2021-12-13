@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { ChatMsgTypes } from "../../types/posttypes";
 import BaseCommonPart from "../base";
-import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import Linkify from "react-linkify/dist/components/Linkify";
 
 const MessageComponent = () => {
@@ -194,11 +193,13 @@ const AllChatMessages = ({ darkMode }) => {
 
   return (
     <div className="h-[90vh] hidden sm:block sm:w-2/3">
+      {/* Upper Section Heading */}
       <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md">
         <div className="text-base">Samarpan Dasgupta</div>
         <div className="text-xs">{desc}</div>
       </div>
 
+      {/* Chat Messages Collection */}
       <div className="h-[76%] lg:h-[78%] overflow-y-auto scroller p-3">
         <ChatMessagesCollection
           messages={messages}
@@ -206,6 +207,7 @@ const AllChatMessages = ({ darkMode }) => {
         />
       </div>
 
+      {/* Lower Message Input Section */}
       <div className="w-full mt-3 px-3 py-auto flex">
         <div>
           <input
