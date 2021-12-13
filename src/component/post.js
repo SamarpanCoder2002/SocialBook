@@ -136,7 +136,7 @@ const PictureSection = ({ maxFiles }) => {
   };
 
   return (
-    <div className="">
+    <div>
       <Dropzone
         onChange={updateFiles}
         value={files}

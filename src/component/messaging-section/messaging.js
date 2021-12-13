@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { ChatMsgTypes } from "../../types/posttypes";
 import BaseCommonPart from "../base";
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+import Linkify from "react-linkify/dist/components/Linkify";
 
 const MessageComponent = () => {
   const chatCollections = [
@@ -169,12 +171,14 @@ const AllChatMessages = ({ darkMode }) => {
     },
     {
       msgOf: 1,
-      msg: "https://images.pexels.com/photos/3763771/pexels-photo-3763771.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      msg: "https://images.pexels.com/photos/1464565/pexels-photo-1464565.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       type: ChatMsgTypes.image,
     },
   ]);
   const [messageWritten, setmessageWritten] = useState("");
   const [preference, setpreference] = useState(0);
+  const [showModal, setshowModal] = useState(false);
+  const [selectedImage, setselectedImage] = useState("");
 
   const messagesEndRef = useRef(null);
 
@@ -185,6 +189,8 @@ const AllChatMessages = ({ darkMode }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const inputFile = useRef(null);
 
   return (
     <div className="h-[90vh] hidden sm:block sm:w-2/3">
@@ -201,28 +207,28 @@ const AllChatMessages = ({ darkMode }) => {
       </div>
 
       <div className="w-full mt-3 px-3 py-auto flex">
-        <button
-          className="bg-[#E6E6E6] dark:bg-darkBgColor rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300 mr-3 shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
-          onClick={() => {
-            if (messageWritten !== "") {
-              setmessages([
-                ...messages,
-                {
-                  msgOf: preference,
-                  msg: messageWritten,
-                  type: ChatMsgTypes.text,
-                },
-              ]);
-              setpreference(preference === 0 ? 1 : 0);
-              setmessageWritten("");
-            }
-          }}
-        >
-          <i
-            class="fas fa-camera"
-            style={{ color: darkMode ? "#fff" : "rgb(55, 65, 81)" }}
-          ></i>
-        </button>
+        <div>
+          <input
+            type="file"
+            id="file"
+            accept="image/*"
+            ref={inputFile}
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setselectedImage(URL.createObjectURL(e.target.files[0]));
+              setshowModal(true);
+            }}
+          />
+
+          <button
+            className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 mr-3 text-zinc-600 dark:text-white shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
+            onClick={() => {
+              inputFile.current.click();
+            }}
+          >
+            <i class="fas fa-camera"></i>
+          </button>
+        </div>
 
         <input
           type="text"
@@ -268,69 +274,17 @@ const AllChatMessages = ({ darkMode }) => {
         </button>
       </div>
 
-      {/* <Modal /> */}
+      {showModal && (
+        <Modal
+          selectedImage={selectedImage}
+          setshowModal={setshowModal}
+          setmessages={setmessages}
+          messages={messages}
+        />
+      )}
     </div>
   );
 };
-
-const Modal = () => {
-  return (
-    <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Modal Title
-                  </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    ///onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                    I always felt like I could do anything. That’s the main
-                    thing people are controlled by! Thoughts- their perception
-                    of themselves! They're slowed down by their perception of
-                    themselves. If you're taught you can’t do anything, you
-                    won’t do anything. I was taught I could do everything.
-                  </p>
-                </div>
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    //onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    //onClick={() => setShowModal(false)}
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      );
-  
-}
 
 const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
   const participantCollection = {
@@ -386,7 +340,9 @@ const TextMessage = ({ messagesEndRef, participantCollection, message }) => {
         <div className="font-semibold text-md">
           {participantCollection[message.msgOf].name}
         </div>
-        <div className="text-sm">{message.msg}</div>
+        <Linkify>
+          <div className="text-sm special-text">{message.msg}</div>
+        </Linkify>
       </div>
     </div>
   );
@@ -419,6 +375,52 @@ const ImageMessage = ({ messagesEndRef, participantCollection, message }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
+  return (
+    <>
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-4 md:m-0">
+        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+          {/*content*/}
+          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-lightBgColor dark:bg-darkBgColor outline-none focus:outline-none">
+            {/*body*/}
+            <div className="relative p-2 flex-auto">
+              <img src={selectedImage} alt="profile" />
+            </div>
+            {/*footer*/}
+            <div className="flex items-center justify-end p-3 rounded-b">
+              <button
+                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => setshowModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button"
+                onClick={() => {
+                  setmessages([
+                    ...messages,
+                    {
+                      msgOf: 0,
+                      msg: selectedImage,
+                      type: ChatMsgTypes.image,
+                    },
+                  ]);
+                  setshowModal(false);
+                }}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+    </>
   );
 };
 
