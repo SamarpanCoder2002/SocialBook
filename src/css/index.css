@@ -56,6 +56,8 @@ body{
   }
 
 
+
+
   /* For Mansory Grid */
 .my-masonry-grid {
   display: -webkit-box;
@@ -94,5 +96,3 @@ body{
 .discover-connection-card:hover{
   box-shadow: 0 10px 5px rgba(25,36,40, 0.3);
 }
-
-
