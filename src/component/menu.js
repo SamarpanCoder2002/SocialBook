@@ -31,7 +31,7 @@ const MenuComponent = ({ isLoading }) => {
 const MenuHeading = () => {
   return (
     <div className="mr-4 md:mr-8">
-      <Link to="/">
+      <Link to="/feed">
         <span className="text-xl 2xl:text-4xl text-black dark:text-white font-semibold tracking-wider">
           SocialBook
         </span>
@@ -83,7 +83,7 @@ const MenuCollection = ({ isMenuOpen }) => {
       <ul className="flex flex-col duration-300 ease-out sm:transition-none mt-5 mx-4 md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
         <li className="hidden md:block">{<ModeToggle />}</li>
         <li className={`py-3`}>
-          <Link className={menuStatus("/feed")} to="/">
+          <Link className={menuStatus("/feed")} to="/feed">
             <i className="fas fa-home fa-md"></i> Home
           </Link>
         </li>

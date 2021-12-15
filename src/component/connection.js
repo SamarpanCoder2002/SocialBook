@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import BaseCommonPart from "./base";
 import ConnectedUsers from "./connection/already_connected/connected_users";
 import InvitationTabsCollection from "./connection/invitations-section/tab-collection";
-import SuggestedProfileCollection from "./connection/suggestions/suggested-connection-list";
+import AllUsersCollection from "./connection/all_users/all-users-collection";
 
 const ConnectionScreen = () => {
   const [selected, setselected] = useState(0);
@@ -23,7 +23,7 @@ const ConnectionScreen = () => {
 };
 
 const LeftSideSelector = ({ selected, setselected }) => {
-  const types = ["Suggestions", "Connections", "Invitations"];
+  const types = ["All Users", "Connections", "Invitations"];
 
   const { darkMode } = useSelector((state) => state);
 
@@ -64,10 +64,10 @@ const RightSideSelector = ({ selected }) => {
 
 const SelectedOption = ({ selected }) => {
   if (selected === 0) {
-    return <SuggestedProfileCollection />;
+    return <AllUsersCollection />;
   } else if (selected === 1) {
     return <ConnectedUsers />;
-  }else if (selected === 2){
+  } else if (selected === 2) {
     return <InvitationTabsCollection />;
   }
 

@@ -28,9 +28,6 @@ const ProfileCard = ({ user }) => {
         </p>
       </div>
 
-      {/* Mutual Connections */}
-      <p className="text-xs mt-3 text-center">{`🔗 ${user.mutual_connections} mutual connections`}</p>
-
       {/* Button to Connect */}
       <button
         className={`${
