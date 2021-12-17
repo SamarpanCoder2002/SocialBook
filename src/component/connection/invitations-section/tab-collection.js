@@ -2,10 +2,10 @@ import { useState } from "react";
 import ReceivedInvitation from "./received-invitation";
 import SendInvitation from "./send-invitation";
 
-const InvitationTabsCollection = () => {
-  /// Make a tabbar for send and receive invitations in tailwind css
+const InvitationTabsCollection = ({invitationSetInitialIndex}) => {
+  // ** Make a tabbar for send and receive invitations in tailwind css
 
-  const [currentTab, setcurrentTab] = useState(0);
+  const [currentTab, setcurrentTab] = useState(invitationSetInitialIndex ?? 0);
 
   return (
     <div>

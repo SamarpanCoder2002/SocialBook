@@ -4,9 +4,12 @@ import BaseCommonPart from "./base";
 import ConnectedUsers from "./connection/already_connected/connected_users";
 import InvitationTabsCollection from "./connection/invitations-section/tab-collection";
 import AllUsersCollection from "./connection/all_users/all-users-collection";
+import { useLocation } from "react-router-dom";
 
 const ConnectionScreen = () => {
-  const [selected, setselected] = useState(0);
+  const { prevDesignSet } = useLocation();
+  const { prevIndex, invitationSetInitialIndex } = prevDesignSet ?? 0;
+  const [selected, setselected] = useState(prevIndex ?? 0);
 
   return (
     <BaseCommonPart>
@@ -14,7 +17,10 @@ const ConnectionScreen = () => {
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
           <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor ">
             <LeftSideSelector selected={selected} setselected={setselected} />
-            <RightSideSelector selected={selected} />
+            <RightSideSelector
+              selected={selected}
+              invitationSetInitialIndex={invitationSetInitialIndex}
+            />
           </div>
         </div>
       </div>
@@ -52,23 +58,32 @@ const LeftSideSelector = ({ selected, setselected }) => {
   );
 };
 
-const RightSideSelector = ({ selected }) => {
+const RightSideSelector = ({ selected, invitationSetInitialIndex }) => {
   return (
     <div className="h-screen w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-2xl">
       <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg transition-all duration-300 ease-in-out">
-        {<SelectedOption selected={selected} />}
+        {
+          <SelectedOption
+            selected={selected}
+            invitationSetInitialIndex={invitationSetInitialIndex}
+          />
+        }
       </div>
     </div>
   );
 };
 
-const SelectedOption = ({ selected }) => {
+const SelectedOption = ({ selected, invitationSetInitialIndex }) => {
   if (selected === 0) {
     return <AllUsersCollection />;
   } else if (selected === 1) {
     return <ConnectedUsers />;
   } else if (selected === 2) {
-    return <InvitationTabsCollection />;
+    return (
+      <InvitationTabsCollection
+        invitationSetInitialIndex={invitationSetInitialIndex}
+      />
+    );
   }
 
   return <h1>Samarpan Dasgupta</h1>;
