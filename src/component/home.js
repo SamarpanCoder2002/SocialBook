@@ -253,7 +253,7 @@ const HomePage = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-auto min-h-screen bg-lightBgColor dark:bg-darkBgColor pt-3">
+      <div className="h-auto min-h-[92vh] bg-lightBgColor dark:bg-darkBgColor pt-1">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-0 2xl:px-96 py-1">
           <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor justify-center">
             <LeftProfileShortSection />
@@ -311,7 +311,7 @@ const LeftProfileShortSection = () => {
 
 const RightFeedSection = ({ testing }) => {
   return (
-    <div className="h-screen overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
+    <div className="h-[90vh] overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
       {testing.map((item, index) => {
         console.log("item", item);
         return <CommonPostStyle key={index} item={item} allowCommentSection={false} />;

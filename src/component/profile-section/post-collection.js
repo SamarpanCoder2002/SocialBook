@@ -1,7 +1,7 @@
 import { PostTypes } from "../../types/posttypes";
 import CommonPostStyle from "../post-prototype/post-common-style";
 
-const ProfileActivityOrPost = () => {
+const ParticularConnectionPostCollection = () => {
   const testing = [
     {
       id: 1,
@@ -266,4 +266,4 @@ const ProfileActivityOrPost = () => {
   );
 };
 
-export default ProfileActivityOrPost;
+export default ParticularConnectionPostCollection;

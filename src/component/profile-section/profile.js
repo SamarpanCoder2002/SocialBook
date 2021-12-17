@@ -1,6 +1,7 @@
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import BaseCommonPart from "../base";
-import ProfileActivityOrPost from "./post-collection";
+import ParticularConnectionPostCollection from "./post-collection";
 
 const ProfileSection = () => {
   const { connectionId } = useParams();
@@ -35,6 +36,8 @@ const ProfileSection = () => {
               </div>
             </div>
 
+            <ProfileRelatedButtons />
+
             <div className="container mx-auto lg:px-20 2xl:px-96 mt-5">
               {/* Tabs Collection */}
               <ul className="flex justify-around mt-3">
@@ -45,12 +48,39 @@ const ProfileSection = () => {
                 </li>
               </ul>
 
-              <ProfileActivityOrPost />
+              <ParticularConnectionPostCollection />
             </div>
           </div>
         </div>
       </div>
     </BaseCommonPart>
+  );
+};
+
+const ProfileRelatedButtons = () => {
+  const { darkMode } = useSelector((state) => state);
+
+  // TODO: Use Suitable Button When Required according to condition
+
+  return (
+    <div className="mt-3 w-full px-32 sm:px-40 md:px-60 lg:px-72 2xl:px-96">
+      <button
+        className={`${
+          darkMode ? "hover:bg-green-400" : "hover:bg-green-400"
+        } mt-3 text-green-600 dark:text-green-400 px-2 py-1 rounded-3xl border-green-400  hover:bg-opacity-30  transition-all duration-300 sm:mr-3 w-full hover:shadow-sm hover:shadow-green-300`}
+        style={{ borderWidth: "0.2px" }}
+      >
+        Connect
+      </button>
+      <button
+        className={`${
+          darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
+        } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor`}
+        style={{ borderWidth: "0.2px" }}
+      >
+        Message
+      </button>
+    </div>
   );
 };
 
