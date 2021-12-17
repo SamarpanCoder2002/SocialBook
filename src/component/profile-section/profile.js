@@ -1,11 +1,10 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import BaseCommonPart from "../base";
 import ProfileActivityOrPost from "./post-collection";
 
 const ProfileSection = () => {
   const { connectionId } = useParams();
-  const [currentTab, setcurrentTab] = useState(0);
+
   const desc =
     "Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman, and former professional wrestler. Regarded as one of the greatest professional wrestlers of all time, he wrestled for WWE for eight years prior to pursuing an acting career. ";
 
@@ -36,42 +35,17 @@ const ProfileSection = () => {
               </div>
             </div>
 
-            <div className="container mx-auto lg:px-20 2xl:px-96">
+            <div className="container mx-auto lg:px-20 2xl:px-96 mt-5">
               {/* Tabs Collection */}
               <ul className="flex justify-around mt-3">
                 <li
-                  className={`${
-                    currentTab === 0
-                      ? "invitation-tab-bar-item"
-                      : "px-4 py-2 cursor-pointer"
-                  }  w-full text-center `}
-                  onClick={() => setcurrentTab(0)}
-                >
-                  Activity
-                  <div
-                    className={`${
-                      currentTab === 0 ? "invitation-tab-bar-item-underbar" : ""
-                    } mt-4`}
-                  ></div>
-                </li>
-                <li
-                  className={`${
-                    currentTab === 1
-                      ? "invitation-tab-bar-item"
-                      : "px-4 py-2 cursor-pointer"
-                  } w-full text-center `}
-                  onClick={() => setcurrentTab(1)}
+                  className={`w-full text-center text-green-400 font-semibold tracking-wider`}
                 >
                   Post
-                  <div
-                    className={`${
-                      currentTab === 1 ? "invitation-tab-bar-item-underbar" : ""
-                    } mt-4`}
-                  ></div>
                 </li>
               </ul>
 
-              <ProfileActivityOrPost index={currentTab} />
+              <ProfileActivityOrPost />
             </div>
           </div>
         </div>

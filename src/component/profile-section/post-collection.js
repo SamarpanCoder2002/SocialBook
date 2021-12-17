@@ -1,7 +1,7 @@
 import { PostTypes } from "../../types/posttypes";
 import CommonPostStyle from "../post-prototype/post-common-style";
 
-const ProfileActivityOrPost = ({ index }) => {
+const ProfileActivityOrPost = () => {
   const testing = [
     {
       id: 1,
@@ -249,13 +249,17 @@ const ProfileActivityOrPost = ({ index }) => {
   ];
 
   return (
-    <div>
+    <div className="mt-3">
       {testing.map((item, index) => {
         console.log("item", item);
         return (
-            <div className="mb-5">
-        <CommonPostStyle key={index} item={item} allowCommentSection={false} />
-        </div>
+          <div className="mb-5">
+            <CommonPostStyle
+              key={index}
+              item={item}
+              allowCommentSection={false}
+            />
+          </div>
         );
       })}
     </div>

@@ -21,7 +21,10 @@ const CommonPostStyle = ({ item, allowCommentSection }) => {
     >
       <PostUpperSection />
       <PostMiddleSection postData={item} />
-      <PostLowerSection allowCommentSection={allowCommentSection} postData={item} />
+      <PostLowerSection
+        allowCommentSection={allowCommentSection}
+        postData={item}
+      />
     </div>
   );
 };
@@ -40,7 +43,9 @@ const PostUpperSection = () => {
         />
 
         <div className="my-auto">
-          <div className="font-semibold tracking-wide text-md">Samarpan Dasgupta</div>
+          <div className="font-semibold tracking-wide text-md">
+            Samarpan Dasgupta
+          </div>
           <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
             <Linkify>
               <ShowMoreText
@@ -97,7 +102,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
             className="px-2"
             onClick={() => {
               if (
-                location.pathname === "/" ||
+                location.pathname === "/feed" ||
                 location.pathname.endsWith("/profile")
               )
                 navigate(`/post/${postData.id}`);
@@ -172,43 +177,44 @@ const CommentCollection = ({ postData }) => {
         </button>
       </div>
 
-      {comments && comments.map((comment, index) => {
-        return (
-          <div className="flex mb-2">
-            {/* Profile Image */}
-            <div className="mr-5">
-              <img
-                src="https://avatars.githubusercontent.com/u/66327336?v=4"
-                alt="profile"
-                className="w-12 rounded-full"
-              />
-            </div>
+      {comments &&
+        comments.map((comment, index) => {
+          return (
+            <div className="flex mb-2">
+              {/* Profile Image */}
+              <div className="mr-5">
+                <img
+                  src="https://avatars.githubusercontent.com/u/66327336?v=4"
+                  alt="profile"
+                  className="w-12 rounded-full"
+                />
+              </div>
 
-            {/* Comment With User Details */}
-            <div className="bg-lightBgColor dark:bg-darkBgColor mb-2 p-2 rounded-lg text-sm w-full">
-              {/* User Details */}
-              <div className="font-semibold">Samarpan Dasgupta</div>
-              <div className="text-xs">Samarpan Dasgupta</div>
+              {/* Comment With User Details */}
+              <div className="bg-lightBgColor dark:bg-darkBgColor mb-2 p-2 rounded-lg text-sm w-full">
+                {/* User Details */}
+                <div className="font-semibold">Samarpan Dasgupta</div>
+                <div className="text-xs">Samarpan Dasgupta</div>
 
-              {/* Post Comment  */}
-              <div className="pt-2 special-text">
-                <Linkify>
-                  <ShowMoreText
-                    lines={3}
-                    more="show more"
-                    less="show less"
-                    className="content-css"
-                    anchorClass="my-anchor-css-class"
-                    expanded={false}
-                  >
-                    {comment}
-                  </ShowMoreText>
-                </Linkify>
+                {/* Post Comment  */}
+                <div className="pt-2 special-text">
+                  <Linkify>
+                    <ShowMoreText
+                      lines={3}
+                      more="show more"
+                      less="show less"
+                      className="content-css"
+                      anchorClass="my-anchor-css-class"
+                      expanded={false}
+                    >
+                      {comment}
+                    </ShowMoreText>
+                  </Linkify>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };
