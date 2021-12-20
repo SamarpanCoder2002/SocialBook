@@ -53,7 +53,7 @@ const PostUpperSection = () => {
                 more="show more"
                 less="show less"
                 className="content-css"
-                anchorClass="my-anchor-css-class"
+                anchorclassName="my-anchor-css-class"
                 expanded={false}
               >
                 {desc}
@@ -83,7 +83,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
       {/* Engagement View Section */}
       <div className="flex justify-between">
         <div>
-          <i class="fas fa-heart" style={{ color: "red" }}></i> 17 Likes
+          <i className="fas fa-heart" style={{ color: "red" }}></i> 17 Likes
         </div>
         <div>30 Shares</div>
         <div>100 Comments</div>
@@ -93,7 +93,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
       <div className="flex justify-between mt-5 px-5">
         <div>
           <button className="px-2">
-            <i class="far fa-heart fa-lg"></i>
+            <i className="far fa-heart fa-lg"></i>
             <span className="pl-2 font-semibold">Love</span>
           </button>
         </div>
@@ -108,19 +108,19 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
                 navigate(`/post/${postData.id}`);
             }}
           >
-            <i class="far fa-comment fa-lg"></i>
+            <i className="far fa-comment fa-lg"></i>
             <span className="pl-2 font-semibold">Comment</span>
           </button>
         </div>
         {/* <div>
           <button>
-            <i class="fas fa-share fa-lg"></i>
+            <i className="fas fa-share fa-lg"></i>
             <span className="pl-2 font-semibold">Share</span>
           </button>
         </div> */}
         <div>
           <button>
-            <i class="far fa-paper-plane fa-lg"></i>
+            <i className="far fa-paper-plane fa-lg"></i>
             <span className="pl-2 font-semibold">Send</span>
           </button>
         </div>
@@ -204,7 +204,7 @@ const CommentCollection = ({ postData }) => {
                       more="show more"
                       less="show less"
                       className="content-css"
-                      anchorClass="my-anchor-css-class"
+                      anchorclassName="my-anchor-css-class"
                       expanded={false}
                     >
                       {comment}

@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+import { API } from "../main-helper/backend";
+import { storeDataInLocalStorage } from "../main-helper/store-data-local-storage";
 
 const LandingPageWithSignInForm = () => {
   return (
     <div className="h-screen dark">
-      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full">
+      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
         <HeaderSection />
         <MiddleSection />
       </div>
@@ -82,14 +85,14 @@ const MiddleRightSection = () => {
                 Password
               </div>
 
-              <div>
+              {/* <div>
                 <button
                   className="text-xs font-display font-semibold text-indigo-400 hover:text-indigo-800
                                         cursor-pointer tracking-wider"
                 >
                   Forgot Password?
                 </button>
-              </div>
+              </div> */}
             </div>
             <input
               className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-darkBgColor"
@@ -112,17 +115,55 @@ const MiddleRightSection = () => {
 
       <div className="text-center mt-3">Or</div>
 
-      <div className="text-center mt-3 py-3 rounded-full border-2 hover:bg-gray-800 transition-all duration-300 cursor-pointer">
-        <img
-          src="https://img.icons8.com/color/50/000000/google-logo.png"
-          alt="google logo"
-          width={25}
-          className="inline pb-1"
-        />
-        <span className="pl-5"> Sign In With Google</span>
-      </div>
+      <GoogleLogInButton />
     </div>
   );
+};
+
+const GoogleLogInButton = () => {
+  return (
+    <GoogleLogin
+      clientId={process.env.REACT_APP_FIREBASE_AUTH_CLIENT_ID}
+      onSuccess={onGoogleLogInSuccess}
+      render={(renderProps) => (
+        <div
+          className="text-center mt-3 py-3 rounded-full border-2 hover:bg-gray-800 transition-all duration-300 cursor-pointer"
+          onClick={renderProps.onClick}
+          disabled={renderProps.disabled}
+        >
+          <img
+            src="https://img.icons8.com/color/50/000000/google-logo.png"
+            alt="google logo"
+            width={25}
+            className="inline pb-1"
+          />
+          <span className="pl-5"> Sign In With Google</span>
+        </div>
+      )}
+    />
+  );
+};
+
+const onGoogleLogInSuccess = (response) => {
+  fetch(`${API}/googleSignIn`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idToken: response.tokenId,
+      accessToken: response.accessToken,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.error) {
+        alert("Google Sign In Error");
+      } else {
+        const { token, user } = data;
+        storeDataInLocalStorage(token, user);
+      }
+    });
 };
 
 export default LandingPageWithSignInForm;

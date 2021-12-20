@@ -104,7 +104,7 @@ const MenuCollection = ({ isMenuOpen }) => {
         </li>
         <li className={`py-3`}>
           <Link className={menuStatus("/messaging")} to="/messaging">
-            <i class="far fa-comment fa-md"></i> Chat
+            <i className="far fa-comment fa-md"></i> Chat
           </Link>
         </li>
       </ul>
@@ -130,7 +130,7 @@ const ModeToggle = () => {
             className="md:pt-1"
           />
         ) : (
-          <i class="far fa-moon fa-md 2xl:fa-lg"></i>
+          <i className="far fa-moon fa-md 2xl:fa-lg"></i>
         )}
       </button>
     </div>

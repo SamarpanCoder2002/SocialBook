@@ -146,9 +146,9 @@ export const PdfPost = ({ postData }) => {
       <iframe
         src={postData.content.pdfSrc}
         style={{ width: "100%", height: "500px" }}
-        frameborder="0"
+        frameBorder="0"
         title="PDF Reader"
-        allowfullscreen
+        allowFullScreen
       ></iframe>
     </Fragment>
   );

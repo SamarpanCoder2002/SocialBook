@@ -60,27 +60,70 @@ const ProfileSection = () => {
 const ProfileRelatedButtons = () => {
   const { darkMode } = useSelector((state) => state);
 
-  // TODO: Use Suitable Button When Required according to condition
+  // ** NOTE: 1) if own user profile, then show edit button
+  // ** NOTE: 2) if the viewer is connected to current user, then show remove and Message button
+  // ** NOTE: 3) if the viewer is not connected to current user, then show connect button
 
   return (
-    <div className="mt-3 w-full px-32 sm:px-40 md:px-60 lg:px-72 2xl:px-96">
-      <button
-        className={`${
-          darkMode ? "hover:bg-green-400" : "hover:bg-green-400"
-        } mt-3 text-green-600 dark:text-green-400 px-2 py-1 rounded-3xl border-green-400  hover:bg-opacity-30  transition-all duration-300 sm:mr-3 w-full hover:shadow-sm hover:shadow-green-300`}
-        style={{ borderWidth: "0.2px" }}
-      >
-        Connect
-      </button>
-      <button
-        className={`${
-          darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-        } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor`}
-        style={{ borderWidth: "0.2px" }}
-      >
-        Message
-      </button>
+    <div className="grid sm:grid-cols-2 mt-3 w-full px-32 sm:px-40 md:px-60 lg:px-72 2xl:px-96">
+      {<ConnectButton darkMode={darkMode} /> || (
+        <MessageButton darkMode={darkMode} />
+      )}
+      {/* <EditButton darkMode={darkMode} /> */}
+      <RemoveConnectionButton darkMode={darkMode} />
     </div>
+  );
+};
+
+const ConnectButton = ({ darkMode }) => {
+  return (
+    <button
+      className={`${
+        darkMode ? "hover:bg-green-400" : "hover:bg-green-400"
+      } mt-3 text-green-600 dark:text-green-400 px-2 py-1 rounded-3xl border-green-400  hover:bg-opacity-30  transition-all duration-300 sm:mr-3 w-full hover:shadow-sm hover:shadow-green-300`}
+      style={{ borderWidth: "0.2px" }}
+    >
+      Connect
+    </button>
+  );
+};
+
+const MessageButton = ({ darkMode }) => {
+  return (
+    <button
+      className={`${
+        darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
+      } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor`}
+      style={{ borderWidth: "0.2px" }}
+    >
+      Message
+    </button>
+  );
+};
+
+const EditButton = ({ darkMode }) => {
+  return (
+    <button
+      className={`${
+        darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
+      } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor`}
+      style={{ borderWidth: "0.2px" }}
+    >
+      Edit
+    </button>
+  );
+};
+
+const RemoveConnectionButton = ({ darkMode }) => {
+  return (
+    <button
+      className={`${
+        darkMode ? "hover:bg-red-800" : "hover:bg-red-400"
+      } mt-3 text-red-600 dark:text-red-400 px-2 py-1 rounded-3xl border-red-400  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-red-300`}
+      style={{ borderWidth: "0.2px" }}
+    >
+      Remove
+    </button>
   );
 };
 
