@@ -162,6 +162,9 @@ const onGoogleLogInSuccess = (response) => {
       } else {
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
+
+        // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
+        window.location.replace("/feed");
       }
     });
 };
