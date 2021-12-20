@@ -53,7 +53,7 @@ const PostUpperSection = () => {
                 more="show more"
                 less="show less"
                 className="content-css"
-                anchorclassName="my-anchor-css-class"
+                anchorClass="my-anchor-css-class"
                 expanded={false}
               >
                 {desc}
