@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
-import { onGoogleLogInSuccess } from "./helper/api_call";
-import { useState } from "react";
-import { DesktopNotification } from "../main-helper/desktop-notification";
+import { onGoogleLogInSuccess, onSignIn } from "./helper/api_call";
+import { Fragment, useState } from "react";
+import {
+  DesktopNotification,
+  infoMessage,
+} from "../main-helper/desktop-notification";
 import LoadingBar from "../loading/loadingbar";
 
-const LandingPageWithSignInForm = () => {
+const LandingPageWithSignInFragment = () => {
   const [isLoading, setisLoading] = useState(false);
 
   return (
@@ -13,7 +16,7 @@ const LandingPageWithSignInForm = () => {
       <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
         <LoadingBar isLoading={isLoading} />
         <HeaderSection />
-        <MiddleSection setisLoading={setisLoading} />
+        <MiddleSection setisLoading={setisLoading} isLoading={isLoading} />
       </div>
     </div>
   );
@@ -42,11 +45,11 @@ const HeaderSection = () => {
   );
 };
 
-const MiddleSection = ({ setisLoading }) => {
+const MiddleSection = ({ setisLoading, isLoading }) => {
   return (
     <div className="container mx-auto px-5 md:px-10 lg:px-20 grid lg:grid-cols-2 h-[80%]">
       <MiddleLeftSection />
-      <MiddleRightSection setisLoading={setisLoading} />
+      <MiddleRightSection setisLoading={setisLoading} isLoading={isLoading} />
     </div>
   );
 };
@@ -65,14 +68,23 @@ const MiddleLeftSection = () => {
   );
 };
 
-const MiddleRightSection = ({ setisLoading }) => {
+const MiddleRightSection = ({ setisLoading, isLoading }) => {
+  const [signInForm, setsignInForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setsignInForm({ ...signInForm, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className="px-12 sm:px-24 md:px-48 lg:px-12 xl:px-24 mt-24 lg:my-auto bg-darkBgColor">
       <h2 className="text-center lg:text-left text-indigo-400 font-display font-semibold text-3xl">
         Login
       </h2>
       <div className="mt-10">
-        <form>
+        <Fragment>
           <div>
             <div className="text-sm font-bold text-gray-300 tracking-wide">
               Email
@@ -82,6 +94,8 @@ const MiddleRightSection = ({ setisLoading }) => {
               type="email"
               placeholder="mike@gmail.com"
               required
+              name="email"
+              onChange={handleChange}
             />
           </div>
           <div className="mt-8">
@@ -104,23 +118,46 @@ const MiddleRightSection = ({ setisLoading }) => {
               type="password"
               placeholder="Enter your password"
               required
+              name="password"
+              onChange={handleChange}
             />
           </div>
-          <div className="mt-10">
-            <button
-              className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+          {!isLoading ? (
+            <div className="mt-10">
+              <button
+                className="bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                 font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                                 shadow-lg"
-            >
-              Log In
-            </button>
-          </div>
-        </form>
+                onClick={() => {
+                  const { email, password } = signInForm;
+
+                  if (email !== "" && password !== "") {
+                    setisLoading(true);
+
+                    console.log(email, password);
+                    onSignIn(email, password, setisLoading);
+                  } else {
+                    infoMessage("Please fill all the fields");
+                  }
+                }}
+              >
+                Log In
+              </button>
+            </div>
+          ) : (
+            <div className="text-center text-xl text-indigo-400 tracking-wider mt-10">
+              Process is going on.... Please Wait
+            </div>
+          )}
+        </Fragment>
       </div>
 
-      <div className="text-center mt-3">Or</div>
-
-      <GoogleLogInButton setisLoading={setisLoading} />
+      {!isLoading && (
+        <>
+          <div className="text-center mt-3">Or</div>
+          <GoogleLogInButton setisLoading={setisLoading} />
+        </>
+      )}
 
       <DesktopNotification />
     </div>
@@ -152,4 +189,4 @@ const GoogleLogInButton = ({ setisLoading }) => {
   );
 };
 
-export default LandingPageWithSignInForm;
+export default LandingPageWithSignInFragment;
