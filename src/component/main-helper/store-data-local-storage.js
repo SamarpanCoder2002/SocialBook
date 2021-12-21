@@ -7,6 +7,7 @@ export const storeDataInLocalStorage = (token, userId) => {
       token,
       darkMode: true,
       user: userId,
+      isLoading: false,
     })
   );
 };

@@ -1,14 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
-import { API } from "../main-helper/backend";
-import { storeDataInLocalStorage } from "../main-helper/store-data-local-storage";
+import { onGoogleLogInSuccess } from "./helper/api_call";
+import { useState } from "react";
+import { DesktopNotification } from "../main-helper/desktop-notification";
+import LoadingBar from "../loading/loadingbar";
 
 const LandingPageWithSignInForm = () => {
+  const [isLoading, setisLoading] = useState(false);
+
   return (
     <div className="h-screen dark">
       <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
+        <LoadingBar isLoading={isLoading} />
         <HeaderSection />
-        <MiddleSection />
+        <MiddleSection setisLoading={setisLoading} />
       </div>
     </div>
   );
@@ -37,11 +42,11 @@ const HeaderSection = () => {
   );
 };
 
-const MiddleSection = () => {
+const MiddleSection = ({ setisLoading }) => {
   return (
     <div className="container mx-auto px-5 md:px-10 lg:px-20 grid lg:grid-cols-2 h-[80%]">
       <MiddleLeftSection />
-      <MiddleRightSection />
+      <MiddleRightSection setisLoading={setisLoading} />
     </div>
   );
 };
@@ -60,7 +65,7 @@ const MiddleLeftSection = () => {
   );
 };
 
-const MiddleRightSection = () => {
+const MiddleRightSection = ({ setisLoading }) => {
   return (
     <div className="px-12 sm:px-24 md:px-48 lg:px-12 xl:px-24 mt-24 lg:my-auto bg-darkBgColor">
       <h2 className="text-center lg:text-left text-indigo-400 font-display font-semibold text-3xl">
@@ -115,16 +120,19 @@ const MiddleRightSection = () => {
 
       <div className="text-center mt-3">Or</div>
 
-      <GoogleLogInButton />
+      <GoogleLogInButton setisLoading={setisLoading} />
+
+      <DesktopNotification />
     </div>
   );
 };
 
-const GoogleLogInButton = () => {
+const GoogleLogInButton = ({ setisLoading }) => {
   return (
     <GoogleLogin
       clientId={process.env.REACT_APP_FIREBASE_AUTH_CLIENT_ID}
-      onSuccess={onGoogleLogInSuccess}
+      onSuccess={(response) => onGoogleLogInSuccess(response, setisLoading)}
+      onFailure={(response) => setisLoading(false)}
       render={(renderProps) => (
         <div
           className="text-center mt-3 py-3 rounded-full border-2 hover:bg-gray-800 transition-all duration-300 cursor-pointer"
@@ -142,31 +150,6 @@ const GoogleLogInButton = () => {
       )}
     />
   );
-};
-
-const onGoogleLogInSuccess = (response) => {
-  fetch(`${API}/googleSignIn`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      idToken: response.tokenId,
-      accessToken: response.accessToken,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        alert("Google Sign In Error");
-      } else {
-        const { token, user } = data;
-        storeDataInLocalStorage(token, user);
-
-        // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
-        window.location.replace("/feed");
-      }
-    });
 };
 
 export default LandingPageWithSignInForm;
