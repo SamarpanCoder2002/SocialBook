@@ -8,7 +8,7 @@ import { storeDataInLocalStorage } from "../../main-helper/store-data-local-stor
 
 export const onGoogleLogInSuccess = (response, setisLoading) => {
   setisLoading(true);
-  infoMessage("Process is going on... Please Wait ", 3000);
+  infoMessage("Process is going on... Please Wait ", 2000);
 
   fetch(`${API}/googleSignIn`, {
     method: "POST",
@@ -25,7 +25,7 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
       if (data.error) {
         errorMessage("Google Sign In Error");
       } else {
-        successMessage("🥳 Sign In Successful");
+        successMessage("🥳 Sign In Successful", 2000);
 
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
@@ -36,6 +36,10 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
         }, 2000);
       }
 
+      setisLoading(false);
+    })
+    .catch((err) => {
+      errorMessage("Server Error... Please Try After some time 😔");
       setisLoading(false);
     });
 };
@@ -89,17 +93,41 @@ export const onSignIn = (email, password, setisLoading) => {
     .then((data) => {
       setisLoading(false);
       if (data.code === 200) {
-        successMessage("Sign In Successful");
+        successMessage("Sign In Successful", 2000);
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
 
-         // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
-         setTimeout(() => {
-            window.location.replace("/feed");
-          }, 2000);
+        // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
+        setTimeout(() => {
+          window.location.replace("/feed");
+        }, 1800);
       } else {
         if (data.code === 422) infoMessage(data.error);
         else errorMessage(data.error);
       }
+    });
+};
+
+export const onSignOut = () => {
+  console.log("here");
+
+  fetch(`${API}/signout`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.code === 200) {
+        successMessage("Sign Out Successful");
+        localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
+        window.location.href = "/landing-with-signin";
+      } else {
+        errorMessage(data.error);
+      }
+    })
+    .catch((err) => {
+      errorMessage("Server Error... Please Try After some time 😔");
     });
 };

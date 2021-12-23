@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { CHANGE_MODE } from "../redux/actions";
+import { onSignOut } from "./auth/helper/api_call";
 import LoadingBar from "./loading/loadingbar";
 
 const MenuComponent = ({ isLoading }) => {
@@ -77,7 +78,7 @@ const MenuCollection = ({ isMenuOpen }) => {
   return (
     <div
       id="menu"
-      style={{ height: isMenuOpen ? "18rem" : "0" }}
+      style={{ height: isMenuOpen ? "22rem" : "0" }}
       className="w-full transition-all transform ease-in-out duration-500 md:transition-none md:w-auto md:flex-grow md:flex md:items-center overflow-hidden md:overflow-visible"
     >
       <ul className="flex flex-col duration-300 ease-out sm:transition-none mt-5 mx-4 md:flex-row md:items-center md:mx-0 md:ml-auto md:mt-0 md:pt-0 md:border-0">
@@ -106,6 +107,12 @@ const MenuCollection = ({ isMenuOpen }) => {
           <Link className={menuStatus("/messaging")} to="/messaging">
             <i className="far fa-comment fa-md"></i> Chat
           </Link>
+        </li>
+        <li
+          className={`py-3 text-red-600 dark:text-red-500 font-semibold text-center md:ml-3 cursor-pointer`}
+          onClick={() => onSignOut()}
+        >
+          <i class="fas fa-power-off"></i> Signout
         </li>
       </ul>
     </div>
