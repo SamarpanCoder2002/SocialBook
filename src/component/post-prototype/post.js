@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
-import BaseCommonPart from "./base";
 import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
+import BaseCommonPart from "../page-builder/base";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);

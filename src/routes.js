@@ -1,14 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ConnectionScreen from "./component/connection";
-import HomePage from "./component/home";
+import ConnectionScreen from "./component/connection/connection";
+import HomePage from "./component/home/home";
 import LandingPageWithSignInForm from "./component/auth/landing-page-with-signin-form";
 import MessageComponent from "./component/messaging-section/messaging";
 import NotificationScreen from "./component/notification/main";
-import PostScreen from "./component/post";
+
 import ParticularPostShowcase from "./component/post-prototype/particular-post-showcase";
 import ProfileSection from "./component/profile-section/profile";
 import { AuthenticatedDecider, EntryPointDecider } from "./decider";
 import SignUp from "./component/auth/signup";
+import UserInformationTakingComponent from "./component/profile-section/take-user-information";
+import PostScreen from "./component/post-prototype/post";
 
 const RoutesEntryPoint = () => {
   return (
@@ -41,6 +43,10 @@ const RoutesEntryPoint = () => {
         <Route
           path="/messaging"
           element={AuthenticatedDecider(MessageComponent)}
+        />
+        <Route
+          path="/take-user-information"
+          element={<UserInformationTakingComponent />}
         />
       </Routes>
     </Router>

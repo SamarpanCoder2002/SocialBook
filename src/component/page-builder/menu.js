@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { CHANGE_MODE } from "../redux/actions";
-import { onSignOut } from "./auth/helper/api_call";
-import LoadingBar from "./loading/loadingbar";
+import { CHANGE_MODE } from "../../redux/actions";
+import LoadingBar from "../loading/loadingbar";
+import { onSignOut } from "../auth/helper/api_call";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);

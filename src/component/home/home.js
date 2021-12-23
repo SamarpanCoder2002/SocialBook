@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { PostTypes } from "../types/posttypes";
-import BaseCommonPart from "./base";
-import CommonPostStyle from "./post-prototype/post-common-style";
+import { PostTypes } from "../../types/posttypes";
+import BaseCommonPart from "../page-builder/base";
+import CommonPostStyle from "../post-prototype/post-common-style";
 
 const HomePage = () => {
   const testing = [

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import BaseCommonPart from "./base";
-import ConnectedUsers from "./connection/already_connected/connected_users";
-import InvitationTabsCollection from "./connection/invitations-section/tab-collection";
-import AllUsersCollection from "./connection/all_users/all-users-collection";
+import BaseCommonPart from "../page-builder/base";
+import ConnectedUsers from "./already_connected/connected_users";
+import InvitationTabsCollection from "./invitations-section/tab-collection";
+import AllUsersCollection from "./all_users/all-users-collection";
 import { useLocation } from "react-router-dom";
 
 const ConnectionScreen = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PostTypes } from "../../types/posttypes";
-import BaseCommonPart from "../base";
+import BaseCommonPart from "../page-builder/base";
 import CommonPostStyle from "./post-common-style";
 
 const ParticularPostShowcase = () => {

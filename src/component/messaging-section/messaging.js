@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { ChatMsgTypes } from "../../types/posttypes";
-import BaseCommonPart from "../base";
+import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
 
 const MessageComponent = () => {

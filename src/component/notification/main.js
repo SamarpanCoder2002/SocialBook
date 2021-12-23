@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { NotificationType } from "../../types/posttypes";
-import BaseCommonPart from "../base";
+import BaseCommonPart from "../page-builder/base";
 
 const NotificationScreen = () => {
   return (

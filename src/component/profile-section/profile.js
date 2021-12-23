@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import BaseCommonPart from "../base";
+import BaseCommonPart from "../page-builder/base";
 import ParticularConnectionPostCollection from "./post-collection";
 
 const ProfileSection = () => {
