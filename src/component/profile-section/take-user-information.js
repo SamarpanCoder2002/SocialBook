@@ -1,21 +1,46 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import LoadingBar from "../loading/loadingbar";
 import {
   DesktopNotification,
   infoMessage,
 } from "../main-helper/desktop-notification";
 import NoProfileImage from "../../image/no_profile_picture.png";
+import { isUserProfileCreatedBefore } from "./helper/api-call";
+import { onSignOut } from "../auth/helper/api_call";
 
 const UserInformationTakingComponent = () => {
+  // const [eligibleForMakingFreshProfile, seteligibleForMakingFreshProfile] =
+  //   useState(true);
+
+  // useEffect(() => {
+  //   infoMessage("Process is going on... Please Wait ", 2000);
+
+  //   isUserProfileCreatedBefore().then((res) => {
+  //     infoMessage(res.message, 2000);
+  //     if (res.message) {
+  //       onSignOut();
+  //       return window.location.replace("/landing-with-signin");
+  //     }
+
+  //     if (res) {
+  //       return window.location.replace("/feed");
+  //     } else {
+  //       seteligibleForMakingFreshProfile(false);
+  //     }
+  //   });
+  // }, []);
+
   return (
     <div className="h-screen dark">
-      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor my-auto h-full overflow-y-scroll">
+      
+      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
         <div className="container mx-auto h-full">
           <div className="h-full">
-            <TakeUserInformation />
+          <TakeUserInformation />
           </div>
         </div>
       </div>
+      <DesktopNotification />
     </div>
   );
 };
@@ -24,7 +49,7 @@ const TakeUserInformation = () => {
   const [isLoading, setisLoading] = useState(false);
 
   return (
-    <div className="pt-32 mx-20 lg:mx-80">
+    <div className="pt-10 md:pt-24 lg:pt-16 mx-20 lg:mx-80 ">
       <LoadingBar isLoading={isLoading} />
       <Heading isLoading={isLoading} />
       <div className="mt-10">
@@ -32,8 +57,6 @@ const TakeUserInformation = () => {
           isLoading={isLoading}
           setisLoading={setisLoading}
         />
-
-        <DesktopNotification />
       </div>
     </div>
   );
@@ -149,10 +172,10 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
         setpickedInterests={setpickedInterests}
       />
 
-      <div className="mt-10 pb-5">
+      <div className="mt-3 sm:mt-10 pb-5">
         {!isLoading ? (
           <button
-            className={` bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
+            className={`bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                     font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                                     shadow-lg`}
             onClick={makeProfile}
@@ -182,8 +205,6 @@ const ChoicesSection = ({ pickedInterests, setpickedInterests }) => {
     "art",
     "sports",
   ];
-
-  console.log(pickedInterests);
 
   return (
     <div className="mt-5">

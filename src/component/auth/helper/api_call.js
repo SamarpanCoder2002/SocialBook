@@ -32,7 +32,7 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
 
         // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
         setTimeout(() => {
-          window.location.replace("/feed");
+          window.location.replace("/take-user-information");
         }, 2000);
       }
 
@@ -99,7 +99,7 @@ export const onSignIn = (email, password, setisLoading) => {
 
         // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
         setTimeout(() => {
-          window.location.replace("/feed");
+          window.location.replace("/take-user-information");
         }, 1800);
       } else {
         if (data.code === 422) infoMessage(data.error);
@@ -109,13 +109,26 @@ export const onSignIn = (email, password, setisLoading) => {
 };
 
 export const onSignOut = () => {
-  console.log("here");
+  const getTokenData = localStorage.getItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN
+  );
+
+  if (getTokenData === null) {
+    return window.location.href = "/landing-with-signin";
+  }
+
+  const { token, user } = JSON.parse(getTokenData);
 
   fetch(`${API}/signout`, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify({
+      uid: user,
+    }),
+
   })
     .then((res) => res.json())
     .then((data) => {
