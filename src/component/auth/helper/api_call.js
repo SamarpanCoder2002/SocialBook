@@ -4,7 +4,7 @@ import {
   infoMessage,
   successMessage,
 } from "../../main-helper/desktop-notification";
-import { storeDataInLocalStorage } from "../../main-helper/store-data-local-storage";
+import { storeDataInLocalStorage } from "../../main-helper/local-storage-management";
 
 export const onGoogleLogInSuccess = (response, setisLoading) => {
   setisLoading(true);

@@ -15,7 +15,7 @@ const ConnectionScreen = () => {
     <BaseCommonPart>
       <div className="h-auto min-h-[91vh] bg-lightBgColor dark:bg-darkBgColor pt-0">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
-          <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor ">
+          <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
             <LeftSideSelector selected={selected} setselected={setselected} />
             <RightSideSelector
               selected={selected}
@@ -34,7 +34,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
   const { darkMode } = useSelector((state) => state);
 
   return (
-    <div className="h-2/6 w-full lg:w-1/6 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg mr-5 shadow-lg">
+    <div className="h-2/6 w-full lg:w-1/6 mb-2 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 shadow-lg">
       <ul className="h-auto">
         {types.map((type, index) => {
           return (

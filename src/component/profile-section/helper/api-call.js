@@ -4,20 +4,13 @@ import {
   errorMessage,
   successMessage,
 } from "../../main-helper/desktop-notification";
+import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
 
-const authToken = () => {
-  const getTokenData = localStorage.getItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN
-  );
 
-  if (getTokenData === null) return false;
-
-  return JSON.parse(getTokenData);
-};
 
 export const isUserProfileCreatedBefore = async () => {
   try {
-    const authTokenResult = authToken();
+    const authTokenResult = getDataFromLocalStorage();
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
 
@@ -62,7 +55,7 @@ export const createUserProfile = async (
 ) => {
   setisLoading(true);
 
-  const authTokenResult = authToken();
+  const authTokenResult = getDataFromLocalStorage();
   if (!authTokenResult) return authTokenResult;
   const { token, user } = authTokenResult;
 
@@ -97,7 +90,7 @@ export const createUserProfile = async (
 
       successMessage(data.message, 2000);
       setTimeout(() => {
-        window.location.reload();
+        window.location.replace("/connection");
         setisLoading(false);
       }, 1800);
     })
