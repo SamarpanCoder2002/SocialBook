@@ -1,42 +1,19 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import LoadingBar from "../loading/loadingbar";
 import {
   DesktopNotification,
   infoMessage,
 } from "../main-helper/desktop-notification";
 import NoProfileImage from "../../image/no_profile_picture.png";
-import { isUserProfileCreatedBefore } from "./helper/api-call";
-import { onSignOut } from "../auth/helper/api_call";
+import { createUserProfile } from "./helper/api-call";
 
 const UserInformationTakingComponent = () => {
-  // const [eligibleForMakingFreshProfile, seteligibleForMakingFreshProfile] =
-  //   useState(true);
-
-  // useEffect(() => {
-  //   infoMessage("Process is going on... Please Wait ", 2000);
-
-  //   isUserProfileCreatedBefore().then((res) => {
-  //     infoMessage(res.message, 2000);
-  //     if (res.message) {
-  //       onSignOut();
-  //       return window.location.replace("/landing-with-signin");
-  //     }
-
-  //     if (res) {
-  //       return window.location.replace("/feed");
-  //     } else {
-  //       seteligibleForMakingFreshProfile(false);
-  //     }
-  //   });
-  // }, []);
-
   return (
     <div className="h-screen dark">
-      
       <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
         <div className="container mx-auto h-full">
           <div className="h-full">
-          <TakeUserInformation />
+            <TakeUserInformation />
           </div>
         </div>
       </div>
@@ -93,8 +70,8 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
 
   const { userName, description } = signUpForm;
 
-  const makeProfile = () => {
-    if (userName === "" && description === "") {
+  const makeProfile = async () => {
+    if (userName === "" || description === "") {
       infoMessage("Please fill all the fields");
       return;
     }
@@ -102,6 +79,15 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       infoMessage("Please select at least 2 topics");
       return;
     }
+
+    console.log(selectedImage);
+
+    await createUserProfile(
+      userName,
+      description,
+      selectedImage,
+      pickedInterests
+    );
   };
 
   return (
@@ -110,7 +96,10 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
         <div className="relative w-16 h-16 lg:w-32 lg:h-32 mx-auto cursor-pointer">
           <img
             className="rounded-full border-2 border-gray-100 shadow-sm w-16 h-16 lg:w-32 lg:h-32 object-cover"
-            src={selectedImage || NoProfileImage}
+            src={
+              (selectedImage && URL.createObjectURL(selectedImage)) ||
+              NoProfileImage
+            }
             alt="profile pic"
             onClick={() => selectedImage && window.open(selectedImage)}
           />
@@ -123,7 +112,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
                 ref={inputFile}
                 style={{ display: "none" }}
                 onChange={(e) => {
-                  setselectedImage(URL.createObjectURL(e.target.files[0]));
+                  setselectedImage(e.target.files[0]);
                 }}
               />
 

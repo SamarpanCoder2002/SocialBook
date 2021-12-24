@@ -133,7 +133,6 @@ export const onSignOut = () => {
     .then((res) => res.json())
     .then((data) => {
       if (data.code === 200) {
-        successMessage("Sign Out Successful");
         localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
         window.location.href = "/landing-with-signin";
       } else {
