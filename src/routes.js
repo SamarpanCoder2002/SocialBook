@@ -10,7 +10,7 @@ import MessageComponent from "./component/messaging-section/messaging";
 import NotificationScreen from "./component/notification/main";
 import ParticularPostShowcase from "./component/post-prototype/particular-post-showcase";
 import ProfileSection from "./component/profile-section/profile";
-import { AuthenticatedDecider, EntryPointDecider, ForNewUser } from "./decider";
+import { AuthenticatedDecider, EntryPointDecider } from "./decider";
 import SignUp from "./component/auth/signup";
 import PostScreen from "./component/post-prototype/post";
 import UserInformationTakingComponent from "./component/profile-section/take-user-information";
