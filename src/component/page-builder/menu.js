@@ -10,7 +10,7 @@ const MenuComponent = ({ isLoading }) => {
   return (
     <nav
       id="nav"
-      className="bg-lightElevationColor dark:bg-darkElevationColor sticky top-0 z-50 backdrop-blur-3xl shadow-lg"
+      className="bg-lightElevationColor dark:bg-darkElevationColor sticky top-0 z-50 backdrop-blur-3xl shadow-sm dark:shadow-lg"
       role="navigation"
     >
       <LoadingBar isLoading={isLoading} />
@@ -112,7 +112,7 @@ const MenuCollection = ({ isMenuOpen }) => {
           className={`py-3 text-red-600 dark:text-red-500 font-semibold text-center md:ml-3 cursor-pointer`}
           onClick={() => onSignOut()}
         >
-          <i class="fas fa-power-off"></i> Signout
+          <i className="fas fa-power-off"></i> Signout
         </li>
       </ul>
     </div>

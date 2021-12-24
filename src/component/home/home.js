@@ -313,7 +313,6 @@ const RightFeedSection = ({ testing }) => {
   return (
     <div className="h-[90vh] overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
       {testing.map((item, index) => {
-        console.log("item", item);
         return <CommonPostStyle key={index} item={item} allowCommentSection={false} />;
       })}
     </div>

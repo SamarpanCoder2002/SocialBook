@@ -13,7 +13,7 @@ const ConnectionScreen = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-auto min-h-screen bg-lightBgColor dark:bg-darkBgColor pt-3">
+      <div className="h-auto min-h-[91vh] bg-lightBgColor dark:bg-darkBgColor pt-0">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
           <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor ">
             <LeftSideSelector selected={selected} setselected={setselected} />
@@ -60,8 +60,8 @@ const LeftSideSelector = ({ selected, setselected }) => {
 
 const RightSideSelector = ({ selected, invitationSetInitialIndex }) => {
   return (
-    <div className="h-screen w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-2xl">
-      <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg transition-all duration-300 ease-in-out">
+    <div className="h-[91vh] w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-2xl">
+      <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor py-3 px-2 rounded-lg transition-all duration-300 ease-in-out">
         {
           <SelectedOption
             selected={selected}

@@ -80,13 +80,12 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       return;
     }
 
-    console.log(selectedImage);
-
     await createUserProfile(
       userName,
       description,
       selectedImage,
-      pickedInterests
+      pickedInterests,
+      setisLoading
     );
   };
 

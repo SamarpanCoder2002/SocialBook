@@ -28,6 +28,8 @@ const RoutesEntryPoint = () => {
   const [protectRoute, setprotectRoute] = useState(false);
   const [isLoading, setisLoading] = useState(false);
 
+  
+
   useEffect(() => {
     setisLoading(true);
 
@@ -36,10 +38,11 @@ const RoutesEntryPoint = () => {
       setisLoading(false);
       if (res.message) {
         onSignOut();
-        return window.location.replace("/landing-with-signin");
+        return window.location.reload();
       }
 
       setprotectRoute(res);
+      
     });
   }, []);
 

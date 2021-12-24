@@ -2,10 +2,8 @@ import { onSignOut } from "../../auth/helper/api_call";
 import { API } from "../../main-helper/backend";
 import {
   errorMessage,
-  infoMessage,
   successMessage,
 } from "../../main-helper/desktop-notification";
-import axios from "axios";
 
 const authToken = () => {
   const getTokenData = localStorage.getItem(
@@ -59,8 +57,11 @@ export const createUserProfile = async (
   userName,
   description,
   profilePic,
-  interests
+  interests,
+  setisLoading
 ) => {
+  setisLoading(true);
+
   const authTokenResult = authToken();
   if (!authTokenResult) return authTokenResult;
   const { token, user } = authTokenResult;
@@ -81,11 +82,24 @@ export const createUserProfile = async (
   })
     .then((res) => res.json())
     .then((data) => {
-      data.code === 403
-        ? infoMessage(data.message, 10000)
-        : data.code === 500
-        ? errorMessage(data.message)
-        : successMessage(data.message);
+      if (data.code === 403) {
+        errorMessage(data.message, 10000);
+        setisLoading(false);
+        onSignOut();
+        return;
+      }
+
+      if (data.code !== 200) {
+        errorMessage(data.message, 10000);
+        setisLoading(false);
+        return;
+      }
+
+      successMessage(data.message, 2000);
+      setTimeout(() => {
+        window.location.reload();
+        setisLoading(false);
+      }, 1800);
     })
     .catch((e) => {
       console.log(e);
@@ -93,5 +107,7 @@ export const createUserProfile = async (
         "Error In Create Your Profile... Please Try Later 😔",
         10000
       );
+
+      setisLoading(false);
     });
 };
