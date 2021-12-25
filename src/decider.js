@@ -42,6 +42,8 @@ export const EntryPointDecider = (RedirectComponent, path) => {
 };
 
 const Decider = (RedirectComponent, userProfileCreatedBefore, specialPath) => {
+  
+
   if (specialPath === "/take-user-information") {
     return userProfileCreatedBefore ? (
       <Navigate to="/feed" />

@@ -119,15 +119,12 @@ export const onSignOut = () => {
 
   const { token, user } = JSON.parse(getTokenData);
 
-  fetch(`${API}/signout`, {
+  fetch(`${API}/signout/${user}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      uid: user,
-    }),
 
   })
     .then((res) => res.json())

@@ -7,8 +7,8 @@ import AllUsersCollection from "./all_users/all-users-collection";
 import { useLocation } from "react-router-dom";
 
 const ConnectionScreen = () => {
-  const { prevDesignSet } = useLocation();
-  const { prevIndex, invitationSetInitialIndex } = prevDesignSet ?? 0;
+  const { state } = useLocation();
+  const { prevIndex, invitationSetInitialIndex } = state?.prevDesignSet ?? 0;
   const [selected, setselected] = useState(prevIndex ?? 0);
 
   return (

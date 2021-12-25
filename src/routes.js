@@ -7,7 +7,7 @@ import ConnectionScreen from "./component/connection/connection";
 import HomePage from "./component/home/home";
 import LandingPageWithSignInForm from "./component/auth/landing-page-with-signin-form";
 import MessageComponent from "./component/messaging-section/messaging";
-import NotificationScreen from "./component/notification/main";
+import NotificationScreen from "./component/notification/notification-container";
 import ParticularPostShowcase from "./component/post-prototype/particular-post-showcase";
 import ProfileSection from "./component/profile-section/profile";
 import { AuthenticatedDecider, EntryPointDecider } from "./decider";
@@ -51,6 +51,7 @@ const RoutesEntryPoint = () => {
           path="/messaging"
           element={AuthenticatedDecider(MessageComponent)}
         />
+
 
         <Route
           path="/take-user-information"

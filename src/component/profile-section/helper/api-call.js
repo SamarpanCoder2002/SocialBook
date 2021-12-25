@@ -14,15 +14,13 @@ export const isUserProfileCreatedBefore = async () => {
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
 
-    const res = await fetch(`${API}/isUserPresent`, {
+    const res = await fetch(`${API}/isUserPresent/${user}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        uid: user,
-      }),
+    
     });
 
     const data = await res.json();
