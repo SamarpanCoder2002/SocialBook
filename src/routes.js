@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ConnectionScreen from "./component/connection/connection";
 import HomePage from "./component/home/home";
 import LandingPageWithSignInForm from "./component/auth/landing-page-with-signin-form";
@@ -52,10 +48,12 @@ const RoutesEntryPoint = () => {
           element={AuthenticatedDecider(MessageComponent)}
         />
 
-
         <Route
           path="/take-user-information"
-          element={AuthenticatedDecider(UserInformationTakingComponent,"/take-user-information")}
+          element={AuthenticatedDecider(
+            UserInformationTakingComponent,
+            "/take-user-information"
+          )}
         />
 
         <Route path="*" element={() => <div>404</div>} />
