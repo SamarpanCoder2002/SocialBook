@@ -6,15 +6,11 @@ import {
 } from "../../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
 
-
-
 export const isUserProfileCreatedBefore = async () => {
   try {
     const authTokenResult = getDataFromLocalStorage();
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
-
-    
 
     const res = await fetch(`${API}/isUserPresent/${user}`, {
       method: "GET",
@@ -22,20 +18,17 @@ export const isUserProfileCreatedBefore = async () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    
     });
-
-    
 
     const data = await res.json();
 
-    console.log("checking: ",data);
+    console.log("checking: ", data);
 
     if (data.code === 200) return true;
     else {
       if (data.code === 403)
         return {
-          code: 403
+          code: 403,
         };
 
       return false;

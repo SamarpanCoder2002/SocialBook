@@ -1,13 +1,18 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
 
 const ProfileCard = ({ user }) => {
   const { darkMode } = useSelector((state) => state);
+  const navigate = useNavigate();
 
   return (
     <div
       className="w-3/4 md:w-5/6 flex flex-col justify-center items-center border-lightSecondaryFgColor dark:border-darkSecondaryFgColor border-opacity-10 rounded-lg p-2 mx-auto cursor-pointer transition-all duration-300 px-3 hover:shadow-md hover:shadow-slate-400 dark:hover:shadow-slate-500 bg-lightCardColor dark:bg-darkCardColor"
       style={{ borderWidth: "0.2px" }}
+      onClick={() => {
+        navigate(`/${user.id}/profile`);
+      }}
     >
       {/* Profile Image */}
       <img
