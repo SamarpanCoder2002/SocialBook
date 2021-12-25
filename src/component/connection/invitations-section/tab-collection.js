@@ -8,7 +8,7 @@ const InvitationTabsCollection = ({invitationSetInitialIndex}) => {
   const [currentTab, setcurrentTab] = useState(invitationSetInitialIndex ?? 0);
 
   return (
-    <div>
+    <div className="px-2 py-3">
 
         {/* Tabs Collection */}
       <ul className="flex justify-around">

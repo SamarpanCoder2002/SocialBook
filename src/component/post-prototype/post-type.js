@@ -160,7 +160,7 @@ export const PollPost = ({ postData }) => {
   const customTheme = {
     textColor: darkMode ? "#fff" : "#303338",
     mainColor: "#00B87B",
-    backgroundColor: darkMode ? "#2E363E" : "#e9e9e9",
+    backgroundColor: darkMode ? "#334247" : "#d3dbde",
     alignment: "center",
   };
 
@@ -174,7 +174,7 @@ export const PollPost = ({ postData }) => {
       <TextPost postData={postData} />
       <div
         className="p-3"
-        style={{ background: darkMode ? "#2a353a" : "#e0e0e0" }}
+        style={{ background: darkMode ? "#2a353a" : "#fff" }}
       >
         <LeafPoll
           type="multiple"

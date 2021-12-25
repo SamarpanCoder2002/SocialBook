@@ -6,10 +6,10 @@ const ConnectedUsers = () => {
   const [searchArgument, setsearchArgument] = useState("");
 
   return (
-    <Fragment>
+    <div className="px-2 py-3">
       <SearchBar setsearchArgument={setsearchArgument} />
       <ConnectedUsersList searchArgument={searchArgument} />
-    </Fragment>
+    </div>
   );
 };
 

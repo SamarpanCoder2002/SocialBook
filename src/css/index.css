@@ -97,6 +97,6 @@ body{
   width: 0px;
 }
 
-.discover-connection-card:hover{
-  box-shadow: 0 10px 5px rgba(25,36,40, 0.3);
-}
+/* .discover-connection-card:hover{
+  box-shadow: 0 0 5px 10px rgba(25,36,40, 0.3);
+} */

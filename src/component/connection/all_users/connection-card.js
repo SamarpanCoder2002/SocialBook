@@ -6,25 +6,25 @@ const ProfileCard = ({ user }) => {
 
   return (
     <div
-      className="w-3/4 md:w-5/6 flex flex-col justify-center items-center border-lightSecondaryFgColor dark:border-darkSecondaryFgColor border-opacity-10 rounded-lg p-2 mx-auto cursor-pointer discover-connection-card transition-all duration-300 px-3 "
+      className="w-3/4 md:w-5/6 flex flex-col justify-center items-center border-lightSecondaryFgColor dark:border-darkSecondaryFgColor border-opacity-10 rounded-lg p-2 mx-auto cursor-pointer transition-all duration-300 px-3 hover:shadow-md hover:shadow-slate-400 dark:hover:shadow-slate-500 bg-lightCardColor dark:bg-darkCardColor"
       style={{ borderWidth: "0.2px" }}
     >
       {/* Profile Image */}
       <img
-        src={user.profileImage ? user.profileImage : NoProfileImage}
+        src={user.profilePic || NoProfileImage}
         alt="profile"
-        className="rounded-full h-24 w-24"
+        className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
       />
 
       <div className="text-center">
         {/* User Name */}
-        <h4 className="text-xl mt-1 font-bold">{user.name}</h4>
+        <h4 className="text-base mt-1 tracking-wide">{user.name}</h4>
 
-        {/* User Title */}
+        {/* User description */}
         <p className="text-sm mt-1">
-          {user.title.length > 45
-            ? user.title.slice(0, 45) + "..."
-            : user.title}
+          {user.description.length > 50
+            ? user.description.slice(0, 50) + "..."
+            : user.description}
         </p>
       </div>
 

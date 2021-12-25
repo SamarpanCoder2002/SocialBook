@@ -34,7 +34,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
   const { darkMode } = useSelector((state) => state);
 
   return (
-    <div className="h-2/6 w-full lg:w-1/6 mb-2 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 shadow-lg">
+    <div className="h-2/6 w-full lg:w-1/6 mb-2 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 shadow-md">
       <ul className="h-auto">
         {types.map((type, index) => {
           return (
@@ -60,8 +60,8 @@ const LeftSideSelector = ({ selected, setselected }) => {
 
 const RightSideSelector = ({ selected, invitationSetInitialIndex }) => {
   return (
-    <div className="h-[91vh] w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-2xl">
-      <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor py-3 px-2 rounded-lg transition-all duration-300 ease-in-out">
+    <div className="h-[91vh] w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-md">
+      <div className="w-full h-full bg-lightElevationColor dark:bg-darkElevationColor rounded-lg transition-all duration-300 ease-in-out">
         {
           <SelectedOption
             selected={selected}

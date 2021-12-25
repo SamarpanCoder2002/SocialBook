@@ -1,5 +1,5 @@
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: "class",
   theme: {
@@ -13,6 +13,7 @@ module.exports = {
         darkSpecificIconsColor: "#d0d0d0",
         darkTextFieldInnerColor: "#313131",
         darkPostTextStyleColor: "#e4e6eb",
+        darkCardColor: "#334247",
 
         // For Light Mode
         lightBgColor: "#f3f3f3",
@@ -22,6 +23,7 @@ module.exports = {
         lightSpecificIconsColor: "#606060",
         lightTextFieldInnerColor: "#DCE0DF",
         lightPostTextStyleColor: "#000000",
+        lightCardColor: "#fafafa",
       },
 
       screens: {
@@ -38,4 +40,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};
