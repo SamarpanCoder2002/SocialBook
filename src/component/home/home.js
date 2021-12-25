@@ -6,6 +6,8 @@ import BaseCommonPart from "../page-builder/base";
 import CommonPostStyle from "../post-prototype/post-common-style";
 
 const HomePage = () => {
+  console.log("Home page");
+
   const testing = [
     {
       id: 1,
@@ -302,7 +304,7 @@ const LeftProfileShortSection = () => {
           style={{ borderWidth: "0.2px" }}
           onClick={() => {
             const result = getDataFromLocalStorage();
-            
+
             if (result) {
               const { user } = result;
               navigate(`/${user}/profile`);

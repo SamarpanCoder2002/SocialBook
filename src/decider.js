@@ -5,79 +5,51 @@ import { getDataFromLocalStorage } from "./component/main-helper/local-storage-m
 import Waiting from "./component/main-helper/waiting";
 import { isUserProfileCreatedBefore } from "./component/profile-section/helper/api-call";
 
-export const AuthenticatedDecider = (RedirectComponent, specialPath = "") => {
-  const response = getDataFromLocalStorage();
-
-  const [isLoading, setisLoading] = useState(true);
-  const [userProfileCreatedBefore, setuserProfileCreatedBefore] =
-    useState(false);
-
-  ProfileInformationChecker(
-    response,
-    setisLoading,
-    setuserProfileCreatedBefore
+export const AuthenticatedDecider = (RedirectComponent, path = "") => {
+  if (!getDataFromLocalStorage()) return <Navigate to="/landing-with-signin" />;
+  return (
+    <ComponentRedirection RedirectComponent={RedirectComponent} path={path} />
   );
-
-  if (response) {
-    return isLoading ? (
-      <Waiting />
-    ) : (
-      Decider(RedirectComponent, userProfileCreatedBefore, specialPath)
-    );
-  }
-
-  return <Navigate to="/landing-with-signin" />;
 };
 
 export const EntryPointDecider = (RedirectComponent, path) => {
-  const information = localStorage.getItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN
-  );
-
-  if (information === null || information.user === null) {
+  if (!getDataFromLocalStorage()) {
     if (path === "/") return <Navigate to="/landing-with-signin" />;
     return <RedirectComponent />;
   }
+
   return <Navigate to="/feed" />;
 };
 
-const Decider = (RedirectComponent, userProfileCreatedBefore, specialPath) => {
-  
+const ComponentRedirection = ({ RedirectComponent, path }) => {
+  const [isLoading, setisLoading] = useState(true);
+  const [userProfileCreatedBefore, setuserProfileCreatedBefore] =
+    useState(true);
 
-  if (specialPath === "/take-user-information") {
+  useEffect(() => {
+    isUserProfileCreatedBefore().then((res) => {
+      setuserProfileCreatedBefore(res);
+      setisLoading(false);
+    });
+  }, []);
+
+  if (userProfileCreatedBefore?.code === 403) {
+    onSignOut();
+    return <Navigate to="/landing-with-signin" />;
+  }
+
+  if (isLoading) return <Waiting />;
+
+  if (path === "/take-user-information")
     return userProfileCreatedBefore ? (
       <Navigate to="/feed" />
     ) : (
       <RedirectComponent />
     );
-  }
 
-  return !userProfileCreatedBefore ? (
-    <Navigate to="/take-user-information" />
-  ) : (
+  return userProfileCreatedBefore ? (
     <RedirectComponent />
+  ) : (
+    <Navigate to="/take-user-information" />
   );
-};
-
-const ProfileInformationChecker = (
-  response,
-  setisLoading,
-  setuserProfileCreatedBefore
-) => {
-  useEffect(() => {
-    if (!response) {
-      return;
-    }
-
-    setisLoading(true);
-    isUserProfileCreatedBefore().then((res) => {
-      if (res.message) {
-        onSignOut();
-        return window.location.reload();
-      }
-
-      setuserProfileCreatedBefore(res);
-      setisLoading(false);
-    });
-  }, []);
 };

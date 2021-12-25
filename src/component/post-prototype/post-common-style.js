@@ -13,8 +13,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
-  console.log(allowCommentSection);
-
   return (
     <div
       className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3`}

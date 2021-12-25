@@ -61,7 +61,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
 const RightSideSelector = ({ selected, invitationSetInitialIndex }) => {
   return (
     <div className="h-[91vh] w-full lg:w-9/12 overflow-y-scroll suggested-profiles-container rounded-lg shadow-md">
-      <div className="w-full h-full bg-lightElevationColor dark:bg-darkElevationColor rounded-lg transition-all duration-300 ease-in-out">
+      <div className="w-full h-full bg-lightElevationColor dark:bg-darkElevationColor rounded-lg transition-all duration-300 ease-in-out overflow-y-scroll scroller">
         {
           <SelectedOption
             selected={selected}

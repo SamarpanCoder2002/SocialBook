@@ -14,8 +14,10 @@ export const isUserProfileCreatedBefore = async () => {
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
 
+    
+
     const res = await fetch(`${API}/isUserPresent/${user}`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -23,19 +25,23 @@ export const isUserProfileCreatedBefore = async () => {
     
     });
 
+    
+
     const data = await res.json();
+
+    console.log("checking: ",data);
 
     if (data.code === 200) return true;
     else {
       if (data.code === 403)
         return {
-          message: data.message,
+          code: 403
         };
 
       return false;
     }
   } catch (err) {
-    errorMessage(
+    alert(
       "Some Error Happened. Make Sure Your Network Connection is Stable",
       10000
     );
