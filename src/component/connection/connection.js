@@ -4,17 +4,25 @@ import BaseCommonPart from "../page-builder/base";
 import ConnectedUsers from "./already_connected/connected_users";
 import InvitationTabsCollection from "./invitations-section/tab-collection";
 import AllUsersCollection from "./all_users/all-users-collection";
-import { useLocation } from "react-router-dom";
-import { DesktopNotification } from "../main-helper/desktop-notification";
+import { useLocation} from "react-router-dom";
+import {
+  DesktopNotification,
+} from "../main-helper/desktop-notification";
 
 const ConnectionScreen = () => {
-  const { state } = useLocation();
+  const { state, search } = useLocation();
   const { prevIndex, invitationSetInitialIndex } = state?.prevDesignSet ?? 0;
   const [selected, setselected] = useState(prevIndex ?? 0);
 
   return (
     <BaseCommonPart>
       <div className="h-auto min-h-[91vh] bg-lightBgColor dark:bg-darkBgColor pt-0">
+        {search.includes("newUser=true") && (
+          <div className="p-5 bg-green-600 dark:bg-green-500 text-white mb-3 text-center">
+            Congrats! Your Account is Created Successfully 🥳. Now Send
+            Connection Request to Others. 👇
+          </div>
+        )}
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
           <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
             <LeftSideSelector selected={selected} setselected={setselected} />

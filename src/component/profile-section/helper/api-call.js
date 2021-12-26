@@ -87,7 +87,7 @@ export const createUserProfile = async (
 
       successMessage(data.message, 2000);
       setTimeout(() => {
-        window.location.replace("/connection");
+        window.location.replace("/connection?newUser=true");
         setisLoading(false);
       }, 1800);
     })
