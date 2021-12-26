@@ -13,11 +13,12 @@ const AllUsersCollection = () => {
     fetchAllAvailableUsers(page).then((data) => {
       setuserSuggestions(data || []);
       setisLoading(false);
+      return;
     })
   }, [page]);
 
   return isLoading ? (
-    <Waiting showName="Loading" largeScreenPadding="lg:px-72" lightBgColor="bg-lightElevationColor" darkBgColor="bg-darkElevationColor" />
+    <Waiting showName="Hang tight... Data Fetching" largeScreenPadding="lg:px-72" lightBgColor="bg-lightElevationColor" darkBgColor="bg-darkElevationColor" />
   ) : (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8 px-2 py-3">
       {!isLoading &&

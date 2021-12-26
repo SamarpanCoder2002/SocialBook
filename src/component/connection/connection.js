@@ -5,6 +5,7 @@ import ConnectedUsers from "./already_connected/connected_users";
 import InvitationTabsCollection from "./invitations-section/tab-collection";
 import AllUsersCollection from "./all_users/all-users-collection";
 import { useLocation } from "react-router-dom";
+import { DesktopNotification } from "../main-helper/desktop-notification";
 
 const ConnectionScreen = () => {
   const { state } = useLocation();
@@ -24,6 +25,7 @@ const ConnectionScreen = () => {
           </div>
         </div>
       </div>
+      <DesktopNotification />
     </BaseCommonPart>
   );
 };
@@ -44,7 +46,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
                 selected === index
                   ? "text-lightPrimaryFgColor "
                   : "text-lightPostTextStyleColor dark:text-darkPostTextStyleColor"
-              } ${darkMode ? "hover:bg-gray-500" : "hover:bg-gray-200"}
+              } ${darkMode ? "hover:bg-[#425359] hover:text-white" : "hover:bg-gray-200 hover:text-lightPostTextStyleColor"}
               
               cursor-pointer py-2 px-5  rounded-sm transition-all duration-300 ease-in-out pb-2`}
               onClick={() => setselected(index)}

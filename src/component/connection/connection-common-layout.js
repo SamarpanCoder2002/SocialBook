@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import ShowMoreText from "react-show-more-text";
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { ConnectionType } from "../../types/posttypes";
 
@@ -39,13 +40,21 @@ const ConnectionTile = ({ user }) => {
   return (
     <div className="flex items-center w-full md:w-2/3">
       <img
-        className="rounded-full w-10 h-10"
-        src={user.profileImage ? user.profileImage : NoProfileImage}
+        className="rounded-full w-10 h-10 object-cover"
+        src={user.profilePic || NoProfileImage}
         alt="profile"
       />
       <div className="ml-4">
         <p className="text-lg font-semibold">{user.name}</p>
-        <p className="text-sm opacity-60">{user.title}</p>
+        <p className="text-sm opacity-60">
+          {" "}
+          {
+           
+            user.description.length > 45
+                ? user.description.slice(0, 45) + "..."
+                : user.description
+          }
+        </p>
       </div>
     </div>
   );
@@ -53,7 +62,7 @@ const ConnectionTile = ({ user }) => {
 
 const ConnectedUsersButtonCollection = ({ darkMode }) => {
   return (
-    <div className="md:flex items-center hidden">
+    <div className="sm:flex items-center hidden sm:ml-5">
       <button
         className={`${
           darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
@@ -90,7 +99,7 @@ const ReceivedInvitationButtonsCollection = ({ darkMode }) => {
       <button
         className={`${
           darkMode ? "hover:bg-green-400" : "hover:bg-green-300"
-        }  text-green-600  border-green-600 dark:text-green-400 dark:border-green-400   connection-screens-common-button-layout hover:bg-opacity-30 `}
+        }  text-green-600  border-green-600 dark:text-green-400 dark:border-green-400 connection-screens-common-button-layout hover:bg-opacity-30 `}
         style={{ borderWidth: "0.2px" }}
       >
         Accept
