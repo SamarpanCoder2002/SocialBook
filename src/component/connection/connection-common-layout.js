@@ -62,7 +62,7 @@ const ConnectionTile = ({ user }) => {
 
 const ConnectedUsersButtonCollection = ({ darkMode }) => {
   return (
-    <div className="sm:flex items-center hidden sm:ml-5">
+    <div className="flex items-center sm:ml-5 text-sm md:text-md 2xl:text-lg md:tracking-wider">
       <button
         className={`${
           darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
@@ -86,7 +86,7 @@ const ConnectedUsersButtonCollection = ({ darkMode }) => {
 
 const ReceivedInvitationButtonsCollection = ({ darkMode }) => {
   return (
-    <div className="md:flex items-center hidden">
+    <div className="flex items-center text-sm md:text-md 2xl:text-lg md:tracking-wider">
       <button
         className={`${
           darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
@@ -110,11 +110,11 @@ const ReceivedInvitationButtonsCollection = ({ darkMode }) => {
 
 const SentRequestButtonCollection = ({ darkMode }) => {
   return (
-    <div className="md:flex items-center hidden">
+    <div className="flex items-center">
       <button
         className={`${
           darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
-        } mr-5 text-red-500  border-red-500 connection-screens-common-button-layout hover:bg-opacity-30`}
+        } mr-5 text-red-500  border-red-500 connection-screens-common-button-layout hover:bg-opacity-30 text-sm md:text-md 2xl:text-lg md:tracking-wider`}
         style={{ borderWidth: "0.2px" }}
       >
         Withdraw

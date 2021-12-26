@@ -1,18 +1,17 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
+import { successMessage } from "../../main-helper/desktop-notification";
+import { sentConnectionRequest } from "../helper/api_call";
 
-const ProfileCard = ({ user }) => {
+const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
   const { darkMode } = useSelector((state) => state);
   const navigate = useNavigate();
 
   return (
     <div
-      className="w-3/4 md:w-5/6 flex flex-col justify-center items-center border-lightSecondaryFgColor dark:border-darkSecondaryFgColor border-opacity-10 rounded-lg p-2 mx-auto cursor-pointer transition-all duration-300 px-3 hover:shadow-md hover:shadow-slate-400 dark:hover:shadow-slate-500 bg-lightCardColor dark:bg-darkCardColor"
+      className="w-3/4 md:w-5/6 flex flex-col justify-center items-center border-lightSecondaryFgColor dark:border-darkSecondaryFgColor border-opacity-10 rounded-lg p-2 mx-auto transition-all duration-300 px-3 hover:shadow-md hover:shadow-slate-400 dark:hover:shadow-slate-500 bg-lightCardColor dark:bg-darkCardColor"
       style={{ borderWidth: "0.2px" }}
-      onClick={() => {
-        navigate(`/${user.id}/profile`);
-      }}
     >
       {/* Profile Image */}
       <img
@@ -23,7 +22,14 @@ const ProfileCard = ({ user }) => {
 
       <div className="text-center">
         {/* User Name */}
-        <h4 className="text-base mt-1 tracking-wide">{user.name}</h4>
+        <h4
+          className="text-base mt-1 tracking-wide hover:underline cursor-pointer"
+          onClick={() => {
+            navigate(`/${user.id}/profile`);
+          }}
+        >
+          {user.name}
+        </h4>
 
         {/* User description */}
         <p className="text-sm mt-1">
@@ -39,6 +45,11 @@ const ProfileCard = ({ user }) => {
           darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
         } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
         style={{ borderWidth: "0.2px" }}
+        onClick={async () => {
+          successMessage("Connection Request Sent", 2000);
+          setrequestSentConnectionsIds((prev) => [...prev, user.id]);
+          await sentConnectionRequest(user.id);
+        }}
       >
         Connect
       </button>

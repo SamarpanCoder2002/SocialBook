@@ -42,8 +42,8 @@ const SendInvitation = () => {
             />
           );
         })) || (
-        <h1 className="w-full text-center text-red-600 text-2xl mt-10 tracking-wide">
-          No Pending Sent Requests
+        <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">
+          No Pending Sent Requests 😳
         </h1>
       )}
     </div>

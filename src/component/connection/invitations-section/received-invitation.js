@@ -35,8 +35,8 @@ const ReceivedInvitation = () => {
             />
           );
         })) || (
-        <h1 className="w-full text-center text-red-600 text-2xl mt-10 tracking-wide">
-          No Pending Received Invitations
+        <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">
+          No Pending Received Invitations ☹️
         </h1>
       )}
     </div>

@@ -102,8 +102,14 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
             />
           );
         })) || (
-        <h1 className="w-full text-center text-red-600 text-2xl mt-10 tracking-wide">
-          You Have No Connection Yet
+        <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">
+          You Have No Connection Yet ☹️
+          <div
+            className="text-sm lg:text-md 2xl:text-lg text-blue-500 tracking-wide underline cursor-pointer mt-2"
+            onClick={() => window.location.reload()}
+          >
+            Find Users to Connect
+          </div>
         </h1>
       )}
     </div>
