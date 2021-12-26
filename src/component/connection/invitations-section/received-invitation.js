@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ConnectionType } from "../../../types/posttypes";
 import Waiting from "../../main-helper/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -7,31 +7,41 @@ import { fetchAllSpecificRequestedUsers } from "../helper/api_call";
 const ReceivedInvitation = () => {
   const [isLoading, setisLoading] = useState(true);
   const [page, setpage] = useState(1);
+  const [receivedInvitationIds, setreceivedInvitationIds] = useState([]);
 
   const [receivedConnectionRequestList, setreceivedConnectionRequestList] =
     useState([]);
 
-    useEffect(() => {
-      if(!isLoading) return;
-      fetchAllSpecificRequestedUsers(page, ConnectionType.RequestReceived).then((data) => {
-        setreceivedConnectionRequestList(data);
+  useEffect(() => {
+    fetchAllSpecificRequestedUsers(page, ConnectionType.RequestReceived).then(
+      (data) => {
+        setreceivedConnectionRequestList((prev) => [...prev, ...data]);
         setisLoading(false);
         return;
-      })
-    }, [page])
+      }
+    );
+  }, [page]);
 
   return isLoading ? (
-    <Waiting showName="Hang tight... Data Fetching" largeScreenPadding="lg:px-72" lightBgColor="bg-lightElevationColor" darkBgColor="bg-darkElevationColor" />
+    <Waiting
+      showName="Hang tight... Data Fetching"
+      largeScreenPadding="lg:px-72"
+      lightBgColor="bg-lightElevationColor"
+      darkBgColor="bg-darkElevationColor"
+    />
   ) : (
     <div className="h-screen overflow-y-scroll suggested-profiles-container">
-      {(receivedConnectionRequestList &&
-        receivedConnectionRequestList.length > 0 &&
+      {(receivedConnectionRequestList?.length > 0 &&
+        receivedInvitationIds.length !== receivedConnectionRequestList.length &&
         receivedConnectionRequestList.map((user, index) => {
+          if (receivedInvitationIds.includes(user.id))
+            return <Fragment key={index}></Fragment>;
           return (
             <ConnectionCollectionItem
               key={index}
               user={user}
               connectionType={ConnectionType.RequestReceived}
+              setCollectiveIds={setreceivedInvitationIds}
             />
           );
         })) || (

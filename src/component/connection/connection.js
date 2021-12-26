@@ -46,7 +46,11 @@ const LeftSideSelector = ({ selected, setselected }) => {
                 selected === index
                   ? "text-lightPrimaryFgColor "
                   : "text-lightPostTextStyleColor dark:text-darkPostTextStyleColor"
-              } ${darkMode ? "hover:bg-[#425359] hover:text-white" : "hover:bg-gray-200 hover:text-lightPostTextStyleColor"}
+              } ${
+                darkMode
+                  ? "hover:bg-[#425359] hover:text-white"
+                  : "hover:bg-gray-200 hover:text-lightPostTextStyleColor"
+              }
               
               cursor-pointer py-2 px-5  rounded-sm transition-all duration-300 ease-in-out pb-2`}
               onClick={() => setselected(index)}

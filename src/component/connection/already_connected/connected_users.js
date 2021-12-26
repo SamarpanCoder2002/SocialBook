@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { ConnectionType } from "../../../types/posttypes";
 import Waiting from "../../main-helper/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -51,6 +51,7 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
   const [page, setpage] = useState(1);
 
   const [connectedUsersCollection, setconnectedUsersCollection] = useState([]);
+  const [removedConnectionIds, setremovedConnectionIds] = useState([]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -72,11 +73,10 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
   }, [searchArgument, isLoading, connectedUsersCollection]);
 
   useEffect(() => {
-    !isLoading && setisLoading(true);
     fetchAllSpecificRequestedUsers(page, ConnectionType.AlreadyConnected).then(
       (data) => {
         console.log("data: ", data);
-        setconnectedUsersCollection(data);
+        setconnectedUsersCollection((prev) => [...prev, ...data]);
         setisLoading(false);
       }
     );
@@ -91,14 +91,17 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
     />
   ) : (
     <div className="h-screen w-full overflow-y-scroll suggested-profiles-container">
-      {(searchResultUsersCollection &&
-        searchResultUsersCollection.length > 0 &&
+      {(searchResultUsersCollection.length > 0 &&
+        removedConnectionIds.length !== searchResultUsersCollection.length &&
         searchResultUsersCollection.map((user, index) => {
+          if (removedConnectionIds.includes(user.id))
+            return <Fragment key={index}></Fragment>;
           return (
             <ConnectionCollectionItem
               key={index}
               user={user}
               connectionType={ConnectionType.AlreadyConnected}
+              setCollectiveIds={setremovedConnectionIds}
             />
           );
         })) || (

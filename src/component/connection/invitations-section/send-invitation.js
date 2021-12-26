@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ConnectionType } from "../../../types/posttypes";
 import Waiting from "../../main-helper/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -10,12 +10,12 @@ const SendInvitation = () => {
   const [sentConnectionRequestList, setsentConnectionRequestList] = useState(
     []
   );
+  const [sentConnectionRequestIds, setsentConnectionRequestIds] = useState([]);
 
   useEffect(() => {
-    if (!isLoading) return;
     fetchAllSpecificRequestedUsers(page, ConnectionType.RequestSent).then(
       (data) => {
-        setsentConnectionRequestList(data);
+        setsentConnectionRequestList((prev) => [...prev, ...data]);
         setisLoading(false);
         return;
       }
@@ -31,14 +31,17 @@ const SendInvitation = () => {
     />
   ) : (
     <div className="h-screen overflow-y-scroll suggested-profiles-container">
-      {(sentConnectionRequestList &&
-        sentConnectionRequestList.length > 0 &&
+      {(sentConnectionRequestList.length > 0 &&
+        sentConnectionRequestIds.length !== sentConnectionRequestList.length &&
         sentConnectionRequestList.map((user, index) => {
+          if (sentConnectionRequestIds.includes(user.id))
+            return <Fragment key={index}></Fragment>;
           return (
             <ConnectionCollectionItem
               key={index}
               user={user}
               connectionType={ConnectionType.RequestSent}
+              setCollectiveIds={setsentConnectionRequestIds}
             />
           );
         })) || (

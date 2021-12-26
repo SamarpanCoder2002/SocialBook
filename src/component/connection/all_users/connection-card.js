@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
 import { successMessage } from "../../main-helper/desktop-notification";
-import { sentConnectionRequest } from "../helper/api_call";
+import { connectionSpecificOperations } from "../helper/api_call";
 
 const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
   const { darkMode } = useSelector((state) => state);
@@ -14,11 +14,13 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
       style={{ borderWidth: "0.2px" }}
     >
       {/* Profile Image */}
-      <img
-        src={user.profilePic || NoProfileImage}
-        alt="profile"
-        className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
-      />
+      <div className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full">
+        <img
+          src={user.profilePic || NoProfileImage}
+          alt="profile"
+          className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
+        />
+      </div>
 
       <div className="text-center">
         {/* User Name */}
@@ -45,10 +47,10 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
           darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
         } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
         style={{ borderWidth: "0.2px" }}
-        onClick={async () => {
-          successMessage("Connection Request Sent", 2000);
+        onClick={() => {
+          connectionSpecificOperations(user.id, "sendConnectionRequest");
+          successMessage("🙋 Connection Request Sent", 2000);
           setrequestSentConnectionsIds((prev) => [...prev, user.id]);
-          await sentConnectionRequest(user.id);
         }}
       >
         Connect

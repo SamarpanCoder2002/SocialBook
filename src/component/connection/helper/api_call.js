@@ -2,7 +2,6 @@ import { API } from "../../main-helper/backend";
 import {
   errorMessage,
   infoMessage,
-  successMessage,
 } from "../../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
 
@@ -75,42 +74,31 @@ export const fetchAllSpecificRequestedUsers = async (page, connectionType) => {
   }
 };
 
-export const sentConnectionRequest = async (oppositeUserId) => {
+export const connectionSpecificOperations = async (
+  oppositeUserId,
+  requestAPItitle
+) => {
   try {
     const storedData = getDataFromLocalStorage();
 
-    console.log(storedData);
-
-    const res = await fetch(`${API}/sendConnectionRequest/${storedData?.user}`, {
+    const res = await fetch(`${API}/${requestAPItitle}/${storedData?.user}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${storedData?.token}`,
       },
       body: JSON.stringify({
-        oppositeUserId
+        oppositeUserId,
       }),
     });
 
     const response = await res.json();
-
     console.log(response);
-
-    if (response?.code === 200) {
-      
-      return true;
-    }
-
-    
-    return false;
-
-    
   } catch (err) {
     console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
     );
-    
   }
-}
+};

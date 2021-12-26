@@ -12,9 +12,8 @@ const AllUsersCollection = () => {
   );
 
   useEffect(() => {
-    setisLoading(true);
     fetchAllAvailableUsers(page).then((data) => {
-      setuserSuggestions(data || []);
+      setuserSuggestions((prev) => (data ? [...prev, ...data] : []));
       setisLoading(false);
       return;
     });
@@ -27,24 +26,24 @@ const AllUsersCollection = () => {
       lightBgColor="bg-lightElevationColor"
       darkBgColor="bg-darkElevationColor"
     />
-  ) : userSuggestions.length > 0 ? (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8 px-2 py-3">
-      {userSuggestions.length > 0 &&
-        userSuggestions.map((user, index) => {
-          if (requestSentConnectionsIds.includes(user.id))
-            return <Fragment key={index}></Fragment>;
-          return (
-            <ProfileCard
-              key={index}
-              user={user}
-              setrequestSentConnectionsIds={setrequestSentConnectionsIds}
-            />
-          );
-        })}
+  ) : userSuggestions.length > 0 &&
+    requestSentConnectionsIds.length !== userSuggestions.length ? (
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-y-8 px-2 py-3">
+      {userSuggestions.map((user, index) => {
+        if (requestSentConnectionsIds.includes(user.id))
+          return <Fragment key={index}></Fragment>;
+        return (
+          <ProfileCard
+            key={index}
+            user={user}
+            setrequestSentConnectionsIds={setrequestSentConnectionsIds}
+          />
+        );
+      })}
     </div>
   ) : (
     <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">
-      No Users Data To Show ☹️
+      No Users To Show ☹️
     </h1>
   );
 };
