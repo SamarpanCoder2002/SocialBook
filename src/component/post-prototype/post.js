@@ -333,45 +333,41 @@ const CreatePostButtonComponent = ({
 }) => {
   const navigate = useNavigate();
 
+  const handleMakePost = async () => {
+    console.log(mediaContentInformation);
+
+    if (mediaContentInformation.mediaType === PostTypes.Text) {
+      if (!textContent || textContent.length === 0) return;
+      setisLoading(true);
+      await makeTextPost(textContent);
+      setisLoading(false);
+      setTimeout(() => {
+        navigate("/feed");
+      }, 2800);
+    } else if (mediaContentInformation.mediaType === PostTypes.Video) {
+      setisLoading(true);
+      await makeVideoPost(textContent, mediaContentInformation.mediaData);
+      setisLoading(false);
+      setTimeout(() => {
+        navigate("/feed");
+      }, 2800);
+    } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
+      setisLoading(true);
+      await makeDocumentPost(textContent, mediaContentInformation.mediaData);
+      setisLoading(false);
+      setTimeout(() => {
+        navigate("/feed");
+      }, 2800);
+    }
+  };
+
   return (
     <div className="w-full text-center mt-5">
       {!isLoading ? (
         <button
           className="dark:bg-green-600 bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
           style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.4)" }}
-          onClick={async () => {
-            console.log(mediaContentInformation);
-
-            if (mediaContentInformation.mediaType === PostTypes.Text) {
-              if (!textContent || textContent.length === 0) return;
-              setisLoading(true);
-              await makeTextPost(textContent);
-              setisLoading(false);
-              setTimeout(() => {
-                navigate("/feed");
-              }, 2800);
-            } else if (mediaContentInformation.mediaType === PostTypes.Video) {
-              setisLoading(true);
-              await makeVideoPost(
-                textContent,
-                mediaContentInformation.mediaData
-              );
-              setisLoading(false);
-              setTimeout(() => {
-                navigate("/feed");
-              }, 2800);
-            } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
-              setisLoading(true);
-              await makeDocumentPost(
-                textContent,
-                mediaContentInformation.mediaData
-              );
-              setisLoading(false);
-              setTimeout(() => {
-                navigate("/feed");
-              }, 2800);
-            }
-          }}
+          onClick={handleMakePost}
         >
           Create Post
         </button>
