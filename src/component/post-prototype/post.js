@@ -4,7 +4,11 @@ import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import BaseCommonPart from "../page-builder/base";
 import { DesktopNotification } from "../main-helper/desktop-notification";
-import { makeTextPost, makeVideoPost } from "./helper/api_call";
+import {
+  makeDocumentPost,
+  makeTextPost,
+  makeVideoPost,
+} from "./helper/api_call";
 import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../../types/posttypes";
 
@@ -327,7 +331,7 @@ const CreatePostButtonComponent = ({
   setisLoading,
   mediaContentInformation,
 }) => {
-  
+  const navigate = useNavigate();
 
   return (
     <div className="w-full text-center mt-5">
@@ -343,12 +347,29 @@ const CreatePostButtonComponent = ({
               setisLoading(true);
               await makeTextPost(textContent);
               setisLoading(false);
-              
-            }else if(mediaContentInformation.mediaType === PostTypes.Video){
+              setTimeout(() => {
+                navigate("/feed");
+              }, 2800);
+            } else if (mediaContentInformation.mediaType === PostTypes.Video) {
               setisLoading(true);
-              await makeVideoPost(textContent, mediaContentInformation.mediaData);
+              await makeVideoPost(
+                textContent,
+                mediaContentInformation.mediaData
+              );
               setisLoading(false);
-              
+              setTimeout(() => {
+                navigate("/feed");
+              }, 2800);
+            } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
+              setisLoading(true);
+              await makeDocumentPost(
+                textContent,
+                mediaContentInformation.mediaData
+              );
+              setisLoading(false);
+              setTimeout(() => {
+                navigate("/feed");
+              }, 2800);
             }
           }}
         >
