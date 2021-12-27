@@ -3,26 +3,40 @@ import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import BaseCommonPart from "../page-builder/base";
+import { DesktopNotification } from "../main-helper/desktop-notification";
+import { makeTextPost } from "./helper/api_call";
+import { useNavigate } from "react-router-dom";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);
+  const [textContent, settextContent] = useState("");
+  const [isLoading, setisLoading] = useState(false);
+  const [mediaContentInformation, setmediaContentInformation] = useState({
+    mediaType: "",
+    mediaData: "",
+  });
 
   return (
-    <BaseCommonPart>
+    <BaseCommonPart isLoading={isLoading}>
       <div className="h-screen bg-lightBgColor dark:bg-darkBgColor pt-3 overflow-y-scroll suggested-profiles-container pb-10">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
           <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg shadow-lg">
             <HeadingSection setmediaOptions={setmediaOptions} />
-            <MiddleSidePostWritingSection />
+            <MiddleSidePostWritingSection settextContent={settextContent} />
             <LowerExtraMediaSection
               mediaOptions={mediaOptions}
               setmediaOptions={setmediaOptions}
             />
           </div>
 
-          <CreatePostButtonComponent />
+          <CreatePostButtonComponent
+            textContent={textContent}
+            setisLoading={setisLoading}
+            isLoading={isLoading}
+          />
         </div>
       </div>
+      <DesktopNotification />
     </BaseCommonPart>
   );
 };
@@ -69,20 +83,15 @@ const HeadingSection = ({ setmediaOptions }) => {
   );
 };
 
-const MiddleSidePostWritingSection = () => {
+const MiddleSidePostWritingSection = ({ settextContent }) => {
   return (
-    <div
-      className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3"
-      contenteditable="true"
+    <textarea
+      className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3 scroller"
       style={{ minHeight: "200px" }}
-    ></div>
-
-    // <div className="mt-3 h-60 md:h-72">
-    //   <textarea
-    //     className="w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none rounded-lg p-3 resize-none min-h-full"
-    //     placeholder="Write Something Here"
-    //   ></textarea>
-    // </div>
+      onChange={(e) => {
+        settextContent(e.target.value);
+      }}
+    ></textarea>
   );
 };
 
@@ -277,15 +286,34 @@ const ShowPdf = ({ enteredLink }) => {
   );
 };
 
-const CreatePostButtonComponent = () => {
+const CreatePostButtonComponent = ({
+  textContent,
+  isLoading,
+  setisLoading,
+}) => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full text-center mt-5">
-      <button
-        className="dark:bg-green-600 bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
-        style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.4)" }}
-      >
-        Create Post
-      </button>
+      {!isLoading ? (
+        <button
+          className="dark:bg-green-600 bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
+          style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.4)" }}
+          onClick={async () => {
+            if (!textContent || textContent.length === 0) return;
+            setisLoading(true);
+            await makeTextPost(textContent);
+            setisLoading(false);
+            navigate("/feed");
+          }}
+        >
+          Create Post
+        </button>
+      ) : (
+        <div className="text-center text-xl text-indigo-400 tracking-wider">
+          Your Post is Creating.... Please Wait
+        </div>
+      )}
     </div>
   );
 };
@@ -423,7 +451,7 @@ const SliderTextSection = ({
         <i class="far fa-trash-alt fa-lg z-50" style={{ color: "red" }}></i>
       </button>
       <textarea
-        className="w-full bg-lightBgColor dark:bg-darkBgColor focus:outline-none rounded-lg p-3 resize-none min-h-full text-black dark:text-white"
+        className="w-full bg-lightBgColor dark:bg-darkBgColor focus:outline-none rounded-lg p-3 resize-none min-h-full text-black dark:text-white scroller"
         defaultValue={particularSlider.text || ""}
         placeholder="Write Something Here"
         onChange={(e) => {
