@@ -21,19 +21,7 @@ export const makeTextPost = async (text) => {
       }),
     });
 
-    const response = await res.json();
-
-    if (response?.code === 200) {
-      successMessage("Text Post Created Successfully", 3000);
-      return;
-    }
-
-    if (response?.code === 403) {
-      infoMessage(response?.message, 3000);
-      return;
-    }
-
-    errorMessage(response?.message, 3000);
+    await apiCallCommonPart(res);
   } catch (err) {
     console.log(err);
     errorMessage(
@@ -41,4 +29,46 @@ export const makeTextPost = async (text) => {
       10000
     );
   }
+};
+
+export const makeVideoPost = async (text, video) => {
+  try {
+    const storedData = getDataFromLocalStorage();
+
+    const res = await fetch(`${API}/createVideoPost/${storedData?.user}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedData?.token}`,
+      },
+      body: JSON.stringify({
+        text,
+        video,
+      }),
+    });
+
+    await apiCallCommonPart(res);
+  } catch (err) {
+    console.log(err);
+    errorMessage(
+      "Some error happened... Make sure your internet connection is stable",
+      10000
+    );
+  }
+};
+
+const apiCallCommonPart = async (res) => {
+  const response = await res.json();
+
+  if (response?.code === 200) {
+    successMessage("Post Created Successfully", 3000);
+    return;
+  }
+
+  if (response?.code === 403) {
+    infoMessage(response?.message, 3000);
+    return;
+  }
+
+  errorMessage(response?.message, 3000);
 };

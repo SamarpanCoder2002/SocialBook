@@ -4,15 +4,16 @@ import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import BaseCommonPart from "../page-builder/base";
 import { DesktopNotification } from "../main-helper/desktop-notification";
-import { makeTextPost } from "./helper/api_call";
+import { makeTextPost, makeVideoPost } from "./helper/api_call";
 import { useNavigate } from "react-router-dom";
+import { PostTypes } from "../../types/posttypes";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);
   const [textContent, settextContent] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [mediaContentInformation, setmediaContentInformation] = useState({
-    mediaType: "",
+    mediaType: PostTypes.Text,
     mediaData: "",
   });
 
@@ -26,6 +27,7 @@ const PostScreen = () => {
             <LowerExtraMediaSection
               mediaOptions={mediaOptions}
               setmediaOptions={setmediaOptions}
+              setmediaContentInformation={setmediaContentInformation}
             />
           </div>
 
@@ -33,6 +35,7 @@ const PostScreen = () => {
             textContent={textContent}
             setisLoading={setisLoading}
             isLoading={isLoading}
+            mediaContentInformation={mediaContentInformation}
           />
         </div>
       </div>
@@ -95,7 +98,11 @@ const MiddleSidePostWritingSection = ({ settextContent }) => {
   );
 };
 
-const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
+const LowerExtraMediaSection = ({
+  mediaOptions,
+  setmediaOptions,
+  setmediaContentInformation,
+}) => {
   return (
     <div>
       {mediaOptions >= 0 && (
@@ -103,7 +110,13 @@ const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
           {/* For Cancel Media Section */}
           <div
             className="p-3 w-full flex flex-wrap justify-between items-center"
-            onClick={() => setmediaOptions(-1)}
+            onClick={() => {
+              setmediaOptions(-1);
+              setmediaContentInformation({
+                mediaType: PostTypes.Text,
+                mediaData: "",
+              });
+            }}
           >
             <div className="font-semibold tracking-wider text-green-600 dark:text-green-400">
               Add External Content
@@ -114,12 +127,27 @@ const LowerExtraMediaSection = ({ mediaOptions, setmediaOptions }) => {
           </div>
 
           {/* Media Content */}
-          {(mediaOptions === 0 && <PictureSection />) ||
+          {(mediaOptions === 0 && (
+            <PictureSection
+              setmediaContentInformation={setmediaContentInformation}
+            />
+          )) ||
             ((mediaOptions === 1 || mediaOptions === 2) && (
-              <YTVideoAndPdfComponent mediaOptions={mediaOptions} />
+              <YTVideoAndPdfComponent
+                mediaOptions={mediaOptions}
+                setmediaContentInformation={setmediaContentInformation}
+              />
             )) ||
-            (mediaOptions === 3 && <CreateSlide />) ||
-            (mediaOptions === 4 && <CreatePoll />)}
+            (mediaOptions === 3 && (
+              <CreateSlide
+                setmediaContentInformation={setmediaContentInformation}
+              />
+            )) ||
+            (mediaOptions === 4 && (
+              <CreatePoll
+                setmediaContentInformation={setmediaContentInformation}
+              />
+            ))}
         </div>
       )}
     </div>
@@ -183,12 +211,19 @@ const PictureSection = ({ maxFiles }) => {
   );
 };
 
-const YTVideoAndPdfComponent = ({ mediaOptions }) => {
+const YTVideoAndPdfComponent = ({
+  mediaOptions,
+  setmediaContentInformation,
+}) => {
   const [enteredLink, setenteredLink] = useState("");
   const [viewComponent, setviewComponent] = useState(false);
 
   const handleChange = (e) => {
     setenteredLink(e.target.value);
+    setmediaContentInformation({
+      mediaType: mediaOptions === 1 ? PostTypes.Video : PostTypes.Pdf,
+      mediaData: e.target.value,
+    });
   };
 
   const handleView = (e) => {
@@ -290,8 +325,9 @@ const CreatePostButtonComponent = ({
   textContent,
   isLoading,
   setisLoading,
+  mediaContentInformation,
 }) => {
-  const navigate = useNavigate();
+  
 
   return (
     <div className="w-full text-center mt-5">
@@ -300,11 +336,20 @@ const CreatePostButtonComponent = ({
           className="dark:bg-green-600 bg-green-400 text-lg text-white font-semibold py-3 px-6 rounded-3xl tracking-wider"
           style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.4)" }}
           onClick={async () => {
-            if (!textContent || textContent.length === 0) return;
-            setisLoading(true);
-            await makeTextPost(textContent);
-            setisLoading(false);
-            navigate("/feed");
+            console.log(mediaContentInformation);
+
+            if (mediaContentInformation.mediaType === PostTypes.Text) {
+              if (!textContent || textContent.length === 0) return;
+              setisLoading(true);
+              await makeTextPost(textContent);
+              setisLoading(false);
+              
+            }else if(mediaContentInformation.mediaType === PostTypes.Video){
+              setisLoading(true);
+              await makeVideoPost(textContent, mediaContentInformation.mediaData);
+              setisLoading(false);
+              
+            }
           }}
         >
           Create Post
