@@ -6,6 +6,7 @@ import BaseCommonPart from "../page-builder/base";
 import { DesktopNotification } from "../main-helper/desktop-notification";
 import {
   makeDocumentPost,
+  makePollPost,
   makeTextPost,
   makeVideoPost,
 } from "./helper/api_call";
@@ -340,25 +341,28 @@ const CreatePostButtonComponent = ({
       if (!textContent || textContent.length === 0) return;
       setisLoading(true);
       await makeTextPost(textContent);
-      setisLoading(false);
-      setTimeout(() => {
-        navigate("/feed");
-      }, 2800);
+      afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Video) {
       setisLoading(true);
       await makeVideoPost(textContent, mediaContentInformation.mediaData);
-      setisLoading(false);
-      setTimeout(() => {
-        navigate("/feed");
-      }, 2800);
+      afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
       setisLoading(true);
       await makeDocumentPost(textContent, mediaContentInformation.mediaData);
-      setisLoading(false);
-      setTimeout(() => {
-        navigate("/feed");
-      }, 2800);
+      afterPostMake();
+    } else if (mediaContentInformation.mediaType === PostTypes.Poll) {
+      setisLoading(true);
+      const { question, options } = mediaContentInformation.mediaData;
+      await makePollPost(textContent, question, options);
+      afterPostMake();
     }
+  };
+
+  const afterPostMake = () => {
+    setisLoading(false);
+    setTimeout(() => {
+      navigate("/feed");
+    }, 2800);
   };
 
   return (
@@ -528,7 +532,7 @@ const SliderTextSection = ({
   );
 };
 
-const CreatePoll = () => {
+const CreatePoll = ({ setmediaContentInformation }) => {
   const [pollContainer, setpollContainer] = useState({
     question: "",
     options: [],
@@ -543,13 +547,17 @@ const CreatePoll = () => {
         onChange={(e) => {
           pollContainer.question = e.target.value;
           setpollContainer({ ...pollContainer });
+          setmediaContentInformation({
+            mediaType: PostTypes.Poll,
+            mediaData: pollContainer,
+          });
         }}
       />
 
       <div className="flex flex-wrap mt-3 justify-center">
         {pollContainer.options.map((option, index) => {
           return (
-            <div className="w-full md:w-1/2 p-2">
+            <div className="w-full md:w-1/2 p-2" key={index}>
               <input
                 type="text"
                 placeholder={"Enter Option Here"}
@@ -557,6 +565,10 @@ const CreatePoll = () => {
                 onChange={(e) => {
                   pollContainer.options[index] = e.target.value;
                   setpollContainer({ ...pollContainer });
+                  setmediaContentInformation({
+                    mediaType: PostTypes.Poll,
+                    mediaData: pollContainer,
+                  });
                 }}
               />
             </div>
@@ -570,6 +582,10 @@ const CreatePoll = () => {
           onClick={() => {
             pollContainer.options.push("");
             setpollContainer({ ...pollContainer });
+            setmediaContentInformation({
+              mediaType: PostTypes.Poll,
+              mediaData: pollContainer,
+            });
           }}
         >
           Add Option
@@ -581,6 +597,10 @@ const CreatePoll = () => {
             onClick={() => {
               pollContainer.options.pop();
               setpollContainer({ ...pollContainer });
+              setmediaContentInformation({
+                mediaType: PostTypes.Poll,
+                mediaData: pollContainer,
+              });
             }}
           >
             Delete Last Option

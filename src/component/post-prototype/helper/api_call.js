@@ -83,6 +83,33 @@ export const makeDocumentPost = async (text, pdfSrc) => {
   }
 };
 
+export const makePollPost = async (text, question, options) => {
+  try {
+    const storedData = getDataFromLocalStorage();
+
+    const res = await fetch(`${API}/createPollPost/${storedData?.user}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedData?.token}`,
+      },
+      body: JSON.stringify({
+        text,
+        question,
+        options,
+      }),
+    });
+
+    await apiCallCommonPart(res);
+  } catch (err) {
+    console.log(err);
+    errorMessage(
+      "Some error happened... Make sure your internet connection is stable",
+      10000
+    );
+  }
+}
+
 const apiCallCommonPart = async (res) => {
   const response = await res.json();
 
