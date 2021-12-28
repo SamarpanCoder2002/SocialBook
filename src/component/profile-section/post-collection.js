@@ -251,9 +251,8 @@ const ParticularConnectionPostCollection = () => {
   return (
     <div className="mt-3">
       {testing.map((item, index) => {
-        console.log("item", item);
         return (
-          <div className="mb-5">
+          <div className="mb-5" key={index}>
             <CommonPostStyle
               key={index}
               item={item}

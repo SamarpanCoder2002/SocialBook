@@ -101,3 +101,27 @@ export const createUserProfile = async (
       setisLoading(false);
     });
 };
+
+export const fetchUserProfile = async (userId) => {
+  try {
+    const storedData = getDataFromLocalStorage();
+    const res = await fetch(`${API}/getProfileData/${storedData?.user}/${userId}`, {
+      method: "GET",
+      headers: {
+        ContentType: "application/json",
+        Authorization: `Bearer ${storedData?.token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (data.code === 200) return data.data;
+    else {
+      errorMessage(data.message, 10000);
+      return;
+    }
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+};

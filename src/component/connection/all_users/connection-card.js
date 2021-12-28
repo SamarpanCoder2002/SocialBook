@@ -27,7 +27,13 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
         <h4
           className="text-base mt-1 tracking-wide hover:underline cursor-pointer"
           onClick={() => {
-            navigate(`/${user.id}/profile`);
+            navigate(`/${user.id}/profile`, {
+              state: {
+                name: user.name,
+                profilePic: user.profilePic,
+                description: user.description,
+              }
+            });
           }}
         >
           {user.name}

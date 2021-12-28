@@ -1,37 +1,77 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import ParticularConnectionPostCollection from "./post-collection";
+import NoProfilePic from "../../image/no_profile_picture.png";
+import Waiting from "../main-helper/waiting";
+import { fetchUserProfile } from "./helper/api-call";
 
 const ProfileSection = () => {
-  const desc =
-    "Dwayne Douglas Johnson, also known by his ring name The Rock, is an American actor, producer, businessman, and former professional wrestler. Regarded as one of the greatest professional wrestlers of all time, he wrestled for WWE for eight years prior to pursuing an acting career. ";
+  const { state } = useLocation();
+  const [userInformation, setuserInformation] = useState({
+    name: state?.name || "",
+    description: state?.description || "",
+    profilePic: state?.profilePic || "",
+    email: "",
+    phone: "",
+  });
+  const { name, description, profilePic } = userInformation;
+  const profileData = getDataFromLocalStorage();
+  const { connectionId } = useParams();
+  const [isLoading, setisLoading] = useState(false);
 
-  return (
+  useEffect(() => {
+    if (profileData && profileData.user === connectionId) {
+      setisLoading(true);
+      fetchUserProfile(connectionId).then((res) => {
+        console.log(res);
+        res &&
+          setuserInformation((prev) => {
+            return {
+              ...prev,
+              name: res.name,
+              description: res.description,
+              profilePic: res.profilePic,
+              email: res?.email || "",
+              interests: res?.interests || [],
+            };
+          });
+        setisLoading(false);
+      });
+    }
+  }, [connectionId]);
+
+  return isLoading ? (
+    <Waiting />
+  ) : (
     <BaseCommonPart>
       <div className="h-screen bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-60 2xl:px-96 py-1">
           <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor justify-center  p-3 mt-5 flex flex-col rounded-lg">
             <div className="w-full ">
-              <div className="relative w-16 h-16 lg:w-32 lg:h-32 mx-auto cursor-pointer">
+              {/* Profile Image */}
+              <div className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full mx-auto">
                 <img
-                  className="rounded-full border-2 border-gray-100 shadow-sm"
-                  src="https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg"
-                  alt="profile pic"
+                  src={profilePic || NoProfilePic}
+                  alt="profile"
+                  className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
                 />
-                <div className="absolute bottom-0 right-0 lg:right-5 bg-lightBgColor rounded-full w-5 h-5 text-center shadow-2xl">
-                  <i class="fas fa-plus" style={{ color: "#2299ff" }}></i>
-                </div>
+
+                {profileData.user === connectionId && (
+                  <div className="absolute bottom-0 right-0 lg:right-5 bg-lightBgColor rounded-full w-5 h-5 text-center shadow-2xl">
+                    <i className="fas fa-plus" style={{ color: "#2299ff" }}></i>
+                  </div>
+                )}
               </div>
             </div>
 
             <div>
               <div className="flex flex-col justify-center items-center">
                 <div className="text-center">
-                  <h1 className="text-xl font-semibold mt-3">Dwayne Johnson</h1>
-                  <h2 className="text-sm mt-3">{desc}</h2>
+                  <h1 className="text-xl font-semibold mt-3">{name}</h1>
+                  <h2 className="text-sm mt-3">{description}</h2>
                 </div>
               </div>
             </div>
@@ -63,19 +103,16 @@ const ProfileRelatedButtons = () => {
   const profileData = getDataFromLocalStorage();
 
   useEffect(() => {
-
-    if(profileData && profileData.userId !== connectionId){
-      
+    if (profileData && profileData.user !== connectionId) {
     }
-
-  }, [connectionId])
+  }, [connectionId]);
 
   // ** NOTE: 1) if own user profile, then show edit button
   // ** NOTE: 2) if the viewer is connected to current user, then show remove and Message button
   // ** NOTE: 3) if the viewer is not connected to current user, then show connect button
 
-  return profileData && profileData.user === connectionId ? (
-    <div className="mx-44 sm:mx-52 md:mx-72 lg:mx-80 2xl:mx-96">
+  return profileData?.user === connectionId ? (
+    <div className="mx-20 sm:mx-52 md:mx-72 lg:mx-80 2xl:mx-96">
       <EditButton darkMode={darkMode} />
     </div>
   ) : (

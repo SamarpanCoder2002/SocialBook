@@ -73,7 +73,13 @@ const ConnectionTile = ({ user }) => {
     <div
       className="flex items-center w-full md:w-2/3 cursor-pointer"
       onClick={() => {
-        navigate(`/${user.id}/profile`);
+        navigate(`/${user.id}/profile`, {
+          state: {
+            name: user.name,
+            profilePic: user.profilePic,
+            description: user.description,
+          },
+        });
       }}
     >
       <div className="w-10 h-10 md:w-16 md:h-16 bg-lightCardColor dark:bg-darkCardColor rounded-full">
