@@ -3,11 +3,15 @@ import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import { useSelector } from "react-redux";
 import { Carousel } from "react-responsive-carousel";
 import BaseCommonPart from "../page-builder/base";
-import { DesktopNotification } from "../main-helper/desktop-notification";
+import {
+  DesktopNotification,
+  infoMessage,
+} from "../main-helper/desktop-notification";
 import {
   makeDocumentPost,
   makeImagePost,
   makePollPost,
+  makeSlidePost,
   makeTextPost,
   makeVideoPost,
 } from "./helper/api_call";
@@ -170,10 +174,10 @@ const PictureSection = ({ maxFiles, setmediaContentInformation }) => {
 
     console.log(incommingFiles);
 
-    setmediaContentInformation(({
+    setmediaContentInformation({
       mediaType: PostTypes.Image,
       mediaData: incommingFiles.filter((file) => file.valid),
-    }))
+    });
   };
   const handleDelete = (id) => {
     setFiles(files.filter((x) => x.id !== id));
@@ -361,9 +365,16 @@ const CreatePostButtonComponent = ({
       const { question, options } = mediaContentInformation.mediaData;
       await makePollPost(textContent, question, options);
       afterPostMake();
-    }else if(mediaContentInformation.mediaType === PostTypes.Image){
+    } else if (mediaContentInformation.mediaType === PostTypes.Image) {
       setisLoading(true);
-      await makeImagePost(textContent, mediaContentInformation.mediaData.map(file => file.file));
+      await makeImagePost(
+        textContent,
+        mediaContentInformation.mediaData.map((file) => file.file)
+      );
+      afterPostMake();
+    } else if (mediaContentInformation.mediaType === PostTypes.Slide) {
+      setisLoading(true);
+      await makeSlidePost(textContent, mediaContentInformation.mediaData);
       afterPostMake();
     }
   };
@@ -394,7 +405,7 @@ const CreatePostButtonComponent = ({
   );
 };
 
-const CreateSlide = () => {
+const CreateSlide = ({ setmediaContentInformation }) => {
   let [postData, setpostData] = useState([]);
   const [showImgUploadBtn, setshowImgUploadBtn] = useState(false);
 
@@ -428,8 +439,13 @@ const CreateSlide = () => {
                     setshowImgUploadBtn(false);
 
                     console.log(postData);
+
+                    setmediaContentInformation({
+                      mediaType: PostTypes.Slide,
+                      mediaData: postData,
+                    });
                   } else {
-                    alert(
+                    infoMessage(
                       "Image Size is too large. Please upload image less than 2MB"
                     );
                   }
@@ -452,12 +468,20 @@ const CreateSlide = () => {
         </div>
       </div>
 
-      <SlideDataShowCase postData={postData} setpostData={setpostData} />
+      <SlideDataShowCase
+        postData={postData}
+        setpostData={setpostData}
+        setmediaContentInformation={setmediaContentInformation}
+      />
     </Fragment>
   );
 };
 
-const SlideDataShowCase = ({ postData, setpostData }) => {
+const SlideDataShowCase = ({
+  postData,
+  setpostData,
+  setmediaContentInformation,
+}) => {
   return (
     <div className="mt-5 container mx-auto md:px-10 lg:px-80 2xl:px-96">
       <Carousel dynamicHeight={true} renderThumbs={() => {}}>
@@ -481,6 +505,7 @@ const SlideDataShowCase = ({ postData, setpostData }) => {
               particularSlider={particularSlider}
               setpostData={setpostData}
               index={index}
+              setmediaContentInformation={setmediaContentInformation}
             />
           );
         })}
@@ -515,6 +540,7 @@ const SliderTextSection = ({
   setpostData,
   particularSlider,
   index,
+  setmediaContentInformation,
 }) => {
   return (
     <div className="text-justify p-2 text-white h-60 md:h-72">
@@ -536,6 +562,11 @@ const SliderTextSection = ({
           setpostData([...postData]);
 
           console.log(postData);
+
+          setmediaContentInformation({
+            mediaType: PostTypes.Slide,
+            mediaData: postData,
+          });
         }}
       />
     </div>
