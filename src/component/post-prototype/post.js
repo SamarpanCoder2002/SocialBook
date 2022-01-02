@@ -6,6 +6,7 @@ import BaseCommonPart from "../page-builder/base";
 import { DesktopNotification } from "../main-helper/desktop-notification";
 import {
   makeDocumentPost,
+  makeImagePost,
   makePollPost,
   makeTextPost,
   makeVideoPost,
@@ -159,7 +160,7 @@ const LowerExtraMediaSection = ({
   );
 };
 
-const PictureSection = ({ maxFiles }) => {
+const PictureSection = ({ maxFiles, setmediaContentInformation }) => {
   const [files, setFiles] = useState([]);
   const [imageSrc, setImageSrc] = useState(undefined);
   const { darkMode } = useSelector((state) => state);
@@ -167,7 +168,12 @@ const PictureSection = ({ maxFiles }) => {
   const updateFiles = (incommingFiles) => {
     setFiles(incommingFiles);
 
-    console.log(files);
+    console.log(incommingFiles);
+
+    setmediaContentInformation(({
+      mediaType: PostTypes.Image,
+      mediaData: incommingFiles.filter((file) => file.valid),
+    }))
   };
   const handleDelete = (id) => {
     setFiles(files.filter((x) => x.id !== id));
@@ -186,7 +192,7 @@ const PictureSection = ({ maxFiles }) => {
         maxFiles={maxFiles || 8}
         maxFileSize={1048576}
         onClean={() => setFiles([])}
-        accept={"image/jpeg,png"}
+        accept={"image/jpeg, image/png"}
         label={"Drop Files here or click to browse"}
         backgroundColor={darkMode ? "#192428" : "#f3f3f3"}
         className="z-50"
@@ -354,6 +360,10 @@ const CreatePostButtonComponent = ({
       setisLoading(true);
       const { question, options } = mediaContentInformation.mediaData;
       await makePollPost(textContent, question, options);
+      afterPostMake();
+    }else if(mediaContentInformation.mediaType === PostTypes.Image){
+      setisLoading(true);
+      await makeImagePost(textContent, mediaContentInformation.mediaData.map(file => file.file));
       afterPostMake();
     }
   };
