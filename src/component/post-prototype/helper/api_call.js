@@ -174,6 +174,35 @@ export const makeSlidePost = async (text, sliderCollection) => {
   }
 };
 
+export const updatePollData = async (newPollData, postId) => {
+  try {
+    const storedData = getDataFromLocalStorage();
+
+    const res = await fetch(`${API}/updatePollInformation/${storedData?.user}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${storedData?.token}`,
+      },
+      body: JSON.stringify({
+        newPollData,
+        postId,
+      }),
+    });
+
+    if(res.status !== 200) {
+      errorMessage(res.message, 3000);
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    errorMessage(
+      "Some error happened... Make sure your internet connection is stable",
+      10000
+    );
+  }
+}
+
 const apiCallCommonPart = async (res) => {
   const response = await res.json();
 

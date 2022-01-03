@@ -1,9 +1,13 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../../types/posttypes";
+import { DesktopNotification } from "../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import CommonPostStyle from "../post-prototype/post-common-style";
+import { fetchFeedPosts } from "./helper/api_call";
+import Waiting from "../main-helper/waiting";
 
 const HomePage = () => {
   console.log("Home page");
@@ -264,6 +268,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      <DesktopNotification />
     </BaseCommonPart>
   );
 };
@@ -319,17 +324,38 @@ const LeftProfileShortSection = () => {
 };
 
 const RightFeedSection = ({ testing }) => {
+  const [feedDataCollection, setfeedDataCollection] = useState([]);
+  const [page, setpage] = useState(1);
+  const [isLoading, setisLoading] = useState(true);
+
+  useEffect(() => {
+    !isLoading && setisLoading(true);
+    fetchFeedPosts(page).then((data) => {
+      setfeedDataCollection(data);
+      setisLoading(false);
+    });
+  }, [page]);
+
   return (
     <div className="h-[90vh] overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
-      {testing.map((item, index) => {
-        return (
-          <CommonPostStyle
-            key={index}
-            item={item}
-            allowCommentSection={false}
-          />
-        );
-      })}
+      {isLoading && (
+        <Waiting
+          showName="Loading... "
+          largeScreenPadding="xl:px-60"
+          lightBgColor="bg-lightElevationColor"
+          darkBgColor="bg-darkElevationColor"
+        />
+      )}
+      {!isLoading &&
+        feedDataCollection.map((feedData, index) => {
+          return (
+            <CommonPostStyle
+              key={index}
+              item={feedData}
+              allowCommentSection={false}
+            />
+          );
+        })}
     </div>
   );
 };

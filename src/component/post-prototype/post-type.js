@@ -8,6 +8,10 @@ import "react-leaf-polls/dist/index.css";
 import { useSelector } from "react-redux";
 import Linkify from "react-linkify";
 import ShowMoreText from "react-show-more-text";
+import { Container } from "postcss";
+import { updatePollData } from "./helper/api_call";
+import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
+import { infoMessage } from "../main-helper/desktop-notification";
 
 export const TextPost = ({ postData }) => {
   return (
@@ -156,17 +160,35 @@ export const PdfPost = ({ postData }) => {
 
 export const PollPost = ({ postData }) => {
   const { darkMode } = useSelector((state) => state);
+  const storedData = getDataFromLocalStorage();
+
+  console.log("Here: ", postData);
+
+  const vote = (item, results) => {
+    const newResults = results.map((result) => {
+      return { text: result.text, votes: result.votes };
+    });
+
+    const updatedData = {
+      content: postData.content,
+      postHolderId: postData.postHolderId,
+      type: postData.type,
+      voterIds: postData.voterIds
+        ? [...postData.voterIds, storedData?.user]
+        : [storedData?.user],
+    };
+
+    updatedData.content.prevResults = newResults;
+
+    console.log(updatedData);
+    updatePollData(updatedData, postData.postId);
+  };
 
   const customTheme = {
     textColor: darkMode ? "#fff" : "#303338",
     mainColor: "#00B87B",
     backgroundColor: darkMode ? "#334247" : "#d3dbde",
     alignment: "center",
-  };
-
-  const vote = (item, results) => {
-    // Here you probably want to manage
-    // and return the modified data to the server.
   };
 
   return (
@@ -178,10 +200,18 @@ export const PollPost = ({ postData }) => {
       >
         <LeafPoll
           type="multiple"
-          question={postData.content.pollItems.question}
-          results={postData.content.pollItems.prevResults}
+          question={postData.content.question}
+          results={postData.content.prevResults || []}
           theme={customTheme}
-          onVote={vote}
+          open={false}
+          onVote={() => {
+            if (!postData.voterIds?.includes(storedData?.user))
+              vote(null, postData.content.prevResults);
+            else
+              infoMessage(
+                "You Already Voted Before... This result not recorded"
+              );
+          }}
         />
       </div>
     </Fragment>
