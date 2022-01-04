@@ -4,13 +4,18 @@ import {
   errorMessage,
   successMessage,
 } from "../../main-helper/desktop-notification";
-import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
+import {
+  getDataFromLocalStorage,
+  storeDataInLocalStorage,
+} from "../../main-helper/local-storage-management";
 
 export const isUserProfileCreatedBefore = async () => {
   try {
     const authTokenResult = getDataFromLocalStorage();
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
+
+    console.log("user is: ", user);
 
     const res = await fetch(`${API}/isUserPresent/${user}`, {
       method: "GET",
@@ -24,8 +29,26 @@ export const isUserProfileCreatedBefore = async () => {
 
     console.log("checking: ", data);
 
-    if (data.code === 200) return true;
-    else {
+    if (data.code === 200) {
+      if (
+        authTokenResult.name !== data.name ||
+        authTokenResult.description !== data.description ||
+        authTokenResult.profilePic !== data.profilePic
+      ) {
+        console.log("Local storage Data updated");
+        storeDataInLocalStorage(
+          token,
+          user,
+          data.name,
+          data?.description,
+          data?.profilePic
+        );
+      } else {
+        console.log("no need to update local storage");
+      }
+
+      return true;
+    } else {
       if (data.code === 403)
         return {
           code: 403,
@@ -34,6 +57,8 @@ export const isUserProfileCreatedBefore = async () => {
       return false;
     }
   } catch (err) {
+    console.log("Error is: ", err);
+
     alert(
       "Some Error Happened. Make Sure Your Network Connection is Stable",
       10000
@@ -105,13 +130,16 @@ export const createUserProfile = async (
 export const fetchUserProfile = async (userId) => {
   try {
     const storedData = getDataFromLocalStorage();
-    const res = await fetch(`${API}/getProfileData/${storedData?.user}/${userId}`, {
-      method: "GET",
-      headers: {
-        ContentType: "application/json",
-        Authorization: `Bearer ${storedData?.token}`,
-      },
-    });
+    const res = await fetch(
+      `${API}/getProfileData/${storedData?.user}/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          ContentType: "application/json",
+          Authorization: `Bearer ${storedData?.token}`,
+        },
+      }
+    );
 
     const data = await res.json();
 

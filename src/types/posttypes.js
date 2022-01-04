@@ -22,3 +22,8 @@ export const ChatMsgTypes = {
     text: "text",
     image: "image",
 }
+
+export const PostCollectionDataTypes = {
+    feedData: "feedData",
+    myPostsData: "myPostsData"
+}

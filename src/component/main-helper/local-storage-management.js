@@ -1,4 +1,4 @@
-export const storeDataInLocalStorage = (token, userId) => {
+export const storeDataInLocalStorage = (token, userId, name="", description="", profilePic="") => {
   console.log("storeDataInLocalStorage");
 
   localStorage.setItem(
@@ -7,6 +7,9 @@ export const storeDataInLocalStorage = (token, userId) => {
       token,
       darkMode: true,
       user: userId,
+      name,
+      description,
+      profilePic
     })
   );
 };

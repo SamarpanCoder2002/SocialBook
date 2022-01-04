@@ -8,7 +8,6 @@ import "react-leaf-polls/dist/index.css";
 import { useSelector } from "react-redux";
 import Linkify from "react-linkify";
 import ShowMoreText from "react-show-more-text";
-import { Container } from "postcss";
 import { updatePollData } from "./helper/api_call";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import { infoMessage } from "../main-helper/desktop-notification";
@@ -25,7 +24,7 @@ export const TextPost = ({ postData }) => {
           anchorClass="my-anchor-css-class"
           expanded={false}
         >
-          {postData.content.text}
+          {postData.content?.text}
         </ShowMoreText>
       </Linkify>
     </div>
@@ -34,7 +33,7 @@ export const TextPost = ({ postData }) => {
 
 export const ImagePost = ({ postData }) => {
   const breakpointColumnsObj = {
-    default: postData.content.image.length < 4 ? 2 : 4,
+    default: postData.content?.imagesCollection?.length < 4 ? 2 : 4,
   };
 
   return (
@@ -42,18 +41,18 @@ export const ImagePost = ({ postData }) => {
       <TextPost postData={postData} />
       <div
         className={
-          postData.content.image.length === 1
+          postData.content?.imagesCollection?.length === 1
             ? "bg-lightElevationColor dark:bg-darkElevationColor mb-1"
             : "bg-lightElevationColor dark:bg-darkElevationColor w-full max-h-screen mb-1"
         }
       >
-        {(postData.content.image.length === 1 && (
+        {(postData.content?.imagesCollection?.length === 1 && (
           <img
-            src={postData.content.image[0]}
+            src={postData.content?.imagesCollection[0]}
             alt="post"
             className="max-h-screen mx-auto object-cover w-full cursor-pointer"
             onClick={() => {
-              window.open(postData.content.image[0], "_blank");
+              window.open(postData.content?.imagesCollection[0], "_blank");
             }}
           />
         )) || (
@@ -63,16 +62,18 @@ export const ImagePost = ({ postData }) => {
             columnClassName="my-masonry-grid_column"
             align="center"
           >
-            {postData.content.image.length > 0 &&
-              postData.content.image.map((particularImg, index) => (
-                <img
-                  src={particularImg}
-                  alt="post"
-                  className="mx-auto object-cover mb-2 cursor-pointer rounded-md"
-                  key={index}
-                  onClick={() => window.open(particularImg, "_blank")}
-                />
-              ))}
+            {postData.content?.imagesCollection?.length > 0 &&
+              postData.content?.imagesCollection?.map(
+                (particularImg, index) => (
+                  <img
+                    src={particularImg}
+                    alt="post"
+                    className="mx-auto object-cover mb-2 cursor-pointer rounded-md"
+                    key={index}
+                    onClick={() => window.open(particularImg, "_blank")}
+                  />
+                )
+              )}
           </Masonry>
         )}
       </div>
@@ -93,7 +94,10 @@ export const VideoPost = ({ postData }) => {
         <iframe
           width="100%"
           height="315"
-          src={postData.content.video}
+          src={`https://www.youtube.com/embed/${postData.content?.video
+            .toString()
+            .split("/")
+            .pop()}`}
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -113,7 +117,7 @@ export const SliderPost = ({ postData }) => {
         dynamicHeight={true}
         renderThumbs={() => {}}
       >
-        {postData.content.sliderContent.map((particularSlider, index) => {
+        {postData.content?.slidesCollection?.map((particularSlider, index) => {
           if (particularSlider.type === "image") {
             return (
               <div key={index}>
@@ -131,7 +135,7 @@ export const SliderPost = ({ postData }) => {
 
           return (
             <div
-              className="text-justify p-2 bg-blue-600 text-white"
+              className="text-justify px-5 py-8 bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor border border-lightElevationColor dark:border-darkElevationColor"
               key={index}
             >
               {particularSlider.data}
@@ -148,7 +152,7 @@ export const PdfPost = ({ postData }) => {
     <Fragment>
       <TextPost postData={postData} />
       <iframe
-        src={postData.content.pdfSrc}
+        src={postData.content?.pdfSrc}
         style={{ width: "100%", height: "500px" }}
         frameBorder="0"
         title="PDF Reader"
@@ -162,15 +166,13 @@ export const PollPost = ({ postData }) => {
   const { darkMode } = useSelector((state) => state);
   const storedData = getDataFromLocalStorage();
 
-  console.log("Here: ", postData);
-
   const vote = (item, results) => {
     const newResults = results.map((result) => {
       return { text: result.text, votes: result.votes };
     });
 
     const updatedData = {
-      content: postData.content,
+      content: postData.content || {},
       postHolderId: postData.postHolderId,
       type: postData.type,
       voterIds: postData.voterIds
@@ -180,7 +182,6 @@ export const PollPost = ({ postData }) => {
 
     updatedData.content.prevResults = newResults;
 
-    console.log(updatedData);
     updatePollData(updatedData, postData.postId);
   };
 
@@ -200,13 +201,13 @@ export const PollPost = ({ postData }) => {
       >
         <LeafPoll
           type="multiple"
-          question={postData.content.question}
-          results={postData.content.prevResults || []}
+          question={postData.content?.question}
+          results={postData.content?.prevResults || []}
           theme={customTheme}
           open={false}
           onVote={() => {
             if (!postData.voterIds?.includes(storedData?.user))
-              vote(null, postData.content.prevResults);
+              vote(null, postData.content?.prevResults);
             else
               infoMessage(
                 "You Already Voted Before... This result not recorded"

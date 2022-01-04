@@ -5,12 +5,12 @@ import {
 } from "../../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
 
-export const fetchFeedPosts = async (page) => {
+export const fetchFeedPosts = async (page, mainRoot) => {
   try {
     const storedData = getDataFromLocalStorage();
 
     const res = await fetch(
-      `${API}/getFeedPosts/${storedData?.user}?page=${page}`,
+      `${API}/${mainRoot}/${storedData?.user}?page=${page}`,
         {
             method: "GET",
             headers: {
@@ -21,8 +21,6 @@ export const fetchFeedPosts = async (page) => {
     );
 
     const data = await res.json();
-
-    console.log(data.code);
 
     if (data.code === 403) {
       infoMessage("You are not authorized");
