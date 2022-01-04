@@ -22,11 +22,13 @@ export const fetchFeedPosts = async (page) => {
 
     const data = await res.json();
 
+    console.log(data.code);
+
     if (data.code === 403) {
       infoMessage("You are not authorized");
       return;
     } else {
-      return data.data;
+      return data.code === 200 && data.data;
     }
   } catch (error) {
     console.log("error in fetchFeedPosts", error);

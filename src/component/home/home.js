@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../../types/posttypes";
@@ -6,8 +6,8 @@ import { DesktopNotification } from "../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import CommonPostStyle from "../post-prototype/post-common-style";
-import { fetchFeedPosts } from "./helper/api_call";
 import Waiting from "../main-helper/waiting";
+import { fetchFeedPosts } from "./helper/api_call";
 
 const HomePage = () => {
   console.log("Home page");
@@ -327,28 +327,56 @@ const RightFeedSection = ({ testing }) => {
   const [feedDataCollection, setfeedDataCollection] = useState([]);
   const [page, setpage] = useState(1);
   const [isLoading, setisLoading] = useState(true);
+  const [lastElement, setLastElement] = useState(null);
+  const [noMorePostFound, setnoMorePostFound] = useState(false);
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        setpage((no) => no + 1);
+      }
+    })
+  );
 
   useEffect(() => {
-    !isLoading && setisLoading(true);
     fetchFeedPosts(page).then((data) => {
-      setfeedDataCollection(data);
+      if (!data) {
+        setnoMorePostFound(true);
+        return;
+      }
+      setfeedDataCollection((prev) => [...prev, ...data]);
       setisLoading(false);
     });
   }, [page]);
 
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [lastElement]);
+
   return (
     <div className="h-[90vh] overflow-y-scroll suggested-profiles-container w-full lg:w-1/2  suggested-profiles-container rounded-lg">
+      {/* Data Loading Section */}
       {isLoading && (
         <Waiting
-          showName="Loading... "
+          showName="Hang tight... Data Fetching in Progress "
           largeScreenPadding="xl:px-60"
           lightBgColor="bg-lightElevationColor"
           darkBgColor="bg-darkElevationColor"
         />
       )}
+
+      {/* Data Show Section */}
       {!isLoading &&
         feedDataCollection.map((feedData, index) => {
-          return (
+          return index === feedDataCollection.length - 1 ? (
+            <div key={index} ref={setLastElement}>
+              <CommonPostStyle item={feedData} allowCommentSection={false} />
+            </div>
+          ) : (
             <CommonPostStyle
               key={index}
               item={feedData}
@@ -356,6 +384,15 @@ const RightFeedSection = ({ testing }) => {
             />
           );
         })}
+
+      {/* Post Found Based on Pagination */}
+      {!isLoading && (
+        <div className="text-center">
+          <h1 className="text-xl font-semibold text-blue-400 my-5">
+            {noMorePostFound ? " No More Post Found..." : "Loading..."}
+          </h1>
+        </div>
+      )}
     </div>
   );
 };
