@@ -383,7 +383,7 @@ const CreatePostButtonComponent = ({
     setisLoading(false);
     setTimeout(() => {
       navigate("/feed");
-    }, 2800);
+    }, 900);
   };
 
   return (

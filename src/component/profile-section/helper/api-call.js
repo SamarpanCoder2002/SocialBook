@@ -72,7 +72,6 @@ export const createUserProfile = async (
   userName,
   description,
   profilePic,
-  interests,
   setisLoading
 ) => {
   setisLoading(true);
@@ -85,7 +84,6 @@ export const createUserProfile = async (
   data.append("file", profilePic);
   data.append("user", userName);
   data.append("description", description);
-  data.append("interests", JSON.stringify(interests));
 
   fetch(`${API}/createUserAccount/${user}`, {
     method: "POST",

@@ -263,7 +263,7 @@ const apiCallCommonPart = async (res) => {
   const response = await res.json();
 
   if (response?.code === 200) {
-    successMessage("Post Created Successfully", 3000);
+    successMessage("Post Created Successfully", 1000);
     return;
   }
 

@@ -10,7 +10,7 @@ const PostDataShowingContainer = ({
   desiredProfileId,
   desiredProfileData,
 }) => {
-  const [feedDataCollection, setfeedDataCollection] = useState([]);
+  const [postDataCollection, setpostDataCollection] = useState([]);
   const [page, setpage] = useState(1);
   const [isLoading, setisLoading] = useState(true);
   const [lastElement, setLastElement] = useState(null);
@@ -35,7 +35,7 @@ const PostDataShowingContainer = ({
         setisLoading(false);
         return;
       }
-      setfeedDataCollection((prev) => [...prev, ...data]);
+      setpostDataCollection((prev) => [...prev, ...data]);
       setisLoading(false);
     });
   }, [page]);
@@ -60,8 +60,8 @@ const PostDataShowingContainer = ({
       )}
 
       {/* Data Show Section */}
-      {!isLoading &&
-        feedDataCollection.map((feedData, index) => {
+      {!isLoading && postDataCollection.length > 0?
+        (postDataCollection.map((feedData, index) => {
           if (
             postCollectionDataTypes ===
             PostCollectionDataTypes.particularAccPostData
@@ -78,7 +78,7 @@ const PostDataShowingContainer = ({
               };
           }
 
-          return index === feedDataCollection.length - 1 ? (
+          return index === postDataCollection.length - 1 ? (
             <div key={index} ref={setLastElement}>
               <CommonPostStyle item={feedData} allowCommentSection={false} />
             </div>
@@ -89,7 +89,11 @@ const PostDataShowingContainer = ({
               allowCommentSection={false}
             />
           );
-        })}
+        })) : (<div>
+          <h1 className="text-xl font-semibold text-blue-400 my-5 text-center">
+            No Posts Found
+          </h1>
+        </div>)}
 
       {/* Post Found Based on Pagination */}
       {!isLoading && (

@@ -59,7 +59,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
 
   const inputFile = useRef(null);
   const [selectedImage, setselectedImage] = useState();
-  const [pickedInterests, setpickedInterests] = useState([]);
+  // const [pickedInterests, setpickedInterests] = useState([]);
 
   const handleChange = (e) => {
     setsignUpForm({
@@ -75,16 +75,11 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       infoMessage("Please fill all the fields");
       return;
     }
-    if (pickedInterests.length < 2) {
-      infoMessage("Please select at least 2 topics");
-      return;
-    }
 
     await createUserProfile(
       userName,
       description,
       selectedImage,
-      pickedInterests,
       setisLoading
     );
   };
@@ -155,10 +150,10 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
         />
       </div>
 
-      <ChoicesSection
+      {/* <ChoicesSection
         pickedInterests={pickedInterests}
         setpickedInterests={setpickedInterests}
-      />
+      /> */}
 
       <div className="mt-3 sm:mt-10 pb-5">
         {!isLoading ? (
@@ -180,58 +175,58 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
   );
 };
 
-const ChoicesSection = ({ pickedInterests, setpickedInterests }) => {
-  const topics = [
-    "comedy",
-    "drama",
-    "romance",
-    "horror",
-    "action",
-    "adventure",
-    "coding",
-    "cooking",
-    "art",
-    "sports",
-  ];
+// const ChoicesSection = ({ pickedInterests, setpickedInterests }) => {
+//   const topics = [
+//     "comedy",
+//     "drama",
+//     "romance",
+//     "horror",
+//     "action",
+//     "adventure",
+//     "coding",
+//     "cooking",
+//     "art",
+//     "sports",
+//   ];
 
-  return (
-    <div className="mt-5">
-      <h1 className="">Select at least 2 topics that excites you 😍</h1>
-      <div className="flex flex-wrap justify-center mt-3">
-        {topics.map((topic, index) => {
-          return (
-            <Topic
-              key={index}
-              topic={topic}
-              pickedInterests={pickedInterests}
-              onClick={() =>
-                setpickedInterests(
-                  pickedInterests.includes(topic)
-                    ? pickedInterests.filter((interest) => interest !== topic)
-                    : [...pickedInterests, topic]
-                )
-              }
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="mt-5">
+//       <h1 className="">Select at least 2 topics that excites you 😍</h1>
+//       <div className="flex flex-wrap justify-center mt-3">
+//         {topics.map((topic, index) => {
+//           return (
+//             <Topic
+//               key={index}
+//               topic={topic}
+//               pickedInterests={pickedInterests}
+//               onClick={() =>
+//                 setpickedInterests(
+//                   pickedInterests.includes(topic)
+//                     ? pickedInterests.filter((interest) => interest !== topic)
+//                     : [...pickedInterests, topic]
+//                 )
+//               }
+//             />
+//           );
+//         })}
+//       </div>
+//     </div>
+//   );
+// };
 
-const Topic = ({ topic, onClick, pickedInterests }) => {
-  return (
-    <div
-      className={`${
-        pickedInterests.includes(topic)
-          ? "border-green-500"
-          : "bg-slate-500 border-slate-500"
-      } border-2 px-2 m-3 rounded-full cursor-pointer`}
-      onClick={onClick}
-    >
-      {topic}
-    </div>
-  );
-};
+// const Topic = ({ topic, onClick, pickedInterests }) => {
+//   return (
+//     <div
+//       className={`${
+//         pickedInterests.includes(topic)
+//           ? "border-green-500"
+//           : "bg-slate-500 border-slate-500"
+//       } border-2 px-2 m-3 rounded-full cursor-pointer`}
+//       onClick={onClick}
+//     >
+//       {topic}
+//     </div>
+//   );
+// };
 
 export default UserInformationTakingComponent;
