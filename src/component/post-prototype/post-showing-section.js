@@ -5,7 +5,11 @@ import { getDataFromLocalStorage } from "../main-helper/local-storage-management
 import Waiting from "../main-helper/waiting";
 import CommonPostStyle from "./post-common-style";
 
-const PostDataShowingContainer = ({ postCollectionDataTypes }) => {
+const PostDataShowingContainer = ({
+  postCollectionDataTypes,
+  desiredProfileId,
+  desiredProfileData,
+}) => {
   const [feedDataCollection, setfeedDataCollection] = useState([]);
   const [page, setpage] = useState(1);
   const [isLoading, setisLoading] = useState(true);
@@ -23,7 +27,8 @@ const PostDataShowingContainer = ({ postCollectionDataTypes }) => {
       page,
       postCollectionDataTypes === PostCollectionDataTypes.feedData
         ? "getFeedPosts"
-        : "getMyPosts"
+        : "getParticularAccountPosts",
+      desiredProfileId
     ).then((data) => {
       if (!data) {
         setnoMorePostFound(true);
@@ -57,13 +62,20 @@ const PostDataShowingContainer = ({ postCollectionDataTypes }) => {
       {/* Data Show Section */}
       {!isLoading &&
         feedDataCollection.map((feedData, index) => {
-          if(postCollectionDataTypes === PostCollectionDataTypes.myPostsData){
+          if (
+            postCollectionDataTypes ===
+            PostCollectionDataTypes.particularAccPostData
+          ) {
             const localStorageData = getDataFromLocalStorage();
-            feedData.postHolderData = {
-              name: localStorageData.name,
-              profilePic: localStorageData.profilePic,
-              description: localStorageData.description,
-            }
+
+            if (localStorageData.user !== desiredProfileId)
+              feedData.postHolderData = desiredProfileData;
+            else
+              feedData.postHolderData = {
+                name: localStorageData.name,
+                profilePic: localStorageData.profilePic,
+                description: localStorageData.description,
+              };
           }
 
           return index === feedDataCollection.length - 1 ? (
@@ -83,7 +95,7 @@ const PostDataShowingContainer = ({ postCollectionDataTypes }) => {
       {!isLoading && (
         <div className="text-center">
           <h1 className="text-xl font-semibold text-blue-400 my-5">
-            {noMorePostFound ? " No More Post Found..." : "Loading..."}
+            {noMorePostFound ? "" : "Loading..."}
           </h1>
         </div>
       )}

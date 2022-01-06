@@ -206,12 +206,15 @@ export const PollPost = ({ postData }) => {
           theme={customTheme}
           open={false}
           onVote={() => {
+            console.log("on vote");
             if (!postData.voterIds?.includes(storedData?.user))
               vote(null, postData.content?.prevResults);
-            else
+            else {
               infoMessage(
-                "You Already Voted Before... This result not recorded"
+                "You Already Voted Before... This result not recorded",
+                1500
               );
+            }
           }}
         />
       </div>

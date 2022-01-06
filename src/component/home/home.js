@@ -77,11 +77,11 @@ const LeftProfileShortSection = () => {
         </div>
       </div>
 
-      <div>
+      <div className="w-full text-center">
         <button
           className={`${
             darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-          } mt-5 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
+          } mt-5 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-32 lg:w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
           style={{ borderWidth: "0.2px" }}
           onClick={() => {
             const result = getDataFromLocalStorage();

@@ -25,5 +25,5 @@ export const ChatMsgTypes = {
 
 export const PostCollectionDataTypes = {
     feedData: "feedData",
-    myPostsData: "myPostsData"
+    particularAccPostData: "particularAccountPosts"
 }

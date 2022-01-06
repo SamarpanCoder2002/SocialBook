@@ -5,12 +5,12 @@ import {
 } from "../../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
 
-export const fetchFeedPosts = async (page, mainRoot) => {
+export const fetchFeedPosts = async (page, mainRoot, desiredProfileId) => {
   try {
     const storedData = getDataFromLocalStorage();
 
     const res = await fetch(
-      `${API}/${mainRoot}/${storedData?.user}?page=${page}`,
+      `${API}/${mainRoot}/${desiredProfileId || storedData?.user}?page=${page}`,
         {
             method: "GET",
             headers: {

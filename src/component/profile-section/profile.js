@@ -17,12 +17,10 @@ const ProfileSection = () => {
   ) : (
     <BaseCommonPart>
       <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
-        <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-0 2xl:px-96 py-1">
-          <div className="flex flex-wrap text-lightPostTextStyleColor dark:text-darkPostTextStyleColor justify-center">
+       
             <UserInformationContainer darkMode={darkMode} />
             <UserActivityContainer darkMode={darkMode} />
-          </div>
-        </div>
+         
       </div>
     </BaseCommonPart>
   );
@@ -40,7 +38,7 @@ const UserInformationContainer = ({ darkMode }) => {
   const { name, description, profilePic } = userInformation;
 
   return (
-    <div className="h-2/6 w-full lg:w-1/5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 p-3 flex flex-col justify-center items-center text-lightPostTextStyleColor dark:text-darkPostTextStyleColor shadow-lg">
+    <div className="w-full rounded-lg lg:mr-5 p-3 flex flex-col justify-center items-center text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
       
         {/* Profile Image */}
         <div className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full mx-auto">
@@ -61,22 +59,26 @@ const UserInformationContainer = ({ darkMode }) => {
 };
 
 const UserActivityContainer = ({ darkMode }) => {
+  const { state } = useLocation();
+
   return (
-    <div className="h-[90vh] overflow-y-scroll suggested-profiles-container w-full lg:w-1/2 rounded-lg mt-5 lg:mt-0">
+    <div className="h-[90vh] rounded-lg mt-3 container mx-auto px-4 sm:px-6 md:px-20 lg:px-48 xl:px-80 2xl:px-96">
       <div className="w-full">
         {/* Tabs Collection */}
-        <div className="flex justify-around bg-lightCardColor dark:bg-darkCardColor mb-3 rounded-lg">
+        <div className="flex justify-around mb-3 rounded-lg">
           <button
             className={`${
               darkMode ? "hover:bg-green-500" : "hover:bg-green-400"
             } text-green-600 dark:text-green-400 px-5 py-1 rounded-3xl hover:bg-opacity-30  transition-all duration-300`}
           >
-            My-Posts
+            Posts
           </button>
         </div>
 
         <PostDataShowingContainer
-          postCollectionDataTypes={PostCollectionDataTypes.myPostsData}
+          postCollectionDataTypes={PostCollectionDataTypes.particularAccPostData}
+          desiredProfileId={useParams().connectionId}
+          desiredProfileData={state}
         />
       </div>
     </div>

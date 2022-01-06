@@ -10,15 +10,20 @@ import {
 import Linkify from "react-linkify";
 import ShowMoreText from "react-show-more-text";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import NoProfilePic from "../../image/no_profile_picture.png";
+import { insertPostComment, insertPostLove } from "./helper/api_call";
+import { infoMessage } from "../main-helper/desktop-notification";
+import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
+  
+
   return (
     <div
-      className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3`}
+      className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3 pb-1`}
     >
-      <PostUpperSection postHolderData={item?.postHolderData} />
+      <PostUpperSection postHolderData={item?.postHolderData} postHolderId = {item?.postHolderId} />
       <PostMiddleSection postData={item} />
       <PostLowerSection
         allowCommentSection={allowCommentSection}
@@ -28,10 +33,19 @@ const CommonPostStyle = ({ item, allowCommentSection }) => {
   );
 };
 
-const PostUpperSection = ({postHolderData}) => {
+const PostUpperSection = ({ postHolderData, postHolderId }) => {
+  const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-between h-auto  text-sm p-2">
+    <div className="flex items-center justify-between h-auto  text-sm p-2 cursor-pointer" onClick={() => {
+      navigate(`/${postHolderId}/profile`, {
+        state: {
+          name: postHolderData?.name,
+          profilePic: postHolderData?.profilePic,
+          description: postHolderData?.description,
+        }
+      });
+    }}>
       {/* Post Upper Left Side */}
       <div className="flex">
         <img
@@ -41,10 +55,10 @@ const PostUpperSection = ({postHolderData}) => {
         />
 
         <div className="my-auto">
-          <div className="font-semibold tracking-wide text-md">
+          <div className="font-semibold tracking-wide text-base">
             {postHolderData?.name || ""}
           </div>
-          <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor">
+          <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor text-sm">
             <Linkify>
               <ShowMoreText
                 lines={1}
@@ -75,23 +89,64 @@ const PostUpperSection = ({postHolderData}) => {
 const PostLowerSection = ({ allowCommentSection, postData }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = getDataFromLocalStorage();
+
+  const [likes, setlikes] = useState(postData.engagement.likes);
+  const comments = postData.engagement.comments;
+
+  const loveReactToPost = () => {
+    if (likes.includes(user)) {
+      infoMessage("You already love this post", 1500);
+      return;
+    }
+
+    setlikes([...likes, user]);
+    insertPostLove(postData.postId).catch((err) => {
+      infoMessage("Could not react this post");
+    });
+  };
 
   return (
     <div className="px-2 text-xs">
       {/* Engagement View Section */}
-      <div className="flex justify-between my-2">
-        <div>
-          <i className="fas fa-heart" style={{ color: "red" }}></i> 17 Likes
+
+      {(likes.length > 0 || comments.length > 0) && (
+        <div className="flex justify-between my-2">
+          <div>
+            {likes.length > 0 ? (
+              <Fragment>
+                <i className="fas fa-heart" style={{ color: "red" }}></i>
+                &nbsp;&nbsp;
+                {likes.length} Likes
+              </Fragment>
+            ) : (
+              ""
+            )}
+          </div>
+
+          {comments.length > 0 ? <div className="cursor-pointer pl-20" onClick={() => {
+            if (
+              location.pathname === "/feed" ||
+              location.pathname.endsWith("/profile")
+            )
+              navigate(`/post/${postData.postId}`, {
+                state: {
+                  postData: postData,
+                },
+              });
+          }}>{comments.length} Comments</div> : ""}
         </div>
-        <div>30 Shares</div>
-        <div>100 Comments</div>
-      </div>
+      )}
 
       {/* Post reaction Section */}
       <div className="flex justify-between px-5 py-2">
-        <div>
+        <div onClick={loveReactToPost}>
           <button className="px-2">
-            <i className="far fa-heart fa-lg"></i>
+            {likes.includes(user) ? (
+              <i className="fas fa-heart fa-lg" style={{ color: "red" }}></i>
+            ) : (
+              <i className="far fa-heart fa-lg"></i>
+            )}
             <span className="pl-2 font-semibold">Love</span>
           </button>
         </div>
@@ -103,7 +158,11 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
                 location.pathname === "/feed" ||
                 location.pathname.endsWith("/profile")
               )
-                navigate(`/post/${postData.id}`);
+                navigate(`/post/${postData.postId}`, {
+                  state: {
+                    postData: postData,
+                  },
+                });
             }}
           >
             <i className="far fa-comment fa-lg"></i>
@@ -130,8 +189,6 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
 };
 
 const PostMiddleSection = ({ postData }) => {
-  
-
   if (postData.type === PostTypes.Text) {
     return <TextPost postData={postData} />;
   } else if (postData.type === PostTypes.Image) {
@@ -150,7 +207,7 @@ const PostMiddleSection = ({ postData }) => {
 };
 
 const CommentCollection = ({ postData }) => {
-  const [comments, setcomments] = useState(postData.comments);
+  const [comments, setcomments] = useState(postData?.engagement.comments || []);
   const [commentText, setcommentText] = useState("");
 
   return (
@@ -168,8 +225,13 @@ const CommentCollection = ({ postData }) => {
           className="px-10 bg-indigo-600 text-sm rounded-3xl"
           onClick={() => {
             if (commentText.length > 0) {
-              setcomments([commentText, ...comments]);
+              const storedData = getDataFromLocalStorage();
+              setcomments([{comment: commentText, name: storedData?.name, description: storedData.description, profilePic: storedData?.profilePic}, ...comments]);
               setcommentText("");
+              insertPostComment(postData.postId, commentText).catch((err) => {
+                infoMessage("Could not comment this post");
+                setcomments(postData.engagement.comments);
+              });
             }
           }}
         >
@@ -180,21 +242,21 @@ const CommentCollection = ({ postData }) => {
       {comments &&
         comments.map((comment, index) => {
           return (
-            <div className="flex mb-2">
+            <div className="flex mb-2" key={index}>
               {/* Profile Image */}
-              <div className="mr-5">
+              <div className="mr-3">
                 <img
-                  src="https://avatars.githubusercontent.com/u/66327336?v=4"
+                  src={comment.profilePic || NoProfilePic}
                   alt="profile"
-                  className="w-12 rounded-full"
+                  className="w-12 h-12 rounded-full object-cover"
                 />
               </div>
 
               {/* Comment With User Details */}
               <div className="bg-lightBgColor dark:bg-darkBgColor mb-2 p-2 rounded-lg text-sm w-full">
                 {/* User Details */}
-                <div className="font-semibold">Samarpan Dasgupta</div>
-                <div className="text-xs">Samarpan Dasgupta</div>
+                <div className="font-semibold">{comment.name}</div>
+                <div className="text-xs">{comment.description}</div>
 
                 {/* Post Comment  */}
                 <div className="pt-2 special-text">
@@ -207,7 +269,7 @@ const CommentCollection = ({ postData }) => {
                       anchorClass="my-anchor-css-class"
                       expanded={false}
                     >
-                      {comment}
+                      {comment.comment}
                     </ShowMoreText>
                   </Linkify>
                 </div>
