@@ -17,13 +17,14 @@ import { infoMessage } from "../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
-  
-
   return (
     <div
       className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3 pb-1`}
     >
-      <PostUpperSection postHolderData={item?.postHolderData} postHolderId = {item?.postHolderId} />
+      <PostUpperSection
+        postHolderData={item?.postHolderData}
+        postHolderId={item?.postHolderId}
+      />
       <PostMiddleSection postData={item} />
       <PostLowerSection
         allowCommentSection={allowCommentSection}
@@ -37,15 +38,7 @@ const PostUpperSection = ({ postHolderData, postHolderId }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-between h-auto  text-sm p-2 cursor-pointer" onClick={() => {
-      navigate(`/${postHolderId}/profile`, {
-        state: {
-          name: postHolderData?.name,
-          profilePic: postHolderData?.profilePic,
-          description: postHolderData?.description,
-        }
-      });
-    }}>
+    <div className="flex items-center justify-between h-auto  text-sm p-2 ">
       {/* Post Upper Left Side */}
       <div className="flex">
         <img
@@ -55,7 +48,18 @@ const PostUpperSection = ({ postHolderData, postHolderId }) => {
         />
 
         <div className="my-auto">
-          <div className="font-semibold tracking-wide text-base">
+          <div
+            className="font-semibold tracking-wide text-base cursor-pointer hover:underline"
+            onClick={() => {
+              navigate(`/${postHolderId}/profile`, {
+                state: {
+                  name: postHolderData?.name,
+                  profilePic: postHolderData?.profilePic,
+                  description: postHolderData?.description,
+                },
+              });
+            }}
+          >
             {postHolderData?.name || ""}
           </div>
           <div className="special-text dark:text-darkSpecificIconsColor text-lightSpecificIconsColor text-sm">
@@ -124,17 +128,26 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
             )}
           </div>
 
-          {comments.length > 0 ? <div className="cursor-pointer pl-20" onClick={() => {
-            if (
-              location.pathname === "/feed" ||
-              location.pathname.endsWith("/profile")
-            )
-              navigate(`/post/${postData.postId}`, {
-                state: {
-                  postData: postData,
-                },
-              });
-          }}>{comments.length} Comments</div> : ""}
+          {comments.length > 0 ? (
+            <div
+              className="cursor-pointer pl-20"
+              onClick={() => {
+                if (
+                  location.pathname === "/feed" ||
+                  location.pathname.endsWith("/profile")
+                )
+                  navigate(`/post/${postData.postId}`, {
+                    state: {
+                      postData: postData,
+                    },
+                  });
+              }}
+            >
+              {comments.length} Comments
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       )}
 
@@ -226,7 +239,15 @@ const CommentCollection = ({ postData }) => {
           onClick={() => {
             if (commentText.length > 0) {
               const storedData = getDataFromLocalStorage();
-              setcomments([{comment: commentText, name: storedData?.name, description: storedData.description, profilePic: storedData?.profilePic}, ...comments]);
+              setcomments([
+                {
+                  comment: commentText,
+                  name: storedData?.name,
+                  description: storedData.description,
+                  profilePic: storedData?.profilePic,
+                },
+                ...comments,
+              ]);
               setcommentText("");
               insertPostComment(postData.postId, commentText).catch((err) => {
                 infoMessage("Could not comment this post");

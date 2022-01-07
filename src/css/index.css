@@ -14,51 +14,48 @@
   border: none;
 }
 
-[contenteditable=true]:empty:before{
-  content:"Write Something Here";
-  color:grey;
+[contenteditable="true"]:empty:before {
+  content: "Write Something Here";
+  color: grey;
   display: block;
 }
 
-body{
-    font-family: "Nunito", sans-serif;
+body {
+  font-family: "Nunito", sans-serif;
   scroll-behavior: smooth;
 }
 
 @layer components {
-    .menu-item{
-       @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center
-    }
-
-    .special-text a{
-      @apply text-blue-500 dark:text-blue-400 hover:text-blue-800 transition-all duration-200 font-semibold
-    }
-
-    .invitation-tab-bar-item{
-      @apply text-green-400 cursor-pointer px-4 py-2 font-semibold
-    }
-
-    .invitation-tab-bar-item-underbar{
-      @apply h-1 bg-green-600 rounded-full
-    }
-
-    .connection-screens-common-button-layout{
-      @apply transition-all duration-300 tracking-wider px-2 py-1 rounded-3xl w-full
-    }
-
-    .post-options{
-      @apply p-3 text-center cursor-pointer hover:bg-green-400 hover:bg-opacity-30 rounded-full
-    }
-
-    .post-option-tooltip{
-      @apply hidden md:block text-sm 2xl:text-lg pt-1
-    }
+  .menu-item {
+    @apply md:p-2 lg:px-4 font-semibold block px-4 py-1 text-center;
   }
 
+  .special-text a {
+    @apply text-blue-500 dark:text-blue-400 hover:text-blue-800 transition-all duration-200 font-semibold hover:underline;
+  }
 
+  .invitation-tab-bar-item {
+    @apply text-green-400 cursor-pointer px-4 py-2 font-semibold;
+  }
 
+  .invitation-tab-bar-item-underbar {
+    @apply h-1 bg-green-600 rounded-full;
+  }
 
-  /* For Mansory Grid */
+  .connection-screens-common-button-layout {
+    @apply transition-all duration-300 tracking-wider px-2 py-1 rounded-3xl w-full;
+  }
+
+  .post-options {
+    @apply p-3 text-center cursor-pointer hover:bg-green-400 hover:bg-opacity-30 rounded-full;
+  }
+
+  .post-option-tooltip {
+    @apply hidden md:block text-sm 2xl:text-lg pt-1;
+  }
+}
+
+/* For Mansory Grid */
 .my-masonry-grid {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -74,7 +71,7 @@ body{
   margin-bottom: 30px;
 }
 
-.suggested-profiles-container::-webkit-scrollbar{
+.suggested-profiles-container::-webkit-scrollbar {
   width: 0px;
 }
 
@@ -93,6 +90,6 @@ body{
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-.no-scroller::-webkit-scrollbar{
+.no-scroller::-webkit-scrollbar {
   width: 0px;
 }
