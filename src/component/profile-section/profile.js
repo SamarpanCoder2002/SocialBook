@@ -8,6 +8,15 @@ import Waiting from "../main-helper/waiting";
 import PostDataShowingContainer from "../post-prototype/post-showing-section";
 import { ConnectionType, PostCollectionDataTypes } from "../../types/types";
 import { particularUserConnectionStatus } from "./helper/api-call";
+import {
+  AcceptButton,
+  CancelButton,
+  ConnectButton,
+  EditButton,
+  MessageButton,
+  RemoveConnectionButton,
+  WithDrawConnectionRequestButton,
+} from "../common/buttons";
 
 const ProfileSection = () => {
   const [isLoading, setisLoading] = useState(false);
@@ -102,120 +111,47 @@ const ProfileRelatedButtons = ({ darkMode }) => {
   // ** NOTE: 2) if the viewer is connected to current user, then show remove and Message button
   // ** NOTE: 3) if the viewer is not connected to current user, then show connect button
 
-  return profileData?.user === connectionId ? (
-    <EditButton darkMode={darkMode} />
-  ) : (
-    <div className="mt-3 flex justify-center items-center">
-      {connectionType === ConnectionType.AlreadyConnected ? (
-        <div className="sm:flex justify-center items-center ">
-          <MessageButton />
-          <RemoveConnectionButton />
-        </div>
-      ) : connectionType === ConnectionType.RequestSent ? (
-        <WithDrawConnectionRequestButton />
-      ) : connectionType === ConnectionType.RequestReceived ? (
-        <div className="sm:flex justify-center items-center ">
-          <AcceptButton />
-          <CancelButton />
-        </div>
-      ) : connectionType === ConnectionType.notConnected ? (
-        <ConnectButton />
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+  if (profileData?.user === connectionId) {
+    return <EditButton darkMode={darkMode} customClassName={"mt-3 text-sm"} />;
+  } else {
+    return (
+      <div className="mt-3 flex justify-center items-center">
+        <ButtonsManagement
+          darkMode={darkMode}
+          connectionType={connectionType}
+        />
+      </div>
+    );
+  }
 };
 
-const AcceptButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-green-400" : "hover:bg-green-300"
-      } mt-3 text-green-600  border-green-600 dark:text-green-400 dark:border-green-400 connection-screens-common-button-layout hover:bg-opacity-30 mx-3 text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Accept
-    </button>
-  );
-};
-
-const ConnectButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-green-400" : "hover:bg-green-400"
-      } mt-3 text-green-600 dark:text-green-400 px-2 py-1 rounded-3xl border-green-400  hover:bg-opacity-30  transition-all duration-300 w-full hover:shadow-sm hover:shadow-green-300 text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Connect
-    </button>
-  );
-};
-
-const CancelButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
-      } text-red-500  border-red-500  connection-screens-common-button-layout hover:bg-opacity-30 mt-3 mx-3 md:mx-0 text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Cancel
-    </button>
-  );
-};
-
-const MessageButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-      } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Message
-    </button>
-  );
-};
-
-const EditButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-      } mt-5 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-10 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Edit
-    </button>
-  );
-};
-
-const RemoveConnectionButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-red-800" : "hover:bg-red-400"
-      } mt-3 text-red-600 dark:text-red-400 px-2 py-1 rounded-3xl border-red-400  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm  text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Remove
-    </button>
-  );
-};
-
-const WithDrawConnectionRequestButton = ({ darkMode }) => {
-  return (
-    <button
-      className={`${
-        darkMode ? "hover:bg-red-800" : "hover:bg-red-400"
-      } mt-3 text-red-600 dark:text-red-400 px-2 py-1 rounded-3xl border-red-400  hover:bg-opacity-30  transition-all duration-300 w-full hover:shadow-sm  text-sm`}
-      style={{ borderWidth: "0.2px" }}
-    >
-      Withdraw
-    </button>
-  );
+const ButtonsManagement = ({ darkMode, connectionType }) => {
+  if (connectionType === ConnectionType.AlreadyConnected) {
+    return (
+      <div className="sm:flex justify-center items-center ">
+        <MessageButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+        <RemoveConnectionButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+      </div>
+    );
+  } else if (connectionType === ConnectionType.RequestSent) {
+    return (
+      <WithDrawConnectionRequestButton
+        customClassName={"mt-3 text-sm"}
+        darkMode={darkMode}
+      />
+    );
+  } else if (connectionType === ConnectionType.RequestReceived) {
+    return (
+      <div className="sm:flex justify-center items-center ">
+        <AcceptButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+        <CancelButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+      </div>
+    );
+  } else if (connectionType === ConnectionType.notConnected) {
+    return <ConnectButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />;
+  } else {
+    return <></>;
+  }
 };
 
 export default ProfileSection;

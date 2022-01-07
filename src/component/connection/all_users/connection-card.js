@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
+import { ConnectButton } from "../../common/buttons";
 import { successMessage } from "../../main-helper/desktop-notification";
 import { connectionSpecificOperations } from "../helper/api_call";
 
@@ -47,8 +48,11 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
         </p>
       </div>
 
+      {/* TODO: OnPressed Work Left */}
+      <ConnectButton darkMode={darkMode} customClassName={"mt-3"} />
+
       {/* Button to Connect */}
-      <button
+      {/* <button
         className={`${
           darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
         } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
@@ -60,7 +64,7 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
         }}
       >
         Connect
-      </button>
+      </button> */}
     </div>
   );
 };
