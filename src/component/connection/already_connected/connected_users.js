@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
-import { ConnectionType } from "../../../types/posttypes";
+import { ConnectionType } from "../../../types/types";
 import Waiting from "../../main-helper/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
 import { fetchAllSpecificRequestedUsers } from "../helper/api_call";

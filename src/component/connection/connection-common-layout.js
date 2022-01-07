@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../image/no_profile_picture.png";
-import { ConnectionType } from "../../types/posttypes";
+import { ConnectionType } from "../../types/types";
 import { successMessage } from "../main-helper/desktop-notification";
 import { connectionSpecificOperations } from "./helper/api_call";
 

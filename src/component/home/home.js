@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { PostCollectionDataTypes } from "../../types/posttypes";
+import { PostCollectionDataTypes } from "../../types/types";
 import { DesktopNotification } from "../main-helper/desktop-notification";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import BaseCommonPart from "../page-builder/base";

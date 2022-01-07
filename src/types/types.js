@@ -9,8 +9,9 @@ export const PostTypes = {
 
 export const ConnectionType = {
     AlreadyConnected: "connected",
-    RequestSent: "sent",
-    RequestReceived: "received",
+    RequestSent: "request-sent",
+    RequestReceived: "request-received",
+    notConnected: "not-connected",
 }
 
 export const NotificationType = {

@@ -1,4 +1,4 @@
-import { PostTypes } from "../../../types/posttypes";
+import { PostTypes } from "../../../types/types";
 import { API } from "../../main-helper/backend";
 import {
   errorMessage,

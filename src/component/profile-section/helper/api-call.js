@@ -1,3 +1,4 @@
+import { ConnectionType } from "../../../types/types";
 import { onSignOut } from "../../auth/helper/api_call";
 import { API } from "../../main-helper/backend";
 import {
@@ -146,6 +147,34 @@ export const fetchUserProfile = async (userId) => {
       errorMessage(data.message, 10000);
       return;
     }
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+};
+
+export const particularUserConnectionStatus = async (queryUserId) => {
+  try {
+    const storedData = getDataFromLocalStorage();
+    const res = await fetch(
+      `${API}/particularUserConnectionStatus/${storedData?.user}/${queryUserId}`,
+      {
+        method: "GET",
+        headers: {
+          ContentType: "application/json",
+          Authorization: `Bearer ${storedData?.token}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.code === 500) {
+      errorMessage(data.message);
+      return;
+    }
+
+    return data.status;
   } catch (e) {
     console.log(e);
     return;

@@ -16,7 +16,7 @@ import {
   makeVideoPost,
 } from "./helper/api_call";
 import { useNavigate } from "react-router-dom";
-import { PostTypes } from "../../types/posttypes";
+import { PostTypes } from "../../types/types";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);

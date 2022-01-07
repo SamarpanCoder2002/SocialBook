@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PostCollectionDataTypes } from "../../types/posttypes";
+import { PostCollectionDataTypes } from "../../types/types";
 import { fetchFeedPosts } from "../home/helper/api_call";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import Waiting from "../main-helper/waiting";
