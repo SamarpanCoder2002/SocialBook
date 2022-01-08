@@ -44,7 +44,7 @@ const LeftSideSelector = ({ selected, setselected }) => {
   const { darkMode } = useSelector((state) => state);
 
   return (
-    <div className="h-2/6 w-full lg:w-1/6 mb-2 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 shadow-md">
+    <div className="h-2/6 w-full lg:w-1/6 mb-2 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 shadow-md ">
       <ul className="h-auto">
         {types.map((type, index) => {
           return (

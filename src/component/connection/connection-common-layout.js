@@ -2,6 +2,13 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { ConnectionType } from "../../types/types";
+import {
+  AcceptButton,
+  CancelButton,
+  MessageButton,
+  RemoveConnectionButton,
+  WithDrawConnectionRequestButton,
+} from "../common/buttons";
 import { successMessage } from "../main-helper/desktop-notification";
 import { connectionSpecificOperations } from "./helper/api_call";
 
@@ -112,28 +119,23 @@ const ConnectedUsersButtonCollection = ({
 
   return (
     <div className="md:flex items-center sm:ml-5 text-sm md:text-md 2xl:text-lg md:tracking-wider">
-      <button
-        className={`${
-          darkMode ? "hover:bg-blue-800" : "hover:bg-blue-300"
-        }  text-lightPrimaryFgColor dark:text-darkPrimaryFgColor  border-darkPrimaryFgColor  connection-screens-common-button-layout hover:bg-opacity-30 mx-3 md:mx-0`}
-        style={{ borderWidth: "0.2px" }}
-      >
-        Message
-      </button>
+      <MessageButton
+        darkMode={darkMode}
+        customClassName={"connection-screens-common-button-layout mx-3 md:mx-0"}
+        onClickOperation={() => {}}
+      />
 
-      <button
-        className={`${
-          darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
-        } mx-3 md:ml-5 text-red-500  border-red-500  connection-screens-common-button-layout hover:bg-opacity-30 mt-3 md:mt-0`}
-        style={{ borderWidth: "0.2px" }}
-        onClick={() => {
+      <RemoveConnectionButton
+        darkMode={darkMode}
+        customClassName={
+          "connection-screens-common-button-layout mt-3 md:mt-0 mx-3 md:ml-5"
+        }
+        onClickOperation={() => {
           connectionSpecificOperations(userId, "removeConnections");
           successMessage("😔 Connection Removed", 2000);
           setCollectiveIds((prev) => [...prev, userId]);
         }}
-      >
-        Remove
-      </button>
+      />
     </div>
   );
 };
@@ -145,26 +147,22 @@ const ReceivedInvitationButtonsCollection = ({
 }) => {
   return (
     <div className="md:flex items-center text-sm md:text-md 2xl:text-lg md:tracking-wider">
-      <button
-        className={`${
-          darkMode ? "hover:bg-green-400" : "hover:bg-green-300"
-        }  text-green-600  border-green-600 dark:text-green-400 dark:border-green-400 connection-screens-common-button-layout hover:bg-opacity-30 mx-3`}
-        style={{ borderWidth: "0.2px" }}
-        onClick={() => {
+      <AcceptButton
+        darkMode={darkMode}
+        customClassName={"connection-screens-common-button-layout mx-3"}
+        onClickOperation={() => {
           connectionSpecificOperations(userId, "acceptConnectionRequest");
           successMessage("🥳 Connection request accepted", 2000);
           setCollectiveIds((prev) => [...prev, userId]);
         }}
-      >
-        Accept
-      </button>
+      />
 
-      <button
-        className={`${
-          darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
-        } mr-5 text-red-500  border-red-500  connection-screens-common-button-layout hover:bg-opacity-30 mt-3 md:mt-0 mx-3 md:mx-0`}
-        style={{ borderWidth: "0.2px" }}
-        onClick={() => {
+      <CancelButton
+        darkMode={darkMode}
+        customClassName={
+          "mr-5 connection-screens-common-button-layout mt-3 md:mt-0 mx-3 md:mx-0"
+        }
+        onClickOperation={() => {
           connectionSpecificOperations(
             userId,
             "removeIncomingConnectionRequest"
@@ -172,9 +170,7 @@ const ReceivedInvitationButtonsCollection = ({
           successMessage("😏 Incoming Connection Request Removed", 2000);
           setCollectiveIds((prev) => [...prev, userId]);
         }}
-      >
-        Cancel
-      </button>
+      />
     </div>
   );
 };
@@ -186,19 +182,17 @@ const SentRequestButtonCollection = ({
 }) => {
   return (
     <div className="flex items-center">
-      <button
-        className={`${
-          darkMode ? "hover:bg-red-400" : "hover:bg-red-300"
-        } ml-3 md:mr-5 text-red-500  border-red-500 connection-screens-common-button-layout hover:bg-opacity-30 text-sm md:text-md 2xl:text-lg md:tracking-wider`}
-        style={{ borderWidth: "0.2px" }}
-        onClick={() => {
+      <WithDrawConnectionRequestButton
+        darkMode={darkMode}
+        customClassName={
+          "ml-3 md:mr-5 connection-screens-common-button-layout text-sm md:text-md 2xl:text-lg md:tracking-wider"
+        }
+        onClickOperation={() => {
           connectionSpecificOperations(userId, "withDrawSentRequest");
           successMessage("😏 Outgoing Connection Request Removed", 2000);
           setCollectiveIds((prev) => [...prev, userId]);
         }}
-      >
-        Withdraw
-      </button>
+      />
     </div>
   );
 };

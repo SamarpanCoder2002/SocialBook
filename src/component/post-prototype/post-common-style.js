@@ -19,7 +19,7 @@ import { getDataFromLocalStorage } from "../main-helper/local-storage-management
 const CommonPostStyle = ({ item, allowCommentSection }) => {
   return (
     <div
-      className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3 pb-1`}
+      className={`w-full mx-auto bg-lightElevationColor dark:bg-darkElevationColor text-lightSecondaryFgColor dark:text-darkSecondaryFgColor rounded-xl mb-3 pb-1 border-2 border-lightBorderColor dark:border-0`}
     >
       <PostUpperSection
         postHolderData={item?.postHolderData}

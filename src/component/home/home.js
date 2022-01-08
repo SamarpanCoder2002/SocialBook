@@ -57,7 +57,7 @@ const LeftProfileShortSection = () => {
   }, []);
 
   return (
-    <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor shadow-lg">
+    <div className="h-2/6 w-full lg:w-1/5 mb-5 bg-lightElevationColor dark:bg-darkElevationColor rounded-lg lg:mr-5 p-3 flex flex-col text-lightPostTextStyleColor dark:text-darkPostTextStyleColor shadow-lg border-2 border-lightBorderColor dark:border-0">
       <div className="w-full ">
         <div className="h-16 w-16 md:h-20 md:w-20 2xl:h-24 2xl:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full mx-auto">
           <img

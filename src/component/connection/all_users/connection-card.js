@@ -33,7 +33,7 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
                 name: user.name,
                 profilePic: user.profilePic,
                 description: user.description,
-              }
+              },
             });
           }}
         >
@@ -48,23 +48,16 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
         </p>
       </div>
 
-      {/* TODO: OnPressed Work Left */}
-      <ConnectButton darkMode={darkMode} customClassName={"mt-3"} />
-
       {/* Button to Connect */}
-      {/* <button
-        className={`${
-          darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-        } mt-3 text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl w-full border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300`}
-        style={{ borderWidth: "0.2px" }}
-        onClick={() => {
+      <ConnectButton
+        darkMode={darkMode}
+        customClassName={"mt-3"}
+        onClickOperation={() => {
           connectionSpecificOperations(user.id, "sendConnectionRequest");
           successMessage("🙋 Connection Request Sent", 2000);
           setrequestSentConnectionsIds((prev) => [...prev, user.id]);
         }}
-      >
-        Connect
-      </button> */}
+      />
     </div>
   );
 };

@@ -14,6 +14,7 @@ module.exports = {
         darkTextFieldInnerColor: "#313131",
         darkPostTextStyleColor: "#e4e6eb",
         darkCardColor: "#334247",
+        darkBorderColor: "#334247",
 
         // For Light Mode
         lightBgColor: "#f3f3f3",
@@ -24,6 +25,7 @@ module.exports = {
         lightTextFieldInnerColor: "#DCE0DF",
         lightPostTextStyleColor: "#000000",
         lightCardColor: "#fafafa",
+        lightBorderColor: "#EODFDC",
       },
 
       screens: {
