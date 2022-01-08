@@ -6,8 +6,14 @@ import {
 } from "../main-helper/desktop-notification";
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { createUserProfile } from "./helper/api-call";
+import { Navigate, useLocation } from "react-router-dom";
 
 const UserInformationTakingComponent = () => {
+  const { state, pathname } = useLocation();
+
+  if (pathname === "/update-user-information" && !state)
+    return <Navigate to="/feed" />;
+
   return (
     <div className="h-screen dark">
       <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
@@ -40,25 +46,35 @@ const TakeUserInformation = () => {
 };
 
 const Heading = ({ isLoading }) => {
+  const { pathname } = useLocation();
+
   return (
     <h2
       className={`${
         isLoading ? "mt-5" : ""
       } text-center text-indigo-400 font-display font-semibold text-3xl tracking-wider`}
     >
-      Complete Your Profile
+      {pathname === "/update-user-information"
+        ? "Update Your Profile"
+        : "Complete Your Profile"}
     </h2>
   );
 };
 
 const UserInformationForm = ({ isLoading, setisLoading }) => {
+  const { state, pathname } = useLocation();
+
   const [signUpForm, setsignUpForm] = useState({
-    userName: "",
-    description: "",
+    userName: state?.name || "",
+    description: state?.description || "",
   });
 
+  const { userName, description } = signUpForm;
+
   const inputFile = useRef(null);
-  const [selectedImage, setselectedImage] = useState();
+  const [selectedImage, setselectedImage] = useState(
+    state?.profilePic || undefined
+  );
   // const [pickedInterests, setpickedInterests] = useState([]);
 
   const handleChange = (e) => {
@@ -68,21 +84,18 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
     });
   };
 
-  const { userName, description } = signUpForm;
-
   const makeProfile = async () => {
     if (userName === "" || description === "") {
       infoMessage("Please fill all the fields");
       return;
     }
-
-    await createUserProfile(
-      userName,
-      description,
-      selectedImage,
-      setisLoading
-    );
+    await createUserProfile(userName, description, selectedImage, setisLoading);
   };
+
+  const imageSelector = () =>
+    selectedImage?.toString()?.startsWith("https://")
+      ? selectedImage
+      : URL.createObjectURL(selectedImage);
 
   return (
     <Fragment>
@@ -90,10 +103,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
         <div className="relative w-16 h-16 lg:w-32 lg:h-32 mx-auto cursor-pointer">
           <img
             className="rounded-full border-2 border-gray-100 shadow-sm w-16 h-16 lg:w-32 lg:h-32 object-cover"
-            src={
-              (selectedImage && URL.createObjectURL(selectedImage)) ||
-              NoProfileImage
-            }
+            src={!selectedImage ? NoProfileImage : imageSelector()}
             alt="profile pic"
             onClick={() => selectedImage && window.open(selectedImage)}
           />
@@ -131,6 +141,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
           placeholder="Write Your Name Here"
           required
           name="userName"
+          value={userName}
           onChange={handleChange}
         />
       </div>
@@ -146,6 +157,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
           placeholder="Write About Yourself"
           required
           name="description"
+          value={description}
           onChange={handleChange}
         />
       </div>
@@ -163,7 +175,9 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
                                     shadow-lg`}
             onClick={makeProfile}
           >
-            Complete My Profile
+            {pathname === "/update-user-information"
+              ? "Update My Profile"
+              : "Complete My Profile"}
           </button>
         ) : (
           <div className="text-center text-xl text-indigo-400 tracking-wider">

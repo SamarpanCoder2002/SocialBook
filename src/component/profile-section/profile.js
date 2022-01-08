@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import NoProfilePic from "../../image/no_profile_picture.png";
@@ -40,8 +40,6 @@ const UserInformationContainer = ({ darkMode }) => {
     name: state?.name || "",
     description: state?.description || "",
     profilePic: state?.profilePic || "",
-    email: "",
-    phone: "",
   });
   const { name, description, profilePic } = userInformation;
 
@@ -97,6 +95,7 @@ const ProfileRelatedButtons = ({ darkMode }) => {
   const { connectionId } = useParams();
   const profileData = getDataFromLocalStorage();
   const [connectionType, setconnectionType] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (profileData && profileData.user !== connectionId) {
@@ -107,12 +106,28 @@ const ProfileRelatedButtons = ({ darkMode }) => {
     }
   }, [connectionId]);
 
+  const handleOwnProfileEdit = () => {
+    navigate("/update-user-information", {
+      state: {
+        name: profileData?.name || "",
+        description: profileData?.description || "",
+        profilePic: profileData?.profilePic || "",
+      },
+    });
+  };
+
   // ** NOTE: 1) if own user profile, then show edit button
   // ** NOTE: 2) if the viewer is connected to current user, then show remove and Message button
   // ** NOTE: 3) if the viewer is not connected to current user, then show connect button
 
   if (profileData?.user === connectionId) {
-    return <EditButton darkMode={darkMode} customClassName={"mt-3 text-sm"} />;
+    return (
+      <EditButton
+        darkMode={darkMode}
+        customClassName={"mt-3 text-sm"}
+        onClickOperation={handleOwnProfileEdit}
+      />
+    );
   } else {
     return (
       <div className="mt-3 flex justify-center items-center">
@@ -130,7 +145,10 @@ const ButtonsManagement = ({ darkMode, connectionType }) => {
     return (
       <div className="sm:flex justify-center items-center ">
         <MessageButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
-        <RemoveConnectionButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+        <RemoveConnectionButton
+          customClassName={"mt-3 text-sm"}
+          darkMode={darkMode}
+        />
       </div>
     );
   } else if (connectionType === ConnectionType.RequestSent) {
@@ -148,7 +166,9 @@ const ButtonsManagement = ({ darkMode, connectionType }) => {
       </div>
     );
   } else if (connectionType === ConnectionType.notConnected) {
-    return <ConnectButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />;
+    return (
+      <ConnectButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+    );
   } else {
     return <></>;
   }

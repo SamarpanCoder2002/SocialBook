@@ -57,6 +57,8 @@ const RoutesEntryPoint = () => {
           element={AuthenticatedDecider(UserInformationTakingComponent, "/take-user-information")}
         />
 
+        <Route path="/update-user-information" element={AuthenticatedDecider(UserInformationTakingComponent)} />
+
         <Route path="*" element={() => <div>404</div>} />
       </Routes>
     </Router>
