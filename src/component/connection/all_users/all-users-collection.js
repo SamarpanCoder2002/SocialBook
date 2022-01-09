@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import Waiting from "../../main-helper/waiting";
+import Waiting from "../../common/waiting";
 import { fetchAllAvailableUsers } from "../helper/api_call";
 import ProfileCard from "./connection-card";
 

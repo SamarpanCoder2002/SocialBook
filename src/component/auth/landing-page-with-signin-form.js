@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import {
   DesktopNotification,
   infoMessage,
-} from "../main-helper/desktop-notification";
+} from "../common/desktop-notification";
 import LoadingBar from "../loading/loadingbar";
 
 const LandingPageWithSignInFragment = () => {

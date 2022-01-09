@@ -7,7 +7,7 @@ import AllUsersCollection from "./all_users/all-users-collection";
 import { useLocation} from "react-router-dom";
 import {
   DesktopNotification,
-} from "../main-helper/desktop-notification";
+} from "../common/desktop-notification";
 
 const ConnectionScreen = () => {
   const { state, search } = useLocation();

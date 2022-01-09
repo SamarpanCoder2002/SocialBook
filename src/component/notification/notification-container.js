@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Waiting from "../main-helper/waiting";
+import Waiting from "../common/waiting";
 import BaseCommonPart from "../page-builder/base";
 import {
   deleteParticularNotification,

@@ -3,9 +3,9 @@ import LoadingBar from "../loading/loadingbar";
 import {
   DesktopNotification,
   infoMessage,
-} from "../main-helper/desktop-notification";
+} from "../common/desktop-notification";
 import NoProfileImage from "../../image/no_profile_picture.png";
-import { createUserProfile } from "./helper/api-call";
+import { createUserProfile, updateUserProfile } from "./helper/api-call";
 import { Navigate, useLocation } from "react-router-dom";
 
 const UserInformationTakingComponent = () => {
@@ -92,6 +92,14 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
     await createUserProfile(userName, description, selectedImage, setisLoading);
   };
 
+  const updateProfile = async () => {
+    if (userName === "" || description === "") {
+      infoMessage("Please fill all the fields");
+      return;
+    }
+    await updateUserProfile(userName, description, selectedImage, setisLoading);
+  }
+
   const imageSelector = () =>
     selectedImage?.toString()?.startsWith("https://")
       ? selectedImage
@@ -173,7 +181,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
             className={`bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                     font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                                     shadow-lg`}
-            onClick={makeProfile}
+            onClick={pathname === "/update-user-information"?updateProfile:makeProfile}
           >
             {pathname === "/update-user-information"
               ? "Update My Profile"

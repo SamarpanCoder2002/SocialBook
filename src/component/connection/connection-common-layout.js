@@ -9,7 +9,7 @@ import {
   RemoveConnectionButton,
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
-import { successMessage } from "../main-helper/desktop-notification";
+import { successMessage } from "../common/desktop-notification";
 import { connectionSpecificOperations } from "./helper/api_call";
 
 const ConnectionCollectionItem = ({

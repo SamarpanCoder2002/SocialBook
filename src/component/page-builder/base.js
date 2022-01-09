@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { DesktopNotification } from "../main-helper/desktop-notification";
+import { DesktopNotification } from "../common/desktop-notification";
 import MenuComponent from "./menu";
 
 const BaseCommonPart = ({ children, isLoading }) => {

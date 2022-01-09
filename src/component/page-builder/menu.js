@@ -66,6 +66,7 @@ const MenuToggleButton = ({ isMenuOpen, setisMenuOpen }) => {
 
 const MenuCollection = ({ isMenuOpen }) => {
   const location = useLocation();
+  const [hasNotification, sethasNotification] = useState(false);
 
   const menuStatus = (path) => {
     if (path === location.pathname) {
@@ -100,7 +101,14 @@ const MenuCollection = ({ isMenuOpen }) => {
         </li>
         <li className={`py-3`}>
           <Link className={menuStatus("/notification")} to="/notification">
-            <i className="far fa-bell fa-md"></i> Notification
+            <div className="flex ">
+              <div className="">
+                <i className="far fa-bell fa-md"></i>
+                {hasNotification && <span class="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full" style={{left: "-15px", top: "-5px"}}></span>}
+              </div>
+              {!hasNotification && <div className="w-1"></div>}
+              Notification
+            </div>
           </Link>
         </li>
         <li className={`py-3`}>

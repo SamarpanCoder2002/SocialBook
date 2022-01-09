@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
+import { getDataFromLocalStorage } from "../common/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import NoProfilePic from "../../image/no_profile_picture.png";
-import Waiting from "../main-helper/waiting";
+import Waiting from "../common/waiting";
 import PostDataShowingContainer from "../post-prototype/post-showing-section";
 import { ConnectionType, PostCollectionDataTypes } from "../../types/types";
 import { particularUserConnectionStatus } from "./helper/api-call";

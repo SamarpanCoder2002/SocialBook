@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 import Linkify from "react-linkify";
 import ShowMoreText from "react-show-more-text";
 import { updatePollData } from "./helper/api_call";
-import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
-import { infoMessage } from "../main-helper/desktop-notification";
+import { getDataFromLocalStorage } from "../common/local-storage-management";
+import { infoMessage } from "../common/desktop-notification";
 
 export const TextPost = ({ postData }) => {
   return (

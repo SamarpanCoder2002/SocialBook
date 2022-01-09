@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { onSignOut } from "./component/auth/helper/api_call";
-import { getDataFromLocalStorage } from "./component/main-helper/local-storage-management";
-import Waiting from "./component/main-helper/waiting";
+import { getDataFromLocalStorage } from "./component/common/local-storage-management";
+import Waiting from "./component/common/waiting";
 import { isUserProfileCreatedBefore } from "./component/profile-section/helper/api-call";
 
 export const AuthenticatedDecider = (RedirectComponent, path = "") => {

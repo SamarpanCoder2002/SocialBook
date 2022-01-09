@@ -1,14 +1,15 @@
+import { Navigate } from "react-router-dom";
 import { ConnectionType } from "../../../types/types";
 import { onSignOut } from "../../auth/helper/api_call";
-import { API } from "../../main-helper/backend";
+import { API } from "../../common/backend";
 import {
   errorMessage,
   successMessage,
-} from "../../main-helper/desktop-notification";
+} from "../../common/desktop-notification";
 import {
   getDataFromLocalStorage,
   storeDataInLocalStorage,
-} from "../../main-helper/local-storage-management";
+} from "../../common/local-storage-management";
 
 export const isUserProfileCreatedBefore = async () => {
   try {
@@ -123,6 +124,47 @@ export const createUserProfile = async (
       );
 
       setisLoading(false);
+    });
+};
+
+export const updateUserProfile = async (
+  userName,
+  userDescription,
+  userProfilePic,
+  setisLoading
+) => {
+  const { token, user } = getDataFromLocalStorage();
+  setisLoading(true);
+
+  const data = new FormData();
+  data.append("updatedName", userName);
+  data.append("updatedDescription", userDescription);
+  data.append("updatedProfilePic", userProfilePic);
+
+  fetch(`${API}/updateProfile/${user}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+    body: data,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.code !== 200) {
+        errorMessage(data.message, 10000);
+        setisLoading(false);
+        return;
+      }
+
+      const { name, description, profilePic } = data;
+      storeDataInLocalStorage(token, user, name, description, profilePic);
+      successMessage(data.message, 1000);
+
+      setTimeout(() => {
+        setisLoading(false);
+        window.location.replace("/feed");
+      }, 1000);
     });
 };
 

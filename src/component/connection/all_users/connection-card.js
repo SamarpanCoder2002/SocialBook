@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
 import { ConnectButton } from "../../common/buttons";
-import { successMessage } from "../../main-helper/desktop-notification";
+import { successMessage } from "../../common/desktop-notification";
 import { connectionSpecificOperations } from "../helper/api_call";
 
 const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {

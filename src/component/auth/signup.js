@@ -5,7 +5,7 @@ import {
   errorMessage,
   infoMessage,
   warningMessage,
-} from "../main-helper/desktop-notification";
+} from "../common/desktop-notification";
 import { onSignUp } from "./helper/api_call";
 
 const SignUp = () => {

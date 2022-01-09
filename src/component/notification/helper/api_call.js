@@ -1,10 +1,10 @@
-import { API } from "../../main-helper/backend";
+import { API } from "../../common/backend";
 import {
   errorMessage,
   infoMessage,
   successMessage,
-} from "../../main-helper/desktop-notification";
-import { getDataFromLocalStorage } from "../../main-helper/local-storage-management";
+} from "../../common/desktop-notification";
+import { getDataFromLocalStorage } from "../../common/local-storage-management";
 
 export const fetchAllNotifications = async () => {
   try {

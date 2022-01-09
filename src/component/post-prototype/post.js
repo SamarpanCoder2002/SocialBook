@@ -6,7 +6,7 @@ import BaseCommonPart from "../page-builder/base";
 import {
   DesktopNotification,
   infoMessage,
-} from "../main-helper/desktop-notification";
+} from "../common/desktop-notification";
 import {
   makeDocumentPost,
   makeImagePost,

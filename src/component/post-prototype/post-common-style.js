@@ -13,8 +13,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Fragment, useState } from "react";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { insertPostComment, insertPostLove } from "./helper/api_call";
-import { infoMessage } from "../main-helper/desktop-notification";
-import { getDataFromLocalStorage } from "../main-helper/local-storage-management";
+import { infoMessage } from "../common/desktop-notification";
+import { getDataFromLocalStorage } from "../common/local-storage-management";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
   return (
