@@ -1,4 +1,4 @@
-export const storeDataInLocalStorage = (token, userId, name="", description="", profilePic="") => {
+export const storeDataInLocalStorage = (token, user, name="", description="", profilePic="", hasPendingNotification = 0) => {
   console.log("storeDataInLocalStorage");
 
   localStorage.setItem(
@@ -6,10 +6,11 @@ export const storeDataInLocalStorage = (token, userId, name="", description="", 
     JSON.stringify({
       token,
       darkMode: true,
-      user: userId,
+      user,
       name,
       description,
-      profilePic
+      profilePic,
+      hasPendingNotification,
     })
   );
 };

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { CHANGE_MODE } from "../../redux/actions";
 import LoadingBar from "../loading/loadingbar";
 import { onSignOut } from "../auth/helper/api_call";
+import { io } from "socket.io-client";
+import { getDataFromLocalStorage, storeDataInLocalStorage } from "../common/local-storage-management";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);
@@ -67,6 +69,10 @@ const MenuToggleButton = ({ isMenuOpen, setisMenuOpen }) => {
 const MenuCollection = ({ isMenuOpen }) => {
   const location = useLocation();
   const [hasNotification, sethasNotification] = useState(false);
+  const socket = useRef();
+
+  const { user } = getDataFromLocalStorage();
+  //const [hasNewPendingNotification, sethasNewPendingNotification] = useState(hasPendingNotification);
 
   const menuStatus = (path) => {
     if (path === location.pathname) {
@@ -75,6 +81,32 @@ const MenuCollection = ({ isMenuOpen }) => {
       return "menu-item text-lightSpecificIconsColor dark:text-darkSpecificIconsColor";
     }
   };
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8000");
+  }, []);
+
+  useEffect(() => {
+    socket.current.emit("addUser", user);
+    socket.current.on("getUsers", (users) => {
+      console.log(users);
+    });
+
+    socket.current.emit("getRealTimeNotifications", {
+      userId: user,
+    });
+
+    socket.current.on("totalUpdatedNotification", (notificationData) => {
+      console.log("socket notification data: ", notificationData);
+      notificationData && sethasNotification(true);
+      // if(notificationData){
+      //   sethasNotification(true);
+      //   !hasNewPendingNotification && storeDataInLocalStorage(token ,user, name, description, profilePic, true) && sethasNewPendingNotification(true);
+      // }
+    });
+  }, [user]);
+
+  console.log(socket);
 
   return (
     <div
@@ -101,10 +133,15 @@ const MenuCollection = ({ isMenuOpen }) => {
         </li>
         <li className={`py-3`}>
           <Link className={menuStatus("/notification")} to="/notification">
-            <div className="flex ">
+            <div className="flex text-center w-full justify-center">
               <div className="">
                 <i className="far fa-bell fa-md"></i>
-                {hasNotification && <span class="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full" style={{left: "-15px", top: "-5px"}}></span>}
+                {hasNotification && (
+                  <span
+                    class="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+                    style={{ left: "-15px", top: "-5px" }}
+                  ></span>
+                )}
               </div>
               {!hasNotification && <div className="w-1"></div>}
               Notification
