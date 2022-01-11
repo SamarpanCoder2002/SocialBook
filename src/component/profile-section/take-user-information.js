@@ -7,6 +7,7 @@ import {
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { createUserProfile, updateUserProfile } from "./helper/api-call";
 import { Navigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const UserInformationTakingComponent = () => {
   const { state, pathname } = useLocation();
@@ -64,6 +65,8 @@ const Heading = ({ isLoading }) => {
 const UserInformationForm = ({ isLoading, setisLoading }) => {
   const { state, pathname } = useLocation();
 
+  const dispatch = useDispatch(state => state);
+
   const [signUpForm, setsignUpForm] = useState({
     userName: state?.name || "",
     description: state?.description || "",
@@ -97,7 +100,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       infoMessage("Please fill all the fields");
       return;
     }
-    await updateUserProfile(userName, description, selectedImage, setisLoading);
+    await updateUserProfile(userName, description, selectedImage, setisLoading, dispatch);
   }
 
   const imageSelector = () =>

@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { CHANGE_MODE } from "../../redux/actions";
+import { CHANGE_MODE, UPDATE_NOTIFICATION } from "../../redux/actions";
 import LoadingBar from "../loading/loadingbar";
 import { onSignOut } from "../auth/helper/api_call";
 import { io } from "socket.io-client";
-import { getDataFromLocalStorage, storeDataInLocalStorage } from "../common/local-storage-management";
+import { getDataFromLocalStorage } from "../common/local-storage-management";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);
@@ -68,11 +68,13 @@ const MenuToggleButton = ({ isMenuOpen, setisMenuOpen }) => {
 
 const MenuCollection = ({ isMenuOpen }) => {
   const location = useLocation();
-  const [hasNotification, sethasNotification] = useState(false);
   const socket = useRef();
-
   const { user } = getDataFromLocalStorage();
-  //const [hasNewPendingNotification, sethasNewPendingNotification] = useState(hasPendingNotification);
+
+  const dispatch = useDispatch();
+  const { hasPendingNotification } = useSelector((state) => state);
+
+  console.log("Has pending notification: ", hasPendingNotification);
 
   const menuStatus = (path) => {
     if (path === location.pathname) {
@@ -95,18 +97,22 @@ const MenuCollection = ({ isMenuOpen }) => {
     socket.current.emit("getRealTimeNotifications", {
       userId: user,
     });
-
-    socket.current.on("totalUpdatedNotification", (notificationData) => {
-      console.log("socket notification data: ", notificationData);
-      notificationData && sethasNotification(true);
-      // if(notificationData){
-      //   sethasNotification(true);
-      //   !hasNewPendingNotification && storeDataInLocalStorage(token ,user, name, description, profilePic, true) && sethasNewPendingNotification(true);
-      // }
-    });
   }, [user]);
 
-  console.log(socket);
+  useEffect(() => {
+    socket.current.on("totalUpdatedNotification", (notificationData) => {
+      console.log("socket notification data: ", notificationData);
+      notificationData && dispatch({ type: UPDATE_NOTIFICATION, payload: true });
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+
+    if(location.pathname === "/notification"){
+      dispatch({ type: UPDATE_NOTIFICATION, payload: false });
+    }
+
+  }, [location, dispatch])
 
   return (
     <div
@@ -136,14 +142,14 @@ const MenuCollection = ({ isMenuOpen }) => {
             <div className="flex text-center w-full justify-center">
               <div className="">
                 <i className="far fa-bell fa-md"></i>
-                {hasNotification && (
+                {hasPendingNotification && (
                   <span
-                    class="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+                    className="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
                     style={{ left: "-15px", top: "-5px" }}
                   ></span>
                 )}
               </div>
-              {!hasNotification && <div className="w-1"></div>}
+              {!hasPendingNotification && <div className="w-1"></div>}
               Notification
             </div>
           </Link>
@@ -155,7 +161,7 @@ const MenuCollection = ({ isMenuOpen }) => {
         </li>
         <li
           className={`py-3 text-red-600 dark:text-red-500 font-semibold text-center md:ml-3 cursor-pointer`}
-          onClick={() => onSignOut()}
+          onClick={() => onSignOut(hasPendingNotification)}
         >
           <i className="fas fa-power-off"></i> Signout
         </li>

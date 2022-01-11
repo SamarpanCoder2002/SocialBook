@@ -97,7 +97,6 @@ export const onSignIn = (email, password, setisLoading) => {
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
 
-        // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
         setTimeout(() => {
           window.location.replace("/take-user-information");
         }, 1800);
@@ -108,13 +107,13 @@ export const onSignIn = (email, password, setisLoading) => {
     });
 };
 
-export const onSignOut = () => {
+export const onSignOut = (hasPendingNotification) => {
   const getTokenData = localStorage.getItem(
     process.env.REACT_APP_SOCIAL_BOOK_TOKEN
   );
 
   if (getTokenData === null) {
-    return window.location.href = "/landing-with-signin";
+    return (window.location.href = "/landing-with-signin");
   }
 
   const { token, user } = JSON.parse(getTokenData);
@@ -125,11 +124,15 @@ export const onSignOut = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-
   })
     .then((res) => res.json())
     .then((data) => {
       if (data.code === 200) {
+        localStorage.setItem(
+          process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY,
+          JSON.stringify({ storedPendingNotification: hasPendingNotification })
+        );
+
         localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
         window.location.href = "/landing-with-signin";
       } else {

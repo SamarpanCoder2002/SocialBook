@@ -1,5 +1,23 @@
-export const storeDataInLocalStorage = (token, user, name="", description="", profilePic="", hasPendingNotification = 0) => {
+export const storeDataInLocalStorage = (
+  token,
+  user,
+  name = "",
+  description = "",
+  profilePic = "",
+  hasPendingNotification
+) => {
   console.log("storeDataInLocalStorage");
+  let hasPrevPendingNotification = hasPendingNotification;
+
+  const secondaryStoredData = localStorage.getItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
+  );
+
+  if (secondaryStoredData !== null) {
+    const { storedPendingNotification } = JSON.parse(secondaryStoredData);
+    hasPrevPendingNotification = storedPendingNotification;
+    localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY);
+  }
 
   localStorage.setItem(
     process.env.REACT_APP_SOCIAL_BOOK_TOKEN,
@@ -10,7 +28,10 @@ export const storeDataInLocalStorage = (token, user, name="", description="", pr
       name,
       description,
       profilePic,
-      hasPendingNotification,
+      hasPendingNotification:
+        hasPrevPendingNotification ||
+        getDataFromLocalStorage().hasPendingNotification ||
+        false,
     })
   );
 };

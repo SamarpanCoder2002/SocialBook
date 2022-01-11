@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { UPDATE_USER_PROFILE } from "../../../redux/actions";
 import { ConnectionType } from "../../../types/types";
 import { onSignOut } from "../../auth/helper/api_call";
 import { API } from "../../common/backend";
@@ -131,7 +132,8 @@ export const updateUserProfile = async (
   userName,
   userDescription,
   userProfilePic,
-  setisLoading
+  setisLoading,
+  dispatch
 ) => {
   const { token, user } = getDataFromLocalStorage();
   setisLoading(true);
@@ -158,8 +160,17 @@ export const updateUserProfile = async (
       }
 
       const { name, description, profilePic } = data;
-      storeDataInLocalStorage(token, user, name, description, profilePic);
       successMessage(data.message, 1000);
+      
+      dispatch({
+        type: UPDATE_USER_PROFILE,
+        payload: {
+          name,
+          description,
+          profilePic,
+        },
+      });
+      
 
       setTimeout(() => {
         setisLoading(false);
