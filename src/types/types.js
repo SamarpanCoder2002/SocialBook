@@ -28,3 +28,8 @@ export const PostCollectionDataTypes = {
   feedData: "feedData",
   particularAccPostData: "particularAccountPosts",
 };
+
+export const MessageHolder = {
+  currentUser: "currentUser",
+  partnerUser: "partnerUser",
+}

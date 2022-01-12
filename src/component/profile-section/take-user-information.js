@@ -7,16 +7,17 @@ import {
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { createUserProfile, updateUserProfile } from "./helper/api-call";
 import { Navigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserInformationTakingComponent = () => {
   const { state, pathname } = useLocation();
+  const { darkMode } = useSelector((state) => state);
 
   if (pathname === "/update-user-information" && !state)
     return <Navigate to="/feed" />;
 
   return (
-    <div className="h-screen dark">
+    <div className={`h-screen ${darkMode ? "dark" : ""}`}>
       <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
         <div className="container mx-auto h-full">
           <div className="h-full">
@@ -65,7 +66,7 @@ const Heading = ({ isLoading }) => {
 const UserInformationForm = ({ isLoading, setisLoading }) => {
   const { state, pathname } = useLocation();
 
-  const dispatch = useDispatch(state => state);
+  const dispatch = useDispatch((state) => state);
 
   const [signUpForm, setsignUpForm] = useState({
     userName: state?.name || "",
@@ -100,8 +101,14 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       infoMessage("Please fill all the fields");
       return;
     }
-    await updateUserProfile(userName, description, selectedImage, setisLoading, dispatch);
-  }
+    await updateUserProfile(
+      userName,
+      description,
+      selectedImage,
+      setisLoading,
+      dispatch
+    );
+  };
 
   const imageSelector = () =>
     selectedImage?.toString()?.startsWith("https://")
@@ -143,11 +150,11 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
         </div>
       </div>
       <div>
-        <div className="text-sm font-bold text-gray-300 tracking-wide">
+        <div className="text-sm font-bold text-lightPostTextStyleColor dark:text-gray-300 tracking-wide">
           Name
         </div>
         <input
-          className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-darkBgColor"
+          className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-darkBgColor"
           type="email"
           placeholder="Write Your Name Here"
           required
@@ -158,12 +165,12 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
       </div>
       <div className="mt-8">
         <div className="flex justify-between items-center">
-          <div className="text-sm font-bold text-gray-300 tracking-wide">
+          <div className="text-sm font-bold text-lightPostTextStyleColor dark:text-gray-300 tracking-wide">
             Description
           </div>
         </div>
         <textarea
-          className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-darkBgColor scroller"
+          className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-darkBgColor scroller"
           type="password"
           placeholder="Write About Yourself"
           required
@@ -184,7 +191,11 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
             className={`bg-indigo-500 text-gray-100 p-4 w-full rounded-full tracking-wide
                                     font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-600
                                     shadow-lg`}
-            onClick={pathname === "/update-user-information"?updateProfile:makeProfile}
+            onClick={
+              pathname === "/update-user-information"
+                ? updateProfile
+                : makeProfile
+            }
           >
             {pathname === "/update-user-information"
               ? "Update My Profile"
