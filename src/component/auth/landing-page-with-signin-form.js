@@ -27,7 +27,12 @@ const HeaderSection = () => {
 
   return (
     <div className="p-2 flex justify-between pt-3">
-      <div className="text-xl p-2 font-semibold tracking-wider ">
+      <div
+        className="text-xl px-2 py-1 font-semibold tracking-wider cursor-pointer"
+        onClick={() => {
+          navigate("/feed");
+        }}
+      >
         Socialbook
       </div>
 

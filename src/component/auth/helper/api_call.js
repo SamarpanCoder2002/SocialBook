@@ -25,7 +25,7 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
       if (data.error) {
         errorMessage("Google Sign In Error");
       } else {
-        successMessage("🥳 Sign In Successful", 2000);
+        successMessage("🥳 Sign In Successful", 1200);
 
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
@@ -33,7 +33,7 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
         // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
         setTimeout(() => {
           window.location.replace("/take-user-information");
-        }, 2000);
+        }, 1000);
       }
 
       setisLoading(false);
@@ -93,13 +93,13 @@ export const onSignIn = (email, password, setisLoading) => {
     .then((data) => {
       setisLoading(false);
       if (data.code === 200) {
-        successMessage("Sign In Successful", 2000);
+        successMessage("Sign In Successful", 1200);
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
 
         setTimeout(() => {
           window.location.replace("/take-user-information");
-        }, 1800);
+        }, 1000);
       } else {
         if (data.code === 422) infoMessage(data.error);
         else errorMessage(data.error);
@@ -128,13 +128,7 @@ export const onSignOut = (hasPendingNotification) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.code === 200) {
-        localStorage.setItem(
-          process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY,
-          JSON.stringify({ storedPendingNotification: hasPendingNotification })
-        );
-
-        localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
-        window.location.href = "/landing-with-signin";
+        storeSecondaryData(user, hasPendingNotification);
       } else {
         errorMessage(data.error);
       }
@@ -142,4 +136,23 @@ export const onSignOut = (hasPendingNotification) => {
     .catch((err) => {
       errorMessage("Server Error... Please Try After some time 😔");
     });
+};
+
+const storeSecondaryData = (user, hasPendingNotification) => {
+  let oldStoredData = localStorage.getItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
+  );
+
+  if (!oldStoredData) oldStoredData = {};
+  else oldStoredData = JSON.parse(oldStoredData);
+  
+  oldStoredData[user] = hasPendingNotification;
+
+  localStorage.setItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY,
+    JSON.stringify(oldStoredData)
+  );
+
+  localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
+  window.location.href = "/landing-with-signin";
 };

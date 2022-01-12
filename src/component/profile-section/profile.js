@@ -4,10 +4,12 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
 import BaseCommonPart from "../page-builder/base";
 import NoProfilePic from "../../image/no_profile_picture.png";
-import Waiting from "../common/waiting";
 import PostDataShowingContainer from "../post-prototype/post-showing-section";
 import { ConnectionType, PostCollectionDataTypes } from "../../types/types";
-import { particularUserConnectionStatus } from "./helper/api-call";
+import {
+  fetchUserProfile,
+  particularUserConnectionStatus,
+} from "./helper/api-call";
 import {
   AcceptButton,
   CancelButton,
@@ -19,28 +21,50 @@ import {
 } from "../common/buttons";
 
 const ProfileSection = () => {
-  const [isLoading, setisLoading] = useState(false);
-  const { darkMode } = useSelector((state) => state);
-
-  return isLoading ? (
-    <Waiting />
-  ) : (
-    <BaseCommonPart>
-      <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
-        <UserInformationContainer darkMode={darkMode} />
-        <UserActivityContainer darkMode={darkMode} />
-      </div>
-    </BaseCommonPart>
-  );
-};
-
-const UserInformationContainer = ({ darkMode }) => {
   const { state } = useLocation();
+  const { darkMode } = useSelector((state) => state);
+  const { connectionId } = useParams();
   const [userInformation, setuserInformation] = useState({
     name: state?.name || "",
     description: state?.description || "",
     profilePic: state?.profilePic || "",
   });
+
+  useEffect(() => {
+    if (state !== null) return;
+
+    fetchUserProfile(connectionId)
+      .then((data) => {
+        if (!data) return;
+
+        setuserInformation({
+          name: data?.name || "",
+          description: data?.description || "",
+          profilePic: data?.profilePic || "",
+        });
+      })
+      .catch((e) => {
+        console.log("Error in fetch user profile in profile screen ", e);
+      });
+  }, [state]);
+
+  return (
+    <BaseCommonPart>
+      <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
+        <UserInformationContainer
+          darkMode={darkMode}
+          userInformation={userInformation}
+        />
+        <UserActivityContainer
+          darkMode={darkMode}
+          userInformation={userInformation}
+        />
+      </div>
+    </BaseCommonPart>
+  );
+};
+
+const UserInformationContainer = ({ darkMode, userInformation }) => {
   const { name, description, profilePic } = userInformation;
 
   return (
@@ -62,8 +86,8 @@ const UserInformationContainer = ({ darkMode }) => {
   );
 };
 
-const UserActivityContainer = ({ darkMode }) => {
-  const { state } = useLocation();
+const UserActivityContainer = ({ darkMode, userInformation }) => {
+  const { connectionId } = useParams();
 
   return (
     <div className="h-[90vh] rounded-lg mt-3 container mx-auto px-4 sm:px-6 md:px-20 lg:px-48 xl:px-80 2xl:px-96">
@@ -83,8 +107,8 @@ const UserActivityContainer = ({ darkMode }) => {
           postCollectionDataTypes={
             PostCollectionDataTypes.particularAccPostData
           }
-          desiredProfileId={useParams().connectionId}
-          desiredProfileData={state}
+          desiredProfileId={connectionId}
+          desiredProfileData={userInformation}
         />
       </div>
     </div>

@@ -14,9 +14,8 @@ export const storeDataInLocalStorage = (
   );
 
   if (secondaryStoredData !== null) {
-    const { storedPendingNotification } = JSON.parse(secondaryStoredData);
-    hasPrevPendingNotification = storedPendingNotification;
-    localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY);
+    const oldStoredData = JSON.parse(secondaryStoredData);
+    hasPrevPendingNotification = oldStoredData[user] || false;
   }
 
   localStorage.setItem(
