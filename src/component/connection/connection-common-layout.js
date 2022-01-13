@@ -10,6 +10,7 @@ import {
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
 import { successMessage } from "../common/desktop-notification";
+import { getChatBoxId } from "../messaging-section/helper/api_call";
 import { connectionSpecificOperations } from "./helper/api_call";
 
 const ConnectionCollectionItem = ({
@@ -31,7 +32,7 @@ const ConnectionCollectionItem = ({
         <ButtonCollectionPrediction
           darkMode={darkMode}
           connectionType={connectionType}
-          userId={user.id}
+          partnerUserId={user.id}
           setCollectiveIds={setCollectiveIds}
         />
       </div>
@@ -42,14 +43,14 @@ const ConnectionCollectionItem = ({
 const ButtonCollectionPrediction = ({
   connectionType,
   darkMode,
-  userId,
+  partnerUserId,
   setCollectiveIds,
 }) => {
   if (connectionType === ConnectionType.AlreadyConnected) {
     return (
       <ConnectedUsersButtonCollection
         darkMode={darkMode}
-        userId={userId}
+        partnerUserId={partnerUserId}
         setCollectiveIds={setCollectiveIds}
       />
     );
@@ -57,7 +58,7 @@ const ButtonCollectionPrediction = ({
     return (
       <ReceivedInvitationButtonsCollection
         darkMode={darkMode}
-        userId={userId}
+        partnerUserId={partnerUserId}
         setCollectiveIds={setCollectiveIds}
       />
     );
@@ -65,7 +66,7 @@ const ButtonCollectionPrediction = ({
     return (
       <SentRequestButtonCollection
         darkMode={darkMode}
-        userId={userId}
+        partnerUserId={partnerUserId}
         setCollectiveIds={setCollectiveIds}
       />
     );
@@ -111,18 +112,28 @@ const ConnectionTile = ({ user }) => {
 
 const ConnectedUsersButtonCollection = ({
   darkMode,
-  userId,
+  partnerUserId,
   setCollectiveIds,
 }) => {
   // ** NOTE: Message Button Will be redirect to the specific chat..
   // ** We will do it after implement chat feature.
+
+  const onMessageButtonClick = () => {
+    getChatBoxId(partnerUserId)
+      .then((data) => {
+        console.log("Chat Box Id is: ", data);
+      })
+      .catch((e) => {
+        console.log("Error in get chat box id: ", e);
+      });
+  };
 
   return (
     <div className="md:flex items-center sm:ml-5 text-sm md:text-md 2xl:text-lg md:tracking-wider">
       <MessageButton
         darkMode={darkMode}
         customClassName={"connection-screens-common-button-layout mx-3 md:mx-0"}
-        onClickOperation={() => {}}
+        onClickOperation={onMessageButtonClick}
       />
 
       <RemoveConnectionButton
@@ -131,9 +142,9 @@ const ConnectedUsersButtonCollection = ({
           "connection-screens-common-button-layout mt-3 md:mt-0 mx-3 md:ml-5"
         }
         onClickOperation={() => {
-          connectionSpecificOperations(userId, "removeConnections");
+          connectionSpecificOperations(partnerUserId, "removeConnections");
           successMessage("😔 Connection Removed", 2000);
-          setCollectiveIds((prev) => [...prev, userId]);
+          setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
     </div>
@@ -142,7 +153,7 @@ const ConnectedUsersButtonCollection = ({
 
 const ReceivedInvitationButtonsCollection = ({
   darkMode,
-  userId,
+  partnerUserId,
   setCollectiveIds,
 }) => {
   return (
@@ -151,9 +162,12 @@ const ReceivedInvitationButtonsCollection = ({
         darkMode={darkMode}
         customClassName={"connection-screens-common-button-layout mx-3"}
         onClickOperation={() => {
-          connectionSpecificOperations(userId, "acceptConnectionRequest");
+          connectionSpecificOperations(
+            partnerUserId,
+            "acceptConnectionRequest"
+          );
           successMessage("🥳 Connection request accepted", 2000);
-          setCollectiveIds((prev) => [...prev, userId]);
+          setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
 
@@ -164,11 +178,11 @@ const ReceivedInvitationButtonsCollection = ({
         }
         onClickOperation={() => {
           connectionSpecificOperations(
-            userId,
+            partnerUserId,
             "removeIncomingConnectionRequest"
           );
           successMessage("😏 Incoming Connection Request Removed", 2000);
-          setCollectiveIds((prev) => [...prev, userId]);
+          setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
     </div>
@@ -177,7 +191,7 @@ const ReceivedInvitationButtonsCollection = ({
 
 const SentRequestButtonCollection = ({
   darkMode,
-  userId,
+  partnerUserId,
   setCollectiveIds,
 }) => {
   return (
@@ -188,9 +202,9 @@ const SentRequestButtonCollection = ({
           "ml-3 md:mr-5 connection-screens-common-button-layout text-sm md:text-md 2xl:text-lg md:tracking-wider"
         }
         onClickOperation={() => {
-          connectionSpecificOperations(userId, "withDrawSentRequest");
+          connectionSpecificOperations(partnerUserId, "withDrawSentRequest");
           successMessage("😏 Outgoing Connection Request Removed", 2000);
-          setCollectiveIds((prev) => [...prev, userId]);
+          setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
     </div>
