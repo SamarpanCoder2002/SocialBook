@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const MessageComponent = () => {
   const [chatCollections, setchatCollections] = useState([]);
+  const [messages, setmessages] = useState([]);
 
   const { darkMode } = useSelector((state) => state);
   const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
@@ -37,12 +38,15 @@ const MessageComponent = () => {
               setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
               clickedChatProfile={clickedChatProfile}
               setclickedChatProfile={setclickedChatProfile}
+              setmessages={setmessages}
             />
 
             {/* Right Side */}
             <AllChatMessages
               isEligibleToOpenChatBox={isEligibleToOpenChatBox}
               setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
+              messages={messages}
+              setmessages={setmessages}
             />
           </div>
         </div>
@@ -58,7 +62,9 @@ const ProfileConnectionCollection = ({
   setisEligibleToOpenChatBox,
   clickedChatProfile,
   setclickedChatProfile,
+  setmessages
 }) => {
+
   return (
     <div
       className={`h-[90vh] ${
@@ -85,8 +91,7 @@ const ProfileConnectionCollection = ({
             onClick={() => {
               setclickedChatProfile(chat.chatBoxId);
               setisEligibleToOpenChatBox(chat);
-              console.log("index is: ", index);
-              console.log("clickedChatProfile: ", clickedChatProfile);
+              setmessages([]);
             }}
           >
             <div className="flex">
@@ -114,29 +119,18 @@ const ProfileConnectionCollection = ({
 const AllChatMessages = ({
   isEligibleToOpenChatBox,
   setisEligibleToOpenChatBox,
+  messages,
+  setmessages
 }) => {
-  const [messages, setmessages] = useState([
-    {
-      msgOf: MessageHolder.currentUser,
-      msg: "Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?",
-      type: ChatMsgTypes.text,
-    },
-    {
-      msgOf: MessageHolder.partnerUser,
-      msg: "https://images.pexels.com/photos/1464565/pexels-photo-1464565.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      type: ChatMsgTypes.image,
-    },
-  ]);
   const [messageWritten, setmessageWritten] = useState("");
   const [preference, setpreference] = useState(MessageHolder.currentUser);
   const [showModal, setshowModal] = useState(false);
   const [selectedImage, setselectedImage] = useState("");
-  const navigate = useNavigate();
 
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -144,10 +138,6 @@ const AllChatMessages = ({
   }, [messages]);
 
   const inputFile = useRef(null);
-
-  const partnerProfileDescription = isEligibleToOpenChatBox?.partnerDescription
-    .toString()
-    .split(" ");
 
   return (
     <div
@@ -158,117 +148,32 @@ const AllChatMessages = ({
       }`}
     >
       {/* Upper Section Heading */}
-      <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md flex">
-        <div
-          onClick={() => setisEligibleToOpenChatBox()}
-          className="p-3 cursor-pointer sm:hidden"
-        >
-          <i className="fas fa-arrow-left"></i>
-        </div>
-        <div className="pr-3">
-          <img
-            src={
-              isEligibleToOpenChatBox?.partnerProfilePic || NoProfilePic || ""
-            }
-            alt="profile"
-            className="w-12 h-12 object-cover rounded-full"
-          />
-        </div>
-        <div>
-          <div
-            className="text-base hover:underline cursor-pointer"
-            onClick={() =>
-              navigate(`/${isEligibleToOpenChatBox?.partnerId}/profile`)
-            }
-          >
-            {isEligibleToOpenChatBox?.partnerName || ""}
-          </div>
-          <div className="text-xs w-10/12">
-            {`${
-              partnerProfileDescription
-                ? partnerProfileDescription?.slice(0, 25).join(" ")
-                : ""
-            }${partnerProfileDescription?.length > 25 ? "..." : ""}` || ""}
-          </div>
-        </div>
-      </div>
+      <ChatBoxUpperSection
+        setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
+        isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+      />
 
       {/* Chat Messages Collection */}
       <div className="h-[76%] lg:h-[78%] overflow-y-auto scroller p-3">
         <ChatMessagesCollection
           messages={messages}
           messagesEndRef={messagesEndRef}
+          partnerData={isEligibleToOpenChatBox}
         />
       </div>
 
       {/* Lower Message Input Section */}
-      <div className="w-full mt-3 px-3 py-auto flex">
-        <div>
-          <input
-            type="file"
-            id="file"
-            accept="image/*"
-            ref={inputFile}
-            style={{ display: "none" }}
-            onChange={(e) => {
-              setselectedImage(URL.createObjectURL(e.target.files[0]));
-              setshowModal(true);
-            }}
-          />
-
-          <button
-            className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 mr-3 text-zinc-600 dark:text-white shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
-            onClick={() => {
-              inputFile.current.click();
-            }}
-          >
-            <i className="fas fa-camera"></i>
-          </button>
-        </div>
-
-        <input
-          type="text"
-          placeholder="Write a message..."
-          value={messageWritten}
-          onChange={(e) => setmessageWritten(e.target.value)}
-          className="rounded-full w-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-[#E6E6E6] dark:bg-darkBgColor text-sm mr-3"
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              if (messageWritten !== "") {
-                setmessages([
-                  ...messages,
-                  {
-                    msgOf: preference,
-                    msg: messageWritten,
-                    type: ChatMsgTypes.text,
-                  },
-                ]);
-                setpreference(MessageHolder.currentUser);
-                setmessageWritten("");
-              }
-            }
-          }}
-        />
-        <button
-          className="bg-[#3DBE29] dark:bg-gray-800 rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300  shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
-          onClick={() => {
-            if (messageWritten !== "") {
-              setmessages([
-                ...messages,
-                {
-                  msgOf: preference,
-                  msg: messageWritten,
-                  type: ChatMsgTypes.text,
-                },
-              ]);
-              setpreference(MessageHolder.currentUser);
-              setmessageWritten("");
-            }
-          }}
-        >
-          <i className="far fa-paper-plane"></i>
-        </button>
-      </div>
+      <ChatBoxLowerSection
+        inputFile={inputFile}
+        setselectedImage={setselectedImage}
+        setshowModal={setshowModal}
+        messageWritten={messageWritten}
+        setmessageWritten={setmessageWritten}
+        setmessages={setmessages}
+        messages={messages}
+        preference={preference}
+        setpreference={setpreference}
+      />
 
       {showModal && (
         <Modal
@@ -282,39 +187,144 @@ const AllChatMessages = ({
   );
 };
 
-const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
-  const participantCollection = {
-    [MessageHolder.currentUser]: {
-      profile:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      partnerName: "Samarpan Dasgupta",
-    },
-    [MessageHolder.partnerUser]: {
-      profile:
-        "data:image/jpeg;base64,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",
-      partnerName: "Sukannya Paul",
-    },
-  };
+const ChatBoxUpperSection = ({
+  setisEligibleToOpenChatBox,
+  isEligibleToOpenChatBox,
+}) => {
+  const navigate = useNavigate();
 
+  const partnerProfileDescription = isEligibleToOpenChatBox?.partnerDescription
+    .toString()
+    .split(" ");
+
+  return (
+    <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md flex">
+      <div
+        onClick={() => setisEligibleToOpenChatBox()}
+        className="p-3 cursor-pointer sm:hidden"
+      >
+        <i className="fas fa-arrow-left"></i>
+      </div>
+      <div className="pr-3 ">
+        <img
+          src={isEligibleToOpenChatBox?.partnerProfilePic || NoProfilePic || ""}
+          alt="profile"
+          className="w-12 h-12 object-cover rounded-full"
+        />
+      </div>
+      <div>
+        <div
+          className="text-base hover:underline cursor-pointer"
+          onClick={() =>
+            navigate(`/${isEligibleToOpenChatBox?.partnerId}/profile`)
+          }
+        >
+          {isEligibleToOpenChatBox?.partnerName || ""}
+        </div>
+        <div className="text-xs w-10/12">
+          {`${
+            partnerProfileDescription
+              ? partnerProfileDescription?.slice(0, 25).join(" ")
+              : ""
+          }${partnerProfileDescription?.length > 25 ? "..." : ""}` || ""}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ChatBoxLowerSection = ({
+  inputFile,
+  setselectedImage,
+  setshowModal,
+  messageWritten,
+  setmessageWritten,
+  setmessages,
+  messages,
+  preference,
+  setpreference,
+}) => {
+  return (
+    <div className="w-full mt-3 px-3 py-auto flex">
+      <div>
+        <input
+          type="file"
+          id="file"
+          accept="image/*"
+          ref={inputFile}
+          style={{ display: "none" }}
+          onChange={(e) => {
+            setselectedImage(URL.createObjectURL(e.target.files[0]));
+            setshowModal(true);
+          }}
+        />
+
+        <button
+          className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 mr-3 text-zinc-600 dark:text-white shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
+          onClick={() => {
+            inputFile.current.click();
+          }}
+        >
+          <i className="fas fa-camera"></i>
+        </button>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Write a message..."
+        value={messageWritten}
+        onChange={(e) => setmessageWritten(e.target.value)}
+        className="rounded-full w-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-[#E6E6E6] dark:bg-darkBgColor text-sm mr-3"
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            if (messageWritten !== "") {
+              setmessages([
+                ...messages,
+                {
+                  holder: preference,
+                  msg: messageWritten,
+                  type: ChatMsgTypes.text,
+                },
+              ]);
+              setpreference(MessageHolder.currentUser);
+              setmessageWritten("");
+            }
+          }
+        }}
+      />
+      <button
+        className="bg-[#3DBE29] dark:bg-gray-800 rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300  shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
+        onClick={() => {
+          if (messageWritten !== "") {
+            setmessages([
+              ...messages,
+              {
+                holder: preference,
+                msg: messageWritten,
+                type: ChatMsgTypes.text,
+              },
+            ]);
+            setpreference(MessageHolder.currentUser);
+            setmessageWritten("");
+          }
+        }}
+      >
+        <i className="far fa-paper-plane"></i>
+      </button>
+    </div>
+  );
+};
+
+const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
   return (
     <div>
       {messages.map((message, index) => {
-        console.log(participantCollection[message.msgOf].profile);
-        if (message.type === ChatMsgTypes.text)
-          return (
-            <TextMessage
-              key={index}
-              messagesEndRef={messagesEndRef}
-              participantCollection={participantCollection}
-              message={message}
-            />
-          );
         return (
-          <ImageMessage
+          <CommonMessageFormat
             key={index}
             messagesEndRef={messagesEndRef}
-            participantCollection={participantCollection}
             message={message}
+            partnerData={partnerData}
           />
         );
       })}
@@ -322,56 +332,62 @@ const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
   );
 };
 
-const TextMessage = ({ messagesEndRef, participantCollection, message }) => {
+const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
+  const { name, profilePic } = useSelector((state) => state);
+
   return (
     <div className=" mb-3 flex" ref={messagesEndRef}>
       <div>
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
-            src={participantCollection[message.msgOf].profile}
-            alt="profile"
-            className="w-full h-full"
+            src={
+              message.holder === MessageHolder.currentUser
+                ? profilePic
+                : partnerData?.partnerProfilePic
+            }
+            alt={`${
+              message.holder === MessageHolder.currentUser
+                ? "my-profile-pic"
+                : "partner-profile-pic"
+            }`}
+            className="w-full h-full object-cover"
           />
         </div>
       </div>
       <div className="ml-3 w-5/6">
         <div className="font-semibold text-md">
-          {participantCollection[message.msgOf].partnerName}
+          {message.holder === MessageHolder.currentUser
+            ? name
+            : partnerData?.partnerName}
         </div>
-        <Linkify>
-          <div className="text-sm special-text">{message.msg}</div>
-        </Linkify>
+
+        {message.type === ChatMsgTypes.text ? (
+          <TextMessage message={message} />
+        ) : (
+          <ImageMessage message={message} />
+        )}
       </div>
     </div>
   );
 };
 
-const ImageMessage = ({ messagesEndRef, participantCollection, message }) => {
+const TextMessage = ({ message }) => {
   return (
-    <div className="flex mb-3" ref={messagesEndRef}>
-      <div>
-        <div className="w-12 h-12 rounded-full overflow-hidden">
-          <img
-            src={participantCollection[message.msgOf].profile}
-            alt="profile"
-            className="w-12 h-12"
-          />
-        </div>
-      </div>
-      <div className="ml-3">
-        <div className="font-semibold text-md">
-          {participantCollection[message.msgOf].partnerName}
-        </div>
+    <Linkify>
+      <div className="text-sm special-text">{message.msg}</div>
+    </Linkify>
+  );
+};
 
-        <div className="w-10/12 md:w-1/2 mt-1">
-          <img
-            src={message.msg}
-            alt="sentimag"
-            className="border-4 rounded-2xl border-slate-300 dark:border-white cursor-pointer"
-            onClick={() => window.open(message.msg)}
-          />
-        </div>
-      </div>
+const ImageMessage = ({ message }) => {
+  return (
+    <div className="w-10/12 md:w-1/2 mt-1">
+      <img
+        src={message.msg}
+        alt="sentimag"
+        className="border-4 rounded-2xl border-slate-300 dark:border-white cursor-pointer"
+        onClick={() => window.open(message.msg)}
+      />
     </div>
   );
 };
@@ -403,7 +419,7 @@ const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
                   setmessages([
                     ...messages,
                     {
-                      msgOf: 0,
+                      holder: 0,
                       msg: selectedImage,
                       type: ChatMsgTypes.image,
                     },
