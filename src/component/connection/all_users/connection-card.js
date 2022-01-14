@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NoProfileImage from "../../../image/no_profile_picture.png";
 import { ConnectButton } from "../../common/buttons";
-import { successMessage } from "../../common/desktop-notification";
-import { connectionSpecificOperations } from "../helper/api_call";
+import { onConnectButtonClicked } from "../../common/common-button-operation";
 
 const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
   const { darkMode } = useSelector((state) => state);
@@ -53,8 +52,7 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
         darkMode={darkMode}
         customClassName={"mt-3"}
         onClickOperation={() => {
-          connectionSpecificOperations(user.id, "sendConnectionRequest");
-          successMessage("🙋 Connection Request Sent", 2000);
+          onConnectButtonClicked(user.id);
           setrequestSentConnectionsIds((prev) => [...prev, user.id]);
         }}
       />

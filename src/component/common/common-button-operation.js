@@ -4,6 +4,7 @@ import {
   infoMessage,
   successMessage,
 } from "./desktop-notification";
+import { connectionSpecificOperations } from "../connection/helper/api_call";
 
 export const onMessageButtonClicked = (
   partnerId,
@@ -27,4 +28,32 @@ export const onMessageButtonClicked = (
     .catch((e) => {
       console.log("Error in get chat box id: ", e);
     });
+};
+
+export const removeConnectionButtonClicked = (partnerUserId) => {
+  connectionSpecificOperations(partnerUserId, "removeConnections");
+  successMessage("😔 Connection Removed", 2000);
+};
+
+export const onAcceptButtonClicked = (partnerUserId) => {
+  connectionSpecificOperations(partnerUserId, "acceptConnectionRequest");
+  successMessage("🥳 Connection request accepted", 2000);
+};
+
+export const onCancelButtonClicked = (partnerUserId) => {
+  connectionSpecificOperations(
+    partnerUserId,
+    "removeIncomingConnectionRequest"
+  );
+  successMessage("😏 Incoming Connection Request Removed", 2000);
+};
+
+export const onWithdrawConnectionButtonClicked = (partnerUserId) => {
+  connectionSpecificOperations(partnerUserId, "withDrawSentRequest");
+  successMessage("😏 Outgoing Connection Request Removed", 2000);
+};
+
+export const onConnectButtonClicked = (targetUserId) => {
+  connectionSpecificOperations(targetUserId, "sendConnectionRequest");
+  successMessage("🙋 Connection Request Sent", 2000);
 };

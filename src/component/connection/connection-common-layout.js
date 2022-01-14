@@ -9,9 +9,14 @@ import {
   RemoveConnectionButton,
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
-import { onMessageButtonClicked } from "../common/common-button-operation";
-import { successMessage } from "../common/desktop-notification";
-import { connectionSpecificOperations } from "./helper/api_call";
+import {
+  onAcceptButtonClicked,
+  onCancelButtonClicked,
+  onMessageButtonClicked,
+  onSendRequestButtonClicked,
+  onWithdrawConnectionButtonClicked,
+  removeConnectionButtonClicked,
+} from "../common/common-button-operation";
 
 const ConnectionCollectionItem = ({
   user,
@@ -140,8 +145,9 @@ const ConnectedUsersButtonCollection = ({
           "connection-screens-common-button-layout mt-3 md:mt-0 mx-3 md:ml-5"
         }
         onClickOperation={() => {
-          connectionSpecificOperations(partnerUserId, "removeConnections");
-          successMessage("😔 Connection Removed", 2000);
+          // connectionSpecificOperations(partnerUserId, "removeConnections");
+          // successMessage("😔 Connection Removed", 2000);
+          removeConnectionButtonClicked(partnerUserId);
           setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
@@ -160,11 +166,7 @@ const ReceivedInvitationButtonsCollection = ({
         darkMode={darkMode}
         customClassName={"connection-screens-common-button-layout mx-3"}
         onClickOperation={() => {
-          connectionSpecificOperations(
-            partnerUserId,
-            "acceptConnectionRequest"
-          );
-          successMessage("🥳 Connection request accepted", 2000);
+          onAcceptButtonClicked(partnerUserId);
           setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
@@ -175,11 +177,7 @@ const ReceivedInvitationButtonsCollection = ({
           "mr-5 connection-screens-common-button-layout mt-3 md:mt-0 mx-3 md:mx-0"
         }
         onClickOperation={() => {
-          connectionSpecificOperations(
-            partnerUserId,
-            "removeIncomingConnectionRequest"
-          );
-          successMessage("😏 Incoming Connection Request Removed", 2000);
+          onCancelButtonClicked(partnerUserId);
           setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />
@@ -200,8 +198,7 @@ const SentRequestButtonCollection = ({
           "ml-3 md:mr-5 connection-screens-common-button-layout text-sm md:text-md 2xl:text-lg md:tracking-wider"
         }
         onClickOperation={() => {
-          connectionSpecificOperations(partnerUserId, "withDrawSentRequest");
-          successMessage("😏 Outgoing Connection Request Removed", 2000);
+          onWithdrawConnectionButtonClicked(partnerUserId);
           setCollectiveIds((prev) => [...prev, partnerUserId]);
         }}
       />

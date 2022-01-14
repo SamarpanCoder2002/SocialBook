@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import BaseCommonPart from "../page-builder/base";
 import CommonPostStyle from "./post-common-style";
@@ -8,6 +8,14 @@ const ParticularPostShowcase = () => {
   const { state } = useLocation();
   console.log("state: ", state);
   const [postData, setpostData] = useState(state?.postData);
+
+  console.log("State is: ", state.postData);
+
+  useEffect(() => {
+    if(!state.postData) return;
+
+    
+  }, [state]);
 
   return (
     <BaseCommonPart>
@@ -21,9 +29,8 @@ const ParticularPostShowcase = () => {
 };
 
 const GetPostData = ({ postData }) => {
-  if (postData.type) {
+  if (postData.type)
     return <CommonPostStyle item={postData} allowCommentSection={true} />;
-  }
 
   return (
     <h1 className="flex flex-wrap justify-center items-center text-center text-4xl">
