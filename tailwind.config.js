@@ -24,7 +24,7 @@ module.exports = {
         lightSpecificIconsColor: "#606060",
         lightTextFieldInnerColor: "#DCE0DF",
         lightPostTextStyleColor: "#000000",
-        lightCardColor: "#fafafa",
+        lightCardColor: "#DDE8EC",
         lightBorderColor: "#EODFDC",
       },
 

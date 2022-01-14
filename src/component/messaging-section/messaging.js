@@ -3,157 +3,26 @@ import { useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
+import { getAllChatConnections } from "./helper/api_call";
+import NoProfilePic from "../../image/no_profile_picture.png";
+import { useNavigate } from "react-router-dom";
 
 const MessageComponent = () => {
-  const chatCollections = [
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-    {
-      chatBoxId: 1,
-      partnerName: "John Doe",
-      partnerProfilePic:
-        "https://www.newsbox.pk/wp-content/uploads/2019/08/the-rock-2.jpg",
-      currUserName: "Samarpan Dasgupta",
-      currUserProfilePic:
-        "https://avatars.githubusercontent.com/u/66327336?v=4",
-    },
-  ];
+  const [chatCollections, setchatCollections] = useState([]);
 
   const { darkMode } = useSelector((state) => state);
-  const [chatId, setchatId] = useState();
+  const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
+  const [clickedChatProfile, setclickedChatProfile] = useState(-1);
+
+  useEffect(() => {
+    getAllChatConnections().then((data) => {
+      if (!data) return;
+
+      setchatCollections(data);
+      setclickedChatProfile(data[0].chatBoxId);
+      setisEligibleToOpenChatBox(data[0]);
+    });
+  }, []);
 
   return (
     <BaseCommonPart>
@@ -164,15 +33,16 @@ const MessageComponent = () => {
             <ProfileConnectionCollection
               chatCollections={chatCollections}
               darkMode={darkMode}
-              chatId={chatId}
-              setchatId={setchatId}
+              isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+              setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
+              clickedChatProfile={clickedChatProfile}
+              setclickedChatProfile={setclickedChatProfile}
             />
 
             {/* Right Side */}
             <AllChatMessages
-              darkMode={darkMode}
-              chatId={chatId}
-              setchatId={setchatId}
+              isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+              setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
             />
           </div>
         </div>
@@ -184,31 +54,47 @@ const MessageComponent = () => {
 const ProfileConnectionCollection = ({
   chatCollections,
   darkMode,
-  chatId,
-  setchatId,
+  isEligibleToOpenChatBox,
+  setisEligibleToOpenChatBox,
+  clickedChatProfile,
+  setclickedChatProfile,
 }) => {
   return (
     <div
       className={`h-[90vh] ${
-        chatId
-          ? "hidden sm:w-1/2 md:w-1/4 sm:block"
-          : "w-full sm:w-1/2 md:w-1/4"
-      } overflow-y-scroll scroller`}
-      onClick={() => setchatId("123456")}
+        isEligibleToOpenChatBox
+          ? "hidden sm:w-1/2 md:w-2/5 sm:block"
+          : "w-full sm:w-1/2 md:w-2/5"
+      } overflow-y-scroll scroller pt-10 pb-5`}
     >
-      {chatCollections.map((chat) => {
+      {chatCollections.map((chat, index) => {
         return (
           <div
+            key={chat.chatBoxId}
             className={`${
               darkMode ? "hover:bg-darkCardColor" : "hover:bg-lightCardColor"
-            } flex items-center p-3 transition-all duration-300 cursor-pointer justify-center md:justify-start lg:justify-between focus:outline-none focus:ring focus:ring-violet-300`}
+            } flex items-center p-3 transition-all duration-300 cursor-pointer justify-start lg:justify-between focus:outline-none focus:ring focus:ring-violet-300 ${
+              clickedChatProfile === chat.chatBoxId
+                ? darkMode
+                  ? "bg-darkCardColor"
+                  : "bg-lightCardColor"
+                : darkMode
+                ? "bg-darkElevationColor"
+                : "bg-lightElevationColor"
+            }`}
+            onClick={() => {
+              setclickedChatProfile(chat.chatBoxId);
+              setisEligibleToOpenChatBox(chat);
+              console.log("index is: ", index);
+              console.log("clickedChatProfile: ", clickedChatProfile);
+            }}
           >
             <div className="flex">
               <div className="w-12 h-12 rounded-full overflow-hidden">
                 <img
-                  src={chat.partnerProfilePic}
+                  src={chat.partnerProfilePic || NoProfilePic}
                   alt="profile"
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="ml-3">
@@ -225,10 +111,10 @@ const ProfileConnectionCollection = ({
   );
 };
 
-const AllChatMessages = ({ darkMode, chatId, setchatId }) => {
-  const desc =
-    "Explorer | Freelance Full Stack Developer | Content Creator 💻  Building Dots to Connect Later! 💡";
-
+const AllChatMessages = ({
+  isEligibleToOpenChatBox,
+  setisEligibleToOpenChatBox,
+}) => {
   const [messages, setmessages] = useState([
     {
       msgOf: MessageHolder.currentUser,
@@ -245,6 +131,7 @@ const AllChatMessages = ({ darkMode, chatId, setchatId }) => {
   const [preference, setpreference] = useState(MessageHolder.currentUser);
   const [showModal, setshowModal] = useState(false);
   const [selectedImage, setselectedImage] = useState("");
+  const navigate = useNavigate();
 
   const messagesEndRef = useRef(null);
 
@@ -258,20 +145,51 @@ const AllChatMessages = ({ darkMode, chatId, setchatId }) => {
 
   const inputFile = useRef(null);
 
+  const partnerProfileDescription = isEligibleToOpenChatBox?.partnerDescription
+    .toString()
+    .split(" ");
+
   return (
     <div
       className={`h-[90vh] ${
-        chatId ? "sm:w-1/2 md:w-3/4" : "hidden sm:w-1/2 md:w-3/4 sm:block"
+        isEligibleToOpenChatBox
+          ? "sm:w-1/2 md:w-4/5"
+          : "hidden sm:w-1/2 md:w-4/5 sm:block"
       }`}
     >
       {/* Upper Section Heading */}
       <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md flex">
-        <div onClick={() => setchatId()} className="p-3 cursor-pointer">
-          <i class="fas fa-arrow-left"></i>
+        <div
+          onClick={() => setisEligibleToOpenChatBox()}
+          className="p-3 cursor-pointer sm:hidden"
+        >
+          <i className="fas fa-arrow-left"></i>
+        </div>
+        <div className="pr-3">
+          <img
+            src={
+              isEligibleToOpenChatBox?.partnerProfilePic || NoProfilePic || ""
+            }
+            alt="profile"
+            className="w-12 h-12 object-cover rounded-full"
+          />
         </div>
         <div>
-          <div className="text-base">Samarpan Dasgupta</div>
-          <div className="text-xs">{desc}</div>
+          <div
+            className="text-base hover:underline cursor-pointer"
+            onClick={() =>
+              navigate(`/${isEligibleToOpenChatBox?.partnerId}/profile`)
+            }
+          >
+            {isEligibleToOpenChatBox?.partnerName || ""}
+          </div>
+          <div className="text-xs w-10/12">
+            {`${
+              partnerProfileDescription
+                ? partnerProfileDescription?.slice(0, 25).join(" ")
+                : ""
+            }${partnerProfileDescription?.length > 25 ? "..." : ""}` || ""}
+          </div>
         </div>
       </div>
 
@@ -304,7 +222,7 @@ const AllChatMessages = ({ darkMode, chatId, setchatId }) => {
               inputFile.current.click();
             }}
           >
-            <i class="fas fa-camera"></i>
+            <i className="fas fa-camera"></i>
           </button>
         </div>
 
@@ -348,7 +266,7 @@ const AllChatMessages = ({ darkMode, chatId, setchatId }) => {
             }
           }}
         >
-          <i class="far fa-paper-plane"></i>
+          <i className="far fa-paper-plane"></i>
         </button>
       </div>
 
@@ -385,6 +303,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
         if (message.type === ChatMsgTypes.text)
           return (
             <TextMessage
+              key={index}
               messagesEndRef={messagesEndRef}
               participantCollection={participantCollection}
               message={message}
@@ -392,6 +311,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef }) => {
           );
         return (
           <ImageMessage
+            key={index}
             messagesEndRef={messagesEndRef}
             participantCollection={participantCollection}
             message={message}

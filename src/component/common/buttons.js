@@ -1,4 +1,8 @@
-export const AcceptButton = ({ darkMode, onClickOperation, customClassName }) => {
+export const AcceptButton = ({
+  darkMode,
+  onClickOperation,
+  customClassName,
+}) => {
   return (
     <button
       className={`${
@@ -12,7 +16,11 @@ export const AcceptButton = ({ darkMode, onClickOperation, customClassName }) =>
   );
 };
 
-export const ConnectButton = ({ darkMode, onClickOperation, customClassName }) => {
+export const ConnectButton = ({
+  darkMode,
+  onClickOperation,
+  customClassName,
+}) => {
   return (
     <button
       className={`${
@@ -26,7 +34,11 @@ export const ConnectButton = ({ darkMode, onClickOperation, customClassName }) =
   );
 };
 
-export const CancelButton = ({ darkMode, onClickOperation, customClassName }) => {
+export const CancelButton = ({
+  darkMode,
+  onClickOperation,
+  customClassName,
+}) => {
   return (
     <button
       className={`${
@@ -40,12 +52,16 @@ export const CancelButton = ({ darkMode, onClickOperation, customClassName }) =>
   );
 };
 
-export const MessageButton = ({ darkMode, onClickOperation, customClassName }) => {
+export const MessageButton = ({
+  darkMode,
+  onClickOperation,
+  customClassName,
+}) => {
   return (
     <button
       className={`${
         darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-      } text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full hover:shadow-sm hover:shadow-darkPrimaryFgColor  ${customClassName}`}
+      } text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full   ${customClassName}`}
       style={{ borderWidth: "0.2px" }}
       onClick={onClickOperation}
     >

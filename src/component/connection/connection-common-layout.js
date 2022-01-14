@@ -34,6 +34,7 @@ const ConnectionCollectionItem = ({
           connectionType={connectionType}
           partnerUserId={user.id}
           setCollectiveIds={setCollectiveIds}
+          userData = {user}
         />
       </div>
     </div>
@@ -45,6 +46,7 @@ const ButtonCollectionPrediction = ({
   darkMode,
   partnerUserId,
   setCollectiveIds,
+  userData
 }) => {
   if (connectionType === ConnectionType.AlreadyConnected) {
     return (
@@ -52,6 +54,7 @@ const ButtonCollectionPrediction = ({
         darkMode={darkMode}
         partnerUserId={partnerUserId}
         setCollectiveIds={setCollectiveIds}
+        userData={userData}
       />
     );
   } else if (connectionType === ConnectionType.RequestReceived) {
@@ -114,12 +117,15 @@ const ConnectedUsersButtonCollection = ({
   darkMode,
   partnerUserId,
   setCollectiveIds,
+  userData
 }) => {
   // ** NOTE: Message Button Will be redirect to the specific chat..
   // ** We will do it after implement chat feature.
 
+  const {name, profilePic, description} = userData;
+
   const onMessageButtonClick = () => {
-    getChatBoxId(partnerUserId)
+    getChatBoxId(partnerUserId, name, description, profilePic)
       .then((data) => {
         console.log("Chat Box Id is: ", data);
       })
