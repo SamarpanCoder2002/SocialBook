@@ -9,8 +9,8 @@ import {
   RemoveConnectionButton,
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
+import { onMessageButtonClicked } from "../common/common-button-operation";
 import { successMessage } from "../common/desktop-notification";
-import { getChatBoxId } from "../messaging-section/helper/api_call";
 import { connectionSpecificOperations } from "./helper/api_call";
 
 const ConnectionCollectionItem = ({
@@ -34,7 +34,7 @@ const ConnectionCollectionItem = ({
           connectionType={connectionType}
           partnerUserId={user.id}
           setCollectiveIds={setCollectiveIds}
-          userData = {user}
+          userData={user}
         />
       </div>
     </div>
@@ -46,7 +46,7 @@ const ButtonCollectionPrediction = ({
   darkMode,
   partnerUserId,
   setCollectiveIds,
-  userData
+  userData,
 }) => {
   if (connectionType === ConnectionType.AlreadyConnected) {
     return (
@@ -117,29 +117,21 @@ const ConnectedUsersButtonCollection = ({
   darkMode,
   partnerUserId,
   setCollectiveIds,
-  userData
+  userData,
 }) => {
   // ** NOTE: Message Button Will be redirect to the specific chat..
   // ** We will do it after implement chat feature.
 
-  const {name, profilePic, description} = userData;
-
-  const onMessageButtonClick = () => {
-    getChatBoxId(partnerUserId, name, description, profilePic)
-      .then((data) => {
-        console.log("Chat Box Id is: ", data);
-      })
-      .catch((e) => {
-        console.log("Error in get chat box id: ", e);
-      });
-  };
+  const { name, profilePic, description } = userData;
 
   return (
     <div className="md:flex items-center sm:ml-5 text-sm md:text-md 2xl:text-lg md:tracking-wider">
       <MessageButton
         darkMode={darkMode}
         customClassName={"connection-screens-common-button-layout mx-3 md:mx-0"}
-        onClickOperation={onMessageButtonClick}
+        onClickOperation={() =>
+          onMessageButtonClicked(partnerUserId, name, description, profilePic)
+        }
       />
 
       <RemoveConnectionButton

@@ -130,7 +130,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
 
           {comments.length > 0 ? (
             <div
-              className="cursor-pointer pl-20"
+              className="cursor-pointer pl-20 hover:underline"
               onClick={() => {
                 if (
                   location.pathname === "/feed" ||

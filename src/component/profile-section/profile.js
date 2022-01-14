@@ -19,6 +19,13 @@ import {
   RemoveConnectionButton,
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
+import {
+  errorMessage,
+  infoMessage,
+  successMessage,
+} from "../common/desktop-notification";
+import { getChatBoxId } from "../messaging-section/helper/api_call";
+import { onMessageButtonClicked } from "../common/common-button-operation";
 
 const ProfileSection = () => {
   const { state } = useLocation();
@@ -165,10 +172,24 @@ const ProfileRelatedButtons = ({ darkMode }) => {
 };
 
 const ButtonsManagement = ({ darkMode, connectionType }) => {
+  const { connectionId } = useParams();
+  const { state } = useLocation();
+
   if (connectionType === ConnectionType.AlreadyConnected) {
     return (
       <div className="sm:flex justify-center items-center ">
-        <MessageButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+        <MessageButton
+          customClassName={"mt-3 text-sm"}
+          darkMode={darkMode}
+          onClickOperation={() =>
+            onMessageButtonClicked(
+              connectionId,
+              state?.name || "",
+              state?.description || "",
+              state?.profilePic || ""
+            )
+          }
+        />
         <RemoveConnectionButton
           customClassName={"mt-3 text-sm"}
           darkMode={darkMode}

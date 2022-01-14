@@ -5,49 +5,72 @@ import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
 import { getAllChatConnections } from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import Waiting from "../common/waiting";
 
 const MessageComponent = () => {
-  const [chatCollections, setchatCollections] = useState([]);
+  const [chatConnectionCollections, setchatConnectionCollections] = useState(
+    []
+  );
   const [messages, setmessages] = useState([]);
-
   const { darkMode } = useSelector((state) => state);
   const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
   const [clickedChatProfile, setclickedChatProfile] = useState(-1);
+  const [isLoading, setisLoading] = useState(true);
+  const location = useLocation();
+  const partnerIdQuery = new URLSearchParams(location.search).get("partnerId");
 
   useEffect(() => {
-    getAllChatConnections().then((data) => {
-      if (!data) return;
+    getAllChatConnections()
+      .then((data) => {
+        if (!data) return;
+        setchatConnectionCollections(data);
 
-      setchatCollections(data);
-      setclickedChatProfile(data[0].chatBoxId);
-      setisEligibleToOpenChatBox(data[0]);
-    });
-  }, []);
+        const chatFilteredConnection = data.filter(
+          (chat) => chat.partnerId === partnerIdQuery
+        );
 
-  return (
+        if (partnerIdQuery && chatFilteredConnection?.length > 0) {
+          setclickedChatProfile(chatFilteredConnection[0].chatBoxId);
+          setisEligibleToOpenChatBox(chatFilteredConnection[0]);
+        } else {
+          setclickedChatProfile(data[0].chatBoxId);
+          setisEligibleToOpenChatBox(data[0]);
+        }
+        setisLoading(false);
+      })
+      .catch((err) => setisLoading(false));
+  }, [partnerIdQuery]);
+
+  return isLoading ? (
+    <Waiting />
+  ) : (
     <BaseCommonPart>
       <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor overflow-y-scroll suggested-profiles-container shadow-lg shadow-zinc-900">
         <div className="px-2 xl:px-60 2xl:px-96 py-1 w-full pb-2">
           <div className="bg-lightElevationColor dark:bg-darkElevationColor mt-3 rounded-lg flex w-full shadow-lg ">
-            {/* Left Side */}
-            <ProfileConnectionCollection
-              chatCollections={chatCollections}
-              darkMode={darkMode}
-              isEligibleToOpenChatBox={isEligibleToOpenChatBox}
-              setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
-              clickedChatProfile={clickedChatProfile}
-              setclickedChatProfile={setclickedChatProfile}
-              setmessages={setmessages}
-            />
+            {chatConnectionCollections.length ? (
+              <>
+                <ProfileConnectionCollection
+                  chatConnectionCollections={chatConnectionCollections}
+                  darkMode={darkMode}
+                  isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+                  setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
+                  clickedChatProfile={clickedChatProfile}
+                  setclickedChatProfile={setclickedChatProfile}
+                  setmessages={setmessages}
+                />
 
-            {/* Right Side */}
-            <AllChatMessages
-              isEligibleToOpenChatBox={isEligibleToOpenChatBox}
-              setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
-              messages={messages}
-              setmessages={setmessages}
-            />
+                <AllChatMessages
+                  isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+                  setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
+                  messages={messages}
+                  setmessages={setmessages}
+                />
+              </>
+            ) : (
+              <NoChatConnectionsScreen />
+            )}
           </div>
         </div>
       </div>
@@ -55,16 +78,41 @@ const MessageComponent = () => {
   );
 };
 
+const NoChatConnectionsScreen = () => {
+  const navigate = useNavigate();
+
+  const switchToConnectionScreen = () => {
+    navigate("/connection", {
+      state: {
+        prevDesignSet: { prevIndex: 1 },
+      },
+    });
+  };
+
+  return (
+    <div className="w-full h-[20vh] flex justify-center items-center">
+      <div>
+        <div className="text-xl text-center">😔 No Chat Connections</div>
+        <div
+          className="pt-1 text-blue-400 underline cursor-pointer"
+          onClick={switchToConnectionScreen}
+        >
+          Message your friends to start chatting
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfileConnectionCollection = ({
-  chatCollections,
+  chatConnectionCollections,
   darkMode,
   isEligibleToOpenChatBox,
   setisEligibleToOpenChatBox,
   clickedChatProfile,
   setclickedChatProfile,
-  setmessages
+  setmessages,
 }) => {
-
   return (
     <div
       className={`h-[90vh] ${
@@ -73,7 +121,7 @@ const ProfileConnectionCollection = ({
           : "w-full sm:w-1/2 md:w-2/5"
       } overflow-y-scroll scroller pt-10 pb-5`}
     >
-      {chatCollections.map((chat, index) => {
+      {chatConnectionCollections.map((chat, index) => {
         return (
           <div
             key={chat.chatBoxId}
@@ -120,10 +168,9 @@ const AllChatMessages = ({
   isEligibleToOpenChatBox,
   setisEligibleToOpenChatBox,
   messages,
-  setmessages
+  setmessages,
 }) => {
   const [messageWritten, setmessageWritten] = useState("");
-  const [preference, setpreference] = useState(MessageHolder.currentUser);
   const [showModal, setshowModal] = useState(false);
   const [selectedImage, setselectedImage] = useState("");
 
@@ -171,8 +218,6 @@ const AllChatMessages = ({
         setmessageWritten={setmessageWritten}
         setmessages={setmessages}
         messages={messages}
-        preference={preference}
-        setpreference={setpreference}
       />
 
       {showModal && (
@@ -241,8 +286,7 @@ const ChatBoxLowerSection = ({
   setmessageWritten,
   setmessages,
   messages,
-  preference,
-  setpreference,
+  
 }) => {
   return (
     <div className="w-full mt-3 px-3 py-auto flex">
@@ -281,12 +325,11 @@ const ChatBoxLowerSection = ({
               setmessages([
                 ...messages,
                 {
-                  holder: preference,
+                  holder: MessageHolder.currentUser,
                   msg: messageWritten,
                   type: ChatMsgTypes.text,
                 },
               ]);
-              setpreference(MessageHolder.currentUser);
               setmessageWritten("");
             }
           }
@@ -299,12 +342,11 @@ const ChatBoxLowerSection = ({
             setmessages([
               ...messages,
               {
-                holder: preference,
+                holder: MessageHolder.currentUser,
                 msg: messageWritten,
                 type: ChatMsgTypes.text,
               },
             ]);
-            setpreference(MessageHolder.currentUser);
             setmessageWritten("");
           }
         }}
@@ -419,7 +461,7 @@ const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
                   setmessages([
                     ...messages,
                     {
-                      holder: 0,
+                      holder: MessageHolder.currentUser,
                       msg: selectedImage,
                       type: ChatMsgTypes.image,
                     },
