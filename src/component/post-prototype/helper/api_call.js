@@ -178,19 +178,22 @@ export const updatePollData = async (newPollData, postId) => {
   try {
     const storedData = getDataFromLocalStorage();
 
-    const res = await fetch(`${API}/updatePollInformation/${storedData?.user}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${storedData?.token}`,
-      },
-      body: JSON.stringify({
-        newPollData,
-        postId,
-      }),
-    });
+    const res = await fetch(
+      `${API}/updatePollInformation/${storedData?.user}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedData?.token}`,
+        },
+        body: JSON.stringify({
+          newPollData,
+          postId,
+        }),
+      }
+    );
 
-    if(res.status !== 200) {
+    if (res.status !== 200) {
       errorMessage(res.message, 3000);
       return;
     }
@@ -201,21 +204,24 @@ export const updatePollData = async (newPollData, postId) => {
       10000
     );
   }
-}
+};
 
 export const insertPostLove = async (postId) => {
   try {
     const storedData = getDataFromLocalStorage();
 
-    const res = await fetch(`${API}/postInsertLove/${postId}/${storedData?.user}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${storedData?.token}`,
-      },
-    });
+    const res = await fetch(
+      `${API}/postInsertLove/${postId}/${storedData?.user}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedData?.token}`,
+        },
+      }
+    );
 
-    if(res.status !== 200) {
+    if (res.status !== 200) {
       errorMessage(res.message, 3000);
       return;
     }
@@ -226,27 +232,30 @@ export const insertPostLove = async (postId) => {
       10000
     );
   }
-}
+};
 
 export const insertPostComment = async (postId, comment) => {
   try {
     const storedData = getDataFromLocalStorage();
 
-    const res = await fetch(`${API}/postInsertComment/${postId}/${storedData?.user}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${storedData?.token}`,
-      },
-      body: JSON.stringify({
-        comment,
-        name: storedData?.name,
-        description: storedData?.description,
-        profilePic: storedData?.profilePic,
-      }),
-    });
+    const res = await fetch(
+      `${API}/postInsertComment/${postId}/${storedData?.user}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${storedData?.token}`,
+        },
+        body: JSON.stringify({
+          comment,
+          name: storedData?.name,
+          description: storedData?.description,
+          profilePic: storedData?.profilePic,
+        }),
+      }
+    );
 
-    if(res.status !== 200) {
+    if (res.status !== 200) {
       errorMessage(res.message, 3000);
       return;
     }
@@ -257,7 +266,38 @@ export const insertPostComment = async (postId, comment) => {
       10000
     );
   }
-}
+};
+
+export const getParticularPost = async (postId) => {
+  try {
+    const { user, token } = getDataFromLocalStorage();
+
+    const res = await fetch(`${API}/getParticularPost/${user}/${postId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status !== 200) {
+      errorMessage(res.message, 3000);
+      return;
+    }
+
+    const data = await res.json();
+    
+    console.log("Data is: ", data);
+
+    return data.data;
+  } catch (err) {
+    console.log(err);
+    errorMessage(
+      "Some error happened... Make sure your internet connection is stable",
+      10000
+    );
+  }
+};
 
 const apiCallCommonPart = async (res) => {
   const response = await res.json();
