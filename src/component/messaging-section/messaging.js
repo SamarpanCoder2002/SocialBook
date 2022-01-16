@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
-import { getAllChatConnections } from "./helper/api_call";
+import { getAllChatConnections, sendMessageToSpecificConnection } from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
+import { io } from "socket.io-client";
 
 const MessageComponent = () => {
   const [chatConnectionCollections, setchatConnectionCollections] = useState(
@@ -218,6 +219,7 @@ const AllChatMessages = ({
         setmessageWritten={setmessageWritten}
         setmessages={setmessages}
         messages={messages}
+        isEligibleToOpenChatBox={isEligibleToOpenChatBox}
       />
 
       {showModal && (
@@ -286,8 +288,36 @@ const ChatBoxLowerSection = ({
   setmessageWritten,
   setmessages,
   messages,
-  
+  isEligibleToOpenChatBox
 }) => {
+
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8000");
+  }, []);
+
+  const sendMessage = (e) => {
+    if (e.key === "Enter") {
+      if (messageWritten !== "") {
+        setmessages([
+          ...messages,
+          {
+            holder: MessageHolder.currentUser,
+            msg: messageWritten,
+            type: ChatMsgTypes.text,
+          },
+        ]);
+
+        const {partnerId, chatBoxId} = isEligibleToOpenChatBox;
+
+        sendMessageToSpecificConnection(partnerId, messageWritten, chatBoxId, ChatMsgTypes.text);
+
+        setmessageWritten("");
+      }
+    }
+  }
+
   return (
     <div className="w-full mt-3 px-3 py-auto flex">
       <div>
@@ -319,21 +349,7 @@ const ChatBoxLowerSection = ({
         value={messageWritten}
         onChange={(e) => setmessageWritten(e.target.value)}
         className="rounded-full w-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-[#E6E6E6] dark:bg-darkBgColor text-sm mr-3"
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            if (messageWritten !== "") {
-              setmessages([
-                ...messages,
-                {
-                  holder: MessageHolder.currentUser,
-                  msg: messageWritten,
-                  type: ChatMsgTypes.text,
-                },
-              ]);
-              setmessageWritten("");
-            }
-          }
-        }}
+        onKeyPress={sendMessage}
       />
       <button
         className="bg-[#3DBE29] dark:bg-gray-800 rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300  shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"

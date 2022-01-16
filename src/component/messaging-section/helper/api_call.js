@@ -59,3 +59,39 @@ export const getAllChatConnections = async () => {
 
   return data.chatConnections;
 };
+
+export const sendMessageToSpecificConnection = async (
+  partnerId,
+  message,
+  chatBoxId,
+  type
+) => {
+  const { token, user } = getDataFromLocalStorage();
+
+  const postData = new FormData();
+  postData.append("senderId", user);
+  postData.append("receiverId", partnerId);
+  postData.append("message", message);
+  postData.append("chatBoxId", chatBoxId);
+  postData.append("type", type);
+
+  const res = await fetch(`${API}/messaging/addChatBoxMessage/${user}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: postData,
+  });
+
+  const data = await res.json();
+
+  console.log(data);
+
+  if (data.code !== 200) {
+    errorMessage(data.message);
+    return;
+  }
+
+  return data.code;
+};
