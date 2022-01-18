@@ -3,7 +3,10 @@ import { useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
-import { getAllChatConnections, sendMessageToSpecificConnection } from "./helper/api_call";
+import {
+  getAllChatConnections,
+  sendMessageToSpecificConnection,
+} from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
@@ -14,7 +17,7 @@ const MessageComponent = () => {
     []
   );
   const [messages, setmessages] = useState([]);
-  const { darkMode } = useSelector((state) => state);
+  const { darkMode, socket } = useSelector((state) => state);
   const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
   const [clickedChatProfile, setclickedChatProfile] = useState(-1);
   const [isLoading, setisLoading] = useState(true);
@@ -288,14 +291,9 @@ const ChatBoxLowerSection = ({
   setmessageWritten,
   setmessages,
   messages,
-  isEligibleToOpenChatBox
+  isEligibleToOpenChatBox,
 }) => {
-
-  const socket = useRef();
-
-  useEffect(() => {
-    socket.current = io("ws://localhost:8000");
-  }, []);
+  const {socket, user} = useSelector(state => state);  
 
   const sendMessage = (e) => {
     if (e.key === "Enter") {
@@ -309,14 +307,26 @@ const ChatBoxLowerSection = ({
           },
         ]);
 
-        const {partnerId, chatBoxId} = isEligibleToOpenChatBox;
+        const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
 
-        sendMessageToSpecificConnection(partnerId, messageWritten, chatBoxId, ChatMsgTypes.text);
+        socket.emit("addChatTextMessages", {
+          chatBoxId: chatBoxId,
+          receiverId: partnerId,
+          senderId: user,
+          message: messageWritten,
+        })
+
+        sendMessageToSpecificConnection(
+          partnerId,
+          messageWritten,
+          chatBoxId,
+          ChatMsgTypes.text
+        );
 
         setmessageWritten("");
       }
     }
-  }
+  };
 
   return (
     <div className="w-full mt-3 px-3 py-auto flex">

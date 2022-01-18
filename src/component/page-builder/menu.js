@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { CHANGE_MODE, UPDATE_NOTIFICATION } from "../../redux/actions";
+import {
+  ATTACH_SOCKET,
+  CHANGE_MODE,
+  UPDATE_NOTIFICATION,
+} from "../../redux/actions";
 import LoadingBar from "../loading/loadingbar";
 import { onSignOut } from "../auth/helper/api_call";
 import { io } from "socket.io-client";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
+import { SocketEvents } from "../../types/types";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);
@@ -89,30 +94,39 @@ const MenuCollection = ({ isMenuOpen }) => {
   }, []);
 
   useEffect(() => {
-    socket.current.emit("addUser", user);
-    socket.current.on("getUsers", (users) => {
+    dispatch({ type: ATTACH_SOCKET, payload: socket.current });
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.current.emit(SocketEvents.addUser, user);
+    socket.current.on(SocketEvents.getUsers, (users) => {
       console.log(users);
     });
 
-    socket.current.emit("getRealTimeNotifications", {
+    socket.current.emit(SocketEvents.realTimeNotification, {
       userId: user,
     });
   }, [user]);
 
   useEffect(() => {
-    socket.current.on("totalUpdatedNotification", (notificationData) => {
-      console.log("socket notification data: ", notificationData);
-      notificationData && dispatch({ type: UPDATE_NOTIFICATION, payload: true });
+    socket.current.on(
+      SocketEvents.totalUpdatedNotification,
+      (notificationData) => {
+        console.log("socket notification data: ", notificationData);
+        notificationData &&
+          dispatch({ type: UPDATE_NOTIFICATION, payload: true });
+      }
+    );
+
+    socket.current.on("incomingMessage", (messageData) => {
+      console.log("socket message data: ", messageData);
     });
   }, [dispatch]);
 
   useEffect(() => {
-
-    if(location.pathname === "/notification"){
+    if (location.pathname === "/notification")
       dispatch({ type: UPDATE_NOTIFICATION, payload: false });
-    }
-
-  }, [location, dispatch])
+  }, [location, dispatch]);
 
   return (
     <div

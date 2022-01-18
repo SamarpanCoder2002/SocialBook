@@ -33,3 +33,11 @@ export const MessageHolder = {
   currentUser: "currentUser",
   partnerUser: "partnerUser",
 }
+
+export const SocketEvents = {
+  newMessage: "newMessage",
+  realTimeNotification: "getRealTimeNotifications",
+  addUser: "addUser",
+  getUsers:"getUsers",
+  totalUpdatedNotification :"totalUpdatedNotification"
+}
