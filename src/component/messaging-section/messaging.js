@@ -10,7 +10,6 @@ import {
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
-import { io } from "socket.io-client";
 
 const MessageComponent = () => {
   const [chatConnectionCollections, setchatConnectionCollections] = useState(
@@ -26,7 +25,7 @@ const MessageComponent = () => {
 
   useEffect(() => {
     getAllChatConnections()
-      .then((data) => {
+      .then(async (data) => {
         if (!data) return;
         setchatConnectionCollections(data);
 
@@ -45,6 +44,49 @@ const MessageComponent = () => {
       })
       .catch((err) => setisLoading(false));
   }, [partnerIdQuery]);
+
+  useEffect(() => {
+    console.log("clickedChatProfile: ", clickedChatProfile);
+
+    if (clickedChatProfile === -1) return;
+
+    socket && socket.on("incomingMessage", (messageData) => {
+      console.log("socket message data: ", messageData);
+      const { message, chatBoxId } = messageData;
+
+      console.log("ChatBoxId: ", chatBoxId);
+      console.log("clickedChatProfile: ", clickedChatProfile);
+      console.log("isEligibleToOpenChatBox: ", isEligibleToOpenChatBox);
+
+      if (chatBoxId !== clickedChatProfile) return;
+
+      console.log("Prev Messages: ", messages);
+
+      setmessages((prevMessages) => [
+        ...prevMessages,
+        {
+          [Date.now()]: {
+            holder: MessageHolder.partnerUser,
+            msg: message,
+            type: ChatMsgTypes.text,
+          },
+        },
+      ]);
+
+      // setmessages([
+      //   ...messages,
+      //   {
+      //     [Date.now()]: {
+      //       holder: MessageHolder.partnerUser,
+      //       msg: message,
+      //       type: ChatMsgTypes.text,
+      //     },
+      //   },
+      // ]);
+
+      console.log("after Prev Messages: ", messages);
+    });
+  }, [clickedChatProfile]);
 
   return isLoading ? (
     <Waiting />
@@ -293,7 +335,7 @@ const ChatBoxLowerSection = ({
   messages,
   isEligibleToOpenChatBox,
 }) => {
-  const {socket, user} = useSelector(state => state);  
+  const { socket, user } = useSelector((state) => state);
 
   const sendMessage = (e) => {
     if (e.key === "Enter") {
@@ -301,9 +343,11 @@ const ChatBoxLowerSection = ({
         setmessages([
           ...messages,
           {
-            holder: MessageHolder.currentUser,
-            msg: messageWritten,
-            type: ChatMsgTypes.text,
+            [Date.now()]: {
+              holder: MessageHolder.currentUser,
+              msg: messageWritten,
+              type: ChatMsgTypes.text,
+            },
           },
         ]);
 
@@ -314,7 +358,7 @@ const ChatBoxLowerSection = ({
           receiverId: partnerId,
           senderId: user,
           message: messageWritten,
-        })
+        });
 
         sendMessageToSpecificConnection(
           partnerId,
@@ -391,7 +435,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
           <CommonMessageFormat
             key={index}
             messagesEndRef={messagesEndRef}
-            message={message}
+            message={Object.values(message)[0]}
             partnerData={partnerData}
           />
         );
