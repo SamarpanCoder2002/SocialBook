@@ -1,7 +1,6 @@
 import initialState from "./initialstate";
 import {
   ATTACH_SOCKET,
-  CHANGE_CHAT_PARTNER_ID,
   CHANGE_MODE,
   START_LOADING,
   STOP_LOADING,
@@ -22,7 +21,7 @@ const reducer = (state = initialState, action) => {
 
       localStorage.setItem(
         process.env.REACT_APP_SOCIAL_BOOK_TOKEN,
-        JSON.stringify(toogleModeState)
+        JSON.stringify({ ...toogleModeState, socket: undefined })
       );
       return toogleModeState;
 
@@ -34,7 +33,7 @@ const reducer = (state = initialState, action) => {
 
       localStorage.setItem(
         process.env.REACT_APP_SOCIAL_BOOK_TOKEN,
-        JSON.stringify(notificationState)
+        JSON.stringify({ ...notificationState, socket: undefined })
       );
       return notificationState;
     case UPDATE_USER_PROFILE:
@@ -47,15 +46,13 @@ const reducer = (state = initialState, action) => {
 
       localStorage.setItem(
         process.env.REACT_APP_SOCIAL_BOOK_TOKEN,
-        JSON.stringify(userProfileState)
+        JSON.stringify({ ...userProfileState, socket: undefined })
       );
 
       return userProfileState;
-    
+
     case ATTACH_SOCKET:
       return { ...state, socket: action.payload };
-    
-   
 
     default:
       return state;

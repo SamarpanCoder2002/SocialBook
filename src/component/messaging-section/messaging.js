@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
@@ -56,14 +56,10 @@ const MessageComponent = () => {
   }, [socket]);
 
   useEffect(() => {
-    const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
-
-    console.log("partner Id: ", currentPartnerId);
-    console.log("latestMessage: ", latestMessage);
-
     if (!latestMessage) return;
 
     const { message, senderId } = latestMessage;
+    const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
 
     if (currentPartnerId !== senderId) {
     } else {
@@ -153,8 +149,6 @@ const ProfileConnectionCollection = ({
   setclickedChatProfile,
   setmessages,
 }) => {
-  const dispatch = useDispatch();
-
   return (
     <div
       className={`h-[90vh] ${
@@ -333,41 +327,40 @@ const ChatBoxLowerSection = ({
 }) => {
   const { socket, user } = useSelector((state) => state);
 
-  const sendMessage = (e) => {
-    if (e.key === "Enter") {
-      if (messageWritten !== "") {
-        setmessages([
-          ...messages,
-          {
-            [Date.now()]: {
-              holder: MessageHolder.currentUser,
-              msg: messageWritten,
-              type: ChatMsgTypes.text,
-            },
-          },
-        ]);
+  const sendTextMessage = () => {
+    if (messageWritten === "") return;
 
-        const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
+    setmessages([
+      ...messages,
+      {
+        [Date.now()]: {
+          holder: MessageHolder.currentUser,
+          msg: messageWritten,
+          type: ChatMsgTypes.text,
+        },
+      },
+    ]);
 
-        socket.emit("addChatTextMessages", {
-          chatBoxId: chatBoxId,
-          receiverId: partnerId,
-          senderId: user,
-          message: messageWritten,
-        });
+    const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
 
-        sendMessageToSpecificConnection(
-          partnerId,
-          messageWritten,
-          chatBoxId,
-          ChatMsgTypes.text
-        );
+    socket.emit("addChatTextMessages", {
+      chatBoxId: chatBoxId,
+      receiverId: partnerId,
+      senderId: user,
+      message: messageWritten,
+    });
 
-        setmessageWritten("");
-      }
-    }
+    sendMessageToSpecificConnection(
+      partnerId,
+      messageWritten,
+      chatBoxId,
+      ChatMsgTypes.text
+    );
+
+    setmessageWritten("");
   };
 
+  const sendMessageonEnterPress = (e) => e.key === "Enter" && sendTextMessage();
   return (
     <div className="w-full mt-3 px-3 py-auto flex">
       <div>
@@ -399,23 +392,11 @@ const ChatBoxLowerSection = ({
         value={messageWritten}
         onChange={(e) => setmessageWritten(e.target.value)}
         className="rounded-full w-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-[#E6E6E6] dark:bg-darkBgColor text-sm mr-3"
-        onKeyPress={sendMessage}
+        onKeyPress={sendMessageonEnterPress}
       />
       <button
         className="bg-[#3DBE29] dark:bg-gray-800 rounded-full w-10 h-10 my-auto text-white hover:scale-110 hover:duration-300  shadow-md dark:shadow-sm shadow-slate-400 dark:shadow-sky-200"
-        onClick={() => {
-          if (messageWritten !== "") {
-            setmessages([
-              ...messages,
-              {
-                holder: MessageHolder.currentUser,
-                msg: messageWritten,
-                type: ChatMsgTypes.text,
-              },
-            ]);
-            setmessageWritten("");
-          }
-        }}
+        onClick={sendTextMessage}
       >
         <i className="far fa-paper-plane"></i>
       </button>
@@ -492,7 +473,7 @@ const ImageMessage = ({ message }) => {
     <div className="w-10/12 md:w-1/2 mt-1">
       <img
         src={message.msg}
-        alt="sentimag"
+        alt="sent-imag"
         className="border-4 rounded-2xl border-slate-300 dark:border-white cursor-pointer"
         onClick={() => window.open(message.msg)}
       />
