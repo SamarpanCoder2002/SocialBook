@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
@@ -10,7 +10,6 @@ import {
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
-import { io } from "socket.io-client";
 
 const MessageComponent = () => {
   const [chatConnectionCollections, setchatConnectionCollections] = useState(
@@ -18,15 +17,17 @@ const MessageComponent = () => {
   );
   const [messages, setmessages] = useState([]);
   const { darkMode, socket } = useSelector((state) => state);
-  const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
+  const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState(0);
   const [clickedChatProfile, setclickedChatProfile] = useState(-1);
   const [isLoading, setisLoading] = useState(true);
   const location = useLocation();
   const partnerIdQuery = new URLSearchParams(location.search).get("partnerId");
 
+  const [latestMessage, setlatestMessage] = useState();
+
   useEffect(() => {
     getAllChatConnections()
-      .then((data) => {
+      .then(async (data) => {
         if (!data) return;
         setchatConnectionCollections(data);
 
@@ -45,6 +46,41 @@ const MessageComponent = () => {
       })
       .catch((err) => setisLoading(false));
   }, [partnerIdQuery]);
+
+  useEffect(() => {
+    socket &&
+      socket.on("incomingMessage", (messageData) => {
+        console.log("message data");
+        setlatestMessage(messageData);
+      });
+  }, [socket]);
+
+  useEffect(() => {
+    const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
+
+    console.log("partner Id: ", currentPartnerId);
+    console.log("latestMessage: ", latestMessage);
+
+    if (!latestMessage) return;
+
+    const { message, senderId } = latestMessage;
+
+    if (currentPartnerId !== senderId) {
+    } else {
+      setmessages((prevMessages) => [
+        ...prevMessages,
+        {
+          [Date.now()]: {
+            holder: MessageHolder.partnerUser,
+            msg: message,
+            type: ChatMsgTypes.text,
+          },
+        },
+      ]);
+    }
+
+    setlatestMessage();
+  }, [latestMessage, isEligibleToOpenChatBox]);
 
   return isLoading ? (
     <Waiting />
@@ -117,6 +153,8 @@ const ProfileConnectionCollection = ({
   setclickedChatProfile,
   setmessages,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <div
       className={`h-[90vh] ${
@@ -293,7 +331,7 @@ const ChatBoxLowerSection = ({
   messages,
   isEligibleToOpenChatBox,
 }) => {
-  const {socket, user} = useSelector(state => state);  
+  const { socket, user } = useSelector((state) => state);
 
   const sendMessage = (e) => {
     if (e.key === "Enter") {
@@ -301,9 +339,11 @@ const ChatBoxLowerSection = ({
         setmessages([
           ...messages,
           {
-            holder: MessageHolder.currentUser,
-            msg: messageWritten,
-            type: ChatMsgTypes.text,
+            [Date.now()]: {
+              holder: MessageHolder.currentUser,
+              msg: messageWritten,
+              type: ChatMsgTypes.text,
+            },
           },
         ]);
 
@@ -314,7 +354,7 @@ const ChatBoxLowerSection = ({
           receiverId: partnerId,
           senderId: user,
           message: messageWritten,
-        })
+        });
 
         sendMessageToSpecificConnection(
           partnerId,
@@ -391,7 +431,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
           <CommonMessageFormat
             key={index}
             messagesEndRef={messagesEndRef}
-            message={message}
+            message={Object.values(message)[0]}
             partnerData={partnerData}
           />
         );
