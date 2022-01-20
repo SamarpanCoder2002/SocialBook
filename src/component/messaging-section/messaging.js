@@ -263,6 +263,7 @@ const AllChatMessages = ({
           setshowModal={setshowModal}
           setmessages={setmessages}
           messages={messages}
+          isEligibleToOpenChatBox={isEligibleToOpenChatBox}
         />
       )}
     </div>
@@ -371,7 +372,7 @@ const ChatBoxLowerSection = ({
           ref={inputFile}
           style={{ display: "none" }}
           onChange={(e) => {
-            setselectedImage(URL.createObjectURL(e.target.files[0]));
+            setselectedImage(e.target.files[0]);
             setshowModal(true);
           }}
         />
@@ -481,7 +482,13 @@ const ImageMessage = ({ message }) => {
   );
 };
 
-const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
+const Modal = ({
+  selectedImage,
+  setshowModal,
+  setmessages,
+  messages,
+  isEligibleToOpenChatBox,
+}) => {
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-4 md:m-0">
@@ -490,7 +497,7 @@ const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-lightBgColor dark:bg-darkBgColor outline-none focus:outline-none">
             {/*body*/}
             <div className="relative p-2 flex-auto">
-              <img src={selectedImage} alt="profile" />
+              <img src={URL.createObjectURL(selectedImage)} alt="profile" />
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end p-3 rounded-b">
@@ -508,12 +515,23 @@ const Modal = ({ selectedImage, setshowModal, setmessages, messages }) => {
                   setmessages([
                     ...messages,
                     {
-                      holder: MessageHolder.currentUser,
-                      msg: selectedImage,
-                      type: ChatMsgTypes.image,
+                      [Date.now()]: {
+                        holder: MessageHolder.currentUser,
+                        msg: URL.createObjectURL(selectedImage),
+                        type: ChatMsgTypes.image,
+                      },
                     },
                   ]);
+
                   setshowModal(false);
+                  const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
+
+                  sendMessageToSpecificConnection(
+                    partnerId,
+                    selectedImage,
+                    chatBoxId,
+                    ChatMsgTypes.image
+                  );
                 }}
               >
                 Send
