@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
@@ -17,11 +17,13 @@ const MessageComponent = () => {
   );
   const [messages, setmessages] = useState([]);
   const { darkMode, socket } = useSelector((state) => state);
-  const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState();
+  const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState(0);
   const [clickedChatProfile, setclickedChatProfile] = useState(-1);
   const [isLoading, setisLoading] = useState(true);
   const location = useLocation();
   const partnerIdQuery = new URLSearchParams(location.search).get("partnerId");
+
+  const [latestMessage, setlatestMessage] = useState();
 
   useEffect(() => {
     getAllChatConnections()
@@ -46,22 +48,25 @@ const MessageComponent = () => {
   }, [partnerIdQuery]);
 
   useEffect(() => {
-    console.log("clickedChatProfile: ", clickedChatProfile);
+    socket &&
+      socket.on("incomingMessage", (messageData) => {
+        console.log("message data");
+        setlatestMessage(messageData);
+      });
+  }, [socket]);
 
-    if (clickedChatProfile === -1) return;
+  useEffect(() => {
+    const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
 
-    socket && socket.on("incomingMessage", (messageData) => {
-      console.log("socket message data: ", messageData);
-      const { message, chatBoxId } = messageData;
+    console.log("partner Id: ", currentPartnerId);
+    console.log("latestMessage: ", latestMessage);
 
-      console.log("ChatBoxId: ", chatBoxId);
-      console.log("clickedChatProfile: ", clickedChatProfile);
-      console.log("isEligibleToOpenChatBox: ", isEligibleToOpenChatBox);
+    if (!latestMessage) return;
 
-      if (chatBoxId !== clickedChatProfile) return;
+    const { message, senderId } = latestMessage;
 
-      console.log("Prev Messages: ", messages);
-
+    if (currentPartnerId !== senderId) {
+    } else {
       setmessages((prevMessages) => [
         ...prevMessages,
         {
@@ -72,21 +77,10 @@ const MessageComponent = () => {
           },
         },
       ]);
+    }
 
-      // setmessages([
-      //   ...messages,
-      //   {
-      //     [Date.now()]: {
-      //       holder: MessageHolder.partnerUser,
-      //       msg: message,
-      //       type: ChatMsgTypes.text,
-      //     },
-      //   },
-      // ]);
-
-      console.log("after Prev Messages: ", messages);
-    });
-  }, [clickedChatProfile]);
+    setlatestMessage();
+  }, [latestMessage, isEligibleToOpenChatBox]);
 
   return isLoading ? (
     <Waiting />
@@ -159,6 +153,8 @@ const ProfileConnectionCollection = ({
   setclickedChatProfile,
   setmessages,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <div
       className={`h-[90vh] ${

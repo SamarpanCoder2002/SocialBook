@@ -1,6 +1,7 @@
 import initialState from "./initialstate";
 import {
   ATTACH_SOCKET,
+  CHANGE_CHAT_PARTNER_ID,
   CHANGE_MODE,
   START_LOADING,
   STOP_LOADING,
@@ -52,8 +53,9 @@ const reducer = (state = initialState, action) => {
       return userProfileState;
     
     case ATTACH_SOCKET:
-      console.log("At attach socket reducer: ", action.payload);
       return { ...state, socket: action.payload };
+    
+   
 
     default:
       return state;
