@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { ChatMsgTypes, MessageHolder } from "../../types/types";
+import { ChatMsgTypes, MessageHolder, SocketEvents } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
 import {
@@ -49,7 +49,7 @@ const MessageComponent = () => {
 
   useEffect(() => {
     socket &&
-      socket.on("incomingMessage", (messageData) => {
+      socket.on(SocketEvents.acceptIncomingChatMessage, (messageData) => {
         console.log("message data");
         setlatestMessage(messageData);
       });
@@ -344,7 +344,7 @@ const ChatBoxLowerSection = ({
 
     const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
 
-    socket.emit("addChatTextMessages", {
+    socket.emit(SocketEvents.sendChatMessage, {
       chatBoxId: chatBoxId,
       receiverId: partnerId,
       senderId: user,
@@ -517,7 +517,7 @@ const Modal = ({
 
       const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
 
-      socket.emit("addChatTextMessages", {
+      socket.emit(SocketEvents.sendChatMessage, {
         chatBoxId: chatBoxId,
         receiverId: partnerId,
         senderId: user,

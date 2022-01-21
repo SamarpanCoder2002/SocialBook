@@ -39,5 +39,7 @@ export const SocketEvents = {
   realTimeNotification: "getRealTimeNotifications",
   addUser: "addUser",
   getUsers:"getUsers",
-  totalUpdatedNotification :"totalUpdatedNotification"
+  totalUpdatedNotification :"totalUpdatedNotification",
+  sendChatMessage: "sendChatMessage",
+  acceptIncomingChatMessage: "acceptIncomingChatMessage",
 }

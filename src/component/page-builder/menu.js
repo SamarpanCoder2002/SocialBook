@@ -118,7 +118,7 @@ const MenuCollection = ({ isMenuOpen }) => {
       }
     );
 
-    socket.current.on("incomingMessage", (messageData) => {
+    socket.current.on(SocketEvents.acceptIncomingChatMessage, (messageData) => {
       console.log("menu screen message data: ", messageData);
     });
   }, [dispatch]);
