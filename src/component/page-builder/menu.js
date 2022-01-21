@@ -118,7 +118,9 @@ const MenuCollection = ({ isMenuOpen }) => {
       }
     );
 
-    
+    socket.current.on("incomingMessage", (messageData) => {
+      console.log("menu screen message data: ", messageData);
+    });
   }, [dispatch]);
 
   useEffect(() => {

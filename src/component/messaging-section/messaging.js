@@ -492,6 +492,41 @@ const Modal = ({
 }) => {
   const { socket, user } = useSelector((state) => state);
 
+  const sendImgMessage = () => {
+    setmessages([
+      ...messages,
+      {
+        [Date.now()]: {
+          holder: MessageHolder.currentUser,
+          msg: URL.createObjectURL(selectedImage),
+          type: ChatMsgTypes.image,
+        },
+      },
+    ]);
+
+    setshowModal(false);
+    const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
+
+    sendMessageToSpecificConnection(
+      partnerId,
+      selectedImage,
+      chatBoxId,
+      ChatMsgTypes.image
+    ).then((imgDataLink) => {
+      if (!imgDataLink) return;
+
+      const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
+
+      socket.emit("addChatTextMessages", {
+        chatBoxId: chatBoxId,
+        receiverId: partnerId,
+        senderId: user,
+        message: imgDataLink,
+        type: ChatMsgTypes.image,
+      });
+    });
+  };
+
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-4 md:m-0">
@@ -514,40 +549,7 @@ const Modal = ({
               <button
                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={() => {
-                  setmessages([
-                    ...messages,
-                    {
-                      [Date.now()]: {
-                        holder: MessageHolder.currentUser,
-                        msg: URL.createObjectURL(selectedImage),
-                        type: ChatMsgTypes.image,
-                      },
-                    },
-                  ]);
-
-                  setshowModal(false);
-                  const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
-
-                  sendMessageToSpecificConnection(
-                    partnerId,
-                    selectedImage,
-                    chatBoxId,
-                    ChatMsgTypes.image
-                  ).then((imgDataLink) => {
-                    if (!imgDataLink) return;
-
-                    const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
-
-                    socket.emit("addChatTextMessages", {
-                      chatBoxId: chatBoxId,
-                      receiverId: partnerId,
-                      senderId: user,
-                      message: imgDataLink,
-                      type: ChatMsgTypes.image,
-                    });
-                  });
-                }}
+                onClick={sendImgMessage}
               >
                 Send
               </button>
