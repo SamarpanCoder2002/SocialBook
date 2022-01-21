@@ -95,3 +95,24 @@ export const sendMessageToSpecificConnection = async (
 
   return data.data;
 };
+
+export const getPaginatedPrevChatMessages = async(pageId, chatBoxId) => {
+  const { token, user } = getDataFromLocalStorage();
+
+  const res = await fetch(`${API}/messaging/getPaginatedChatMessages/${user}/${pageId}/${chatBoxId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (data.code !== 200) {
+    errorMessage(data.message);
+    return;
+  }
+
+  return data.data;
+}

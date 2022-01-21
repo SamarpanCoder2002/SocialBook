@@ -5,6 +5,7 @@ import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
 import {
   getAllChatConnections,
+  getPaginatedPrevChatMessages,
   sendMessageToSpecificConnection,
 } from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
@@ -49,10 +50,9 @@ const MessageComponent = () => {
 
   useEffect(() => {
     socket &&
-      socket.on(SocketEvents.acceptIncomingChatMessage, (messageData) => {
-        console.log("message data");
-        setlatestMessage(messageData);
-      });
+      socket.on(SocketEvents.acceptIncomingChatMessage, (messageData) =>
+        setlatestMessage(messageData)
+      );
   }, [socket]);
 
   useEffect(() => {
@@ -60,17 +60,17 @@ const MessageComponent = () => {
 
     const { message, senderId, type } = latestMessage;
     const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
+    const currTime = Date.now();
 
     if (currentPartnerId !== senderId) {
     } else {
       setmessages((prevMessages) => [
         ...prevMessages,
         {
-          [Date.now()]: {
-            holder: MessageHolder.partnerUser,
-            msg: message,
-            type: type,
-          },
+          holder: MessageHolder.partnerUser,
+          message: message,
+          type: type,
+          time: currTime,
         },
       ]);
     }
@@ -209,6 +209,7 @@ const AllChatMessages = ({
   const [messageWritten, setmessageWritten] = useState("");
   const [showModal, setshowModal] = useState(false);
   const [selectedImage, setselectedImage] = useState("");
+  const [isLoading, setisLoading] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -222,7 +223,16 @@ const AllChatMessages = ({
 
   const inputFile = useRef(null);
 
-  return (
+  return isLoading ? (
+    <div className="w-full">
+      <Waiting
+        showName="Hang tight... Data Fetching in Progress "
+        largeScreenPadding="lg:px-72"
+        lightBgColor="bg-lightElevationColor"
+        darkBgColor="bg-darkElevationColor"
+      />
+    </div>
+  ) : (
     <div
       className={`h-[90vh] ${
         isEligibleToOpenChatBox
@@ -240,8 +250,11 @@ const AllChatMessages = ({
       <div className="h-[76%] lg:h-[78%] overflow-y-auto scroller p-3">
         <ChatMessagesCollection
           messages={messages}
+          setmessages={setmessages}
           messagesEndRef={messagesEndRef}
           partnerData={isEligibleToOpenChatBox}
+          setisLoading={setisLoading}
+          isEligibleToOpenChatBox={isEligibleToOpenChatBox}
         />
       </div>
 
@@ -330,15 +343,15 @@ const ChatBoxLowerSection = ({
 
   const sendTextMessage = () => {
     if (messageWritten === "") return;
+    const currTime = Date.now();
 
     setmessages([
       ...messages,
       {
-        [Date.now()]: {
-          holder: MessageHolder.currentUser,
-          msg: messageWritten,
-          type: ChatMsgTypes.text,
-        },
+        holder: MessageHolder.currentUser,
+        message: messageWritten,
+        type: ChatMsgTypes.text,
+        time: currTime,
       },
     ]);
 
@@ -406,17 +419,58 @@ const ChatBoxLowerSection = ({
   );
 };
 
-const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
+const ChatMessagesCollection = ({
+  messages,
+  setmessages,
+  messagesEndRef,
+  partnerData,
+  setisLoading,
+  isEligibleToOpenChatBox,
+}) => {
+  const [firstElement, setFirstElement] = useState(null);
+  const [page, setpage] = useState(1);
+  const { chatBoxId } = isEligibleToOpenChatBox;
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      console.log("is Intersecting: ", entries[0]?.isIntersecting);
+
+      if (!entries[0]?.isIntersecting) return;
+      setpage((prevPageId) => prevPageId + 1);
+    })
+  );
+
+  useEffect(() => {
+    getPaginatedPrevChatMessages(page, chatBoxId).then((prevMsgCollection) => {
+      console.log("Prev message data: ", prevMsgCollection);
+
+      if (!prevMsgCollection || !prevMsgCollection.length) return;
+
+      setmessages((prevMessages) => [...prevMsgCollection, ...prevMessages]);
+    });
+  }, [page]);
+
+  useEffect(() => {
+    const currentElement = firstElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [firstElement]);
+
   return (
     <div>
       {messages.map((message, index) => {
         return (
-          <CommonMessageFormat
+          <div
             key={index}
-            messagesEndRef={messagesEndRef}
-            message={Object.values(message)[0]}
-            partnerData={partnerData}
-          />
+            ref={index === 0 && messages.length > 10 ? setFirstElement : null}
+          >
+            <CommonMessageFormat
+              messagesEndRef={messagesEndRef}
+              message={message}
+              partnerData={partnerData}
+            />
+          </div>
         );
       })}
     </div>
@@ -424,7 +478,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
 };
 
 const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
-  const { name, profilePic } = useSelector((state) => state);
+  const { name, profilePic, user } = useSelector((state) => state);
 
   return (
     <div className=" mb-3 flex" ref={messagesEndRef}>
@@ -432,12 +486,12 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
             src={
-              message.holder === MessageHolder.currentUser
+              message.holder === (MessageHolder.currentUser || user.toString())
                 ? profilePic
                 : partnerData?.partnerProfilePic
             }
             alt={`${
-              message.holder === MessageHolder.currentUser
+              message.holder === (MessageHolder.currentUser || user.toString())
                 ? "my-profile-pic"
                 : "partner-profile-pic"
             }`}
@@ -447,7 +501,7 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
       </div>
       <div className="ml-3 w-5/6">
         <div className="font-semibold text-md">
-          {message.holder === MessageHolder.currentUser
+          {message.holder === (MessageHolder.currentUser || user.toString())
             ? name
             : partnerData?.partnerName}
         </div>
@@ -465,7 +519,7 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
 const TextMessage = ({ message }) => {
   return (
     <Linkify>
-      <div className="text-sm special-text">{message.msg}</div>
+      <div className="text-sm special-text">{message.message}</div>
     </Linkify>
   );
 };
@@ -474,10 +528,10 @@ const ImageMessage = ({ message }) => {
   return (
     <div className="w-10/12 md:w-1/2 mt-1">
       <img
-        src={message.msg}
+        src={message.message}
         alt="sent-imag"
         className="border-4 rounded-2xl border-slate-300 dark:border-white cursor-pointer"
-        onClick={() => window.open(message.msg)}
+        onClick={() => window.open(message.message)}
       />
     </div>
   );
@@ -491,16 +545,16 @@ const Modal = ({
   isEligibleToOpenChatBox,
 }) => {
   const { socket, user } = useSelector((state) => state);
+  const currTime = Date.now();
 
   const sendImgMessage = () => {
     setmessages([
       ...messages,
       {
-        [Date.now()]: {
-          holder: MessageHolder.currentUser,
-          msg: URL.createObjectURL(selectedImage),
-          type: ChatMsgTypes.image,
-        },
+        holder: MessageHolder.currentUser,
+        message: URL.createObjectURL(selectedImage),
+        type: ChatMsgTypes.image,
+        time: currTime,
       },
     ]);
 
