@@ -89,9 +89,9 @@ export const sendMessageToSpecificConnection = async (
   console.log(data);
 
   if (data.code !== 200) {
-    errorMessage(data.message);
+    errorMessage(data.message, 10000);
     return;
   }
 
-  return data.code;
+  return data.data;
 };

@@ -58,7 +58,7 @@ const MessageComponent = () => {
   useEffect(() => {
     if (!latestMessage) return;
 
-    const { message, senderId } = latestMessage;
+    const { message, senderId, type } = latestMessage;
     const currentPartnerId = isEligibleToOpenChatBox?.partnerId;
 
     if (currentPartnerId !== senderId) {
@@ -69,7 +69,7 @@ const MessageComponent = () => {
           [Date.now()]: {
             holder: MessageHolder.partnerUser,
             msg: message,
-            type: ChatMsgTypes.text,
+            type: type,
           },
         },
       ]);
@@ -349,6 +349,7 @@ const ChatBoxLowerSection = ({
       receiverId: partnerId,
       senderId: user,
       message: messageWritten,
+      type: ChatMsgTypes.text,
     });
 
     sendMessageToSpecificConnection(
@@ -489,6 +490,8 @@ const Modal = ({
   messages,
   isEligibleToOpenChatBox,
 }) => {
+  const { socket, user } = useSelector((state) => state);
+
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-4 md:m-0">
@@ -531,7 +534,19 @@ const Modal = ({
                     selectedImage,
                     chatBoxId,
                     ChatMsgTypes.image
-                  );
+                  ).then((imgDataLink) => {
+                    if (!imgDataLink) return;
+
+                    const { partnerId, chatBoxId } = isEligibleToOpenChatBox;
+
+                    socket.emit("addChatTextMessages", {
+                      chatBoxId: chatBoxId,
+                      receiverId: partnerId,
+                      senderId: user,
+                      message: imgDataLink,
+                      type: ChatMsgTypes.image,
+                    });
+                  });
                 }}
               >
                 Send
