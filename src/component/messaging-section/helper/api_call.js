@@ -96,10 +96,10 @@ export const sendMessageToSpecificConnection = async (
   return data.data;
 };
 
-export const getPaginatedPrevChatMessages = async(pageId, chatBoxId) => {
+export const getAllChatHistoryMessages = async(chatBoxId) => {
   const { token, user } = getDataFromLocalStorage();
 
-  const res = await fetch(`${API}/messaging/getPaginatedChatMessages/${user}/${pageId}/${chatBoxId}`, {
+  const res = await fetch(`${API}/messaging/getAllChatMessages/${user}/${chatBoxId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
