@@ -11,8 +11,12 @@ import ShowMoreText from "react-show-more-text";
 import { updatePollData } from "./helper/api_call";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
 import { infoMessage } from "../common/desktop-notification";
+import parse from "html-react-parser";
+import { postDecryption } from "../../encryption/encryption_mangement";
 
 export const TextPost = ({ postData }) => {
+  const decryptedData = postDecryption(postData.content?.text);
+
   return (
     <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text">
       <Linkify>
@@ -24,7 +28,7 @@ export const TextPost = ({ postData }) => {
           anchorClass="my-anchor-css-class"
           expanded={false}
         >
-          {postData.content?.text}
+          {parse(`${decryptedData}`)}
         </ShowMoreText>
       </Linkify>
     </div>

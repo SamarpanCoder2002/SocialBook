@@ -17,6 +17,7 @@ import {
 } from "./helper/api_call";
 import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../../types/types";
+import { postEncryption } from "../../encryption/encryption_mangement";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);
@@ -33,7 +34,10 @@ const PostScreen = () => {
         <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8 2xl:px-96 py-1">
           <div className="text-lightPostTextStyleColor dark:text-darkPostTextStyleColor bg-lightElevationColor dark:bg-darkElevationColor p-3 rounded-lg shadow-lg">
             <HeadingSection setmediaOptions={setmediaOptions} />
-            <MiddleSidePostWritingSection settextContent={settextContent} />
+            <MiddleSidePostWritingSection
+              settextContent={settextContent}
+              textContent={textContent}
+            />
             <LowerExtraMediaSection
               mediaOptions={mediaOptions}
               setmediaOptions={setmediaOptions}
@@ -96,13 +100,14 @@ const HeadingSection = ({ setmediaOptions }) => {
   );
 };
 
-const MiddleSidePostWritingSection = ({ settextContent }) => {
+const MiddleSidePostWritingSection = ({ settextContent, textContent }) => {
   return (
     <textarea
-      className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3 scroller"
+      className="textarea w-full bg-lightElevationColor dark:bg-darkElevationColor focus:outline-none p-3 scroller whitespace-pre-wrap"
       style={{ minHeight: "200px" }}
       onChange={(e) => {
         settextContent(e.target.value);
+        console.log(textContent);
       }}
     ></textarea>
   );
@@ -345,36 +350,47 @@ const CreatePostButtonComponent = ({
   const navigate = useNavigate();
 
   const handleMakePost = async () => {
-    console.log(mediaContentInformation);
+    const encrptedPostTextData = postEncryption(
+      textContent.toString().split("\n").join("<br/>")
+    );
 
     if (mediaContentInformation.mediaType === PostTypes.Text) {
       if (!textContent || textContent.length === 0) return;
       setisLoading(true);
-      await makeTextPost(textContent);
+      await makeTextPost(encrptedPostTextData);
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Video) {
       setisLoading(true);
-      await makeVideoPost(textContent, mediaContentInformation.mediaData);
+      await makeVideoPost(
+        encrptedPostTextData,
+        mediaContentInformation.mediaData
+      );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
       setisLoading(true);
-      await makeDocumentPost(textContent, mediaContentInformation.mediaData);
+      await makeDocumentPost(
+        encrptedPostTextData,
+        mediaContentInformation.mediaData
+      );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Poll) {
       setisLoading(true);
       const { question, options } = mediaContentInformation.mediaData;
-      await makePollPost(textContent, question, options);
+      await makePollPost(encrptedPostTextData, question, options);
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Image) {
       setisLoading(true);
       await makeImagePost(
-        textContent,
+        encrptedPostTextData,
         mediaContentInformation.mediaData.map((file) => file.file)
       );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Slide) {
       setisLoading(true);
-      await makeSlidePost(textContent, mediaContentInformation.mediaData);
+      await makeSlidePost(
+        encrptedPostTextData,
+        mediaContentInformation.mediaData
+      );
       afterPostMake();
     }
   };

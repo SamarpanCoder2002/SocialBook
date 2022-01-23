@@ -11,6 +11,8 @@ export const makeTextPost = async (text) => {
   try {
     const storedData = getDataFromLocalStorage();
 
+    console.log("At call text: ", text);
+
     const res = await fetch(`${API}/createTextPost/${storedData?.user}`, {
       method: "POST",
       headers: {
