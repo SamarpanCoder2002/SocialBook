@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import {
   ATTACH_SOCKET,
   CHANGE_MODE,
+  UPDATE_NEW_CHAT_ALERT,
   UPDATE_NOTIFICATION,
 } from "../../redux/actions";
 import LoadingBar from "../loading/loadingbar";
@@ -77,9 +78,9 @@ const MenuCollection = ({ isMenuOpen }) => {
   const { user } = getDataFromLocalStorage();
 
   const dispatch = useDispatch();
-  const { hasPendingNotification } = useSelector((state) => state);
-
-  console.log("Has pending notification: ", hasPendingNotification);
+  const { hasPendingNotification, hasPendingChatMessage } = useSelector(
+    (state) => state
+  );
 
   const menuStatus = (path) => {
     if (path === location.pathname) {
@@ -112,20 +113,22 @@ const MenuCollection = ({ isMenuOpen }) => {
     socket.current.on(
       SocketEvents.totalUpdatedNotification,
       (notificationData) => {
-        console.log("socket notification data: ", notificationData);
         notificationData &&
           dispatch({ type: UPDATE_NOTIFICATION, payload: true });
       }
     );
 
     socket.current.on(SocketEvents.acceptIncomingChatMessage, (messageData) => {
-      console.log("menu screen message data: ", messageData);
+      messageData && dispatch({ type: UPDATE_NEW_CHAT_ALERT, payload: true });
     });
   }, [dispatch]);
 
   useEffect(() => {
     if (location.pathname === "/notification")
       dispatch({ type: UPDATE_NOTIFICATION, payload: false });
+
+    if (location.pathname.startsWith("/messaging"))
+      dispatch({ type: UPDATE_NEW_CHAT_ALERT, payload: false });
   }, [location, dispatch]);
 
   return (
@@ -168,14 +171,30 @@ const MenuCollection = ({ isMenuOpen }) => {
             </div>
           </Link>
         </li>
+
         <li className={`py-3`}>
           <Link className={menuStatus("/messaging")} to="/messaging">
-            <i className="far fa-comment fa-md"></i> Chat
+            <div className="flex text-center w-full justify-center">
+              <div className="">
+                <i className="far fa-comment fa-md"></i>
+                {hasPendingChatMessage && (
+                  <span
+                    className="relative inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"
+                    style={{ left: "-15px", top: "-5px" }}
+                  ></span>
+                )}
+              </div>
+              {!hasPendingChatMessage && <div className="w-1"></div>}
+              Chat
+            </div>
           </Link>
         </li>
+
         <li
           className={`py-3 text-red-600 dark:text-red-500 font-semibold text-center md:ml-3 cursor-pointer`}
-          onClick={() => onSignOut(hasPendingNotification)}
+          onClick={() =>
+            onSignOut(hasPendingNotification, hasPendingChatMessage)
+          }
         >
           <i className="fas fa-power-off"></i> Signout
         </li>

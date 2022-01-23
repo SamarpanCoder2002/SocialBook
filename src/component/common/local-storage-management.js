@@ -4,10 +4,11 @@ export const storeDataInLocalStorage = (
   name = "",
   description = "",
   profilePic = "",
-  hasPendingNotification
+  hasPendingNotification,
+  hasPendingChatMessage
 ) => {
-  console.log("storeDataInLocalStorage");
   let hasPrevPendingNotification = hasPendingNotification;
+  let hasPrevPendingChatMessage = hasPendingChatMessage;
 
   const secondaryStoredData = localStorage.getItem(
     process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
@@ -16,6 +17,15 @@ export const storeDataInLocalStorage = (
   if (secondaryStoredData !== null) {
     const oldStoredData = JSON.parse(secondaryStoredData);
     hasPrevPendingNotification = oldStoredData[user] || false;
+  }
+
+  const msgReminderStoredData = localStorage.getItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD
+  );
+
+  if (msgReminderStoredData !== null) {
+    const oldStoredMsgReminder = JSON.parse(msgReminderStoredData);
+    hasPrevPendingChatMessage = oldStoredMsgReminder[user] || false;
   }
 
   localStorage.setItem(
@@ -30,6 +40,11 @@ export const storeDataInLocalStorage = (
       hasPendingNotification:
         hasPrevPendingNotification ||
         getDataFromLocalStorage().hasPendingNotification ||
+        false,
+
+      hasPendingChatMessage:
+        hasPrevPendingChatMessage ||
+        getDataFromLocalStorage().hasPendingChatMessage ||
         false,
     })
   );

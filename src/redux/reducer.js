@@ -4,6 +4,7 @@ import {
   CHANGE_MODE,
   START_LOADING,
   STOP_LOADING,
+  UPDATE_NEW_CHAT_ALERT,
   UPDATE_NOTIFICATION,
   UPDATE_USER_PROFILE,
 } from "./actions";
@@ -53,6 +54,18 @@ const reducer = (state = initialState, action) => {
 
     case ATTACH_SOCKET:
       return { ...state, socket: action.payload };
+
+    case UPDATE_NEW_CHAT_ALERT:
+      const updateAlertState = {
+        ...state,
+        hasPendingChatMessage: action.payload,
+      }
+
+      localStorage.setItem(
+        process.env.REACT_APP_SOCIAL_BOOK_TOKEN,
+        JSON.stringify({ ...updateAlertState, socket: undefined })
+      );
+      return updateAlertState;
 
     default:
       return state;

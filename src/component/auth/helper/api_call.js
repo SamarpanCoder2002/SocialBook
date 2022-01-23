@@ -30,7 +30,7 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
 
-        // TODO: Temporary navigation to feed page. Need to create a page for user profile data take and then switch to feed page
+        
         setTimeout(() => {
           window.location.replace("/take-user-information");
         }, 1000);
@@ -107,7 +107,7 @@ export const onSignIn = (email, password, setisLoading) => {
     });
 };
 
-export const onSignOut = (hasPendingNotification) => {
+export const onSignOut = (hasPendingNotification, hasPendingChatMessage) => {
   const getTokenData = localStorage.getItem(
     process.env.REACT_APP_SOCIAL_BOOK_TOKEN
   );
@@ -128,7 +128,7 @@ export const onSignOut = (hasPendingNotification) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.code === 200) {
-        storeSecondaryData(user, hasPendingNotification);
+        storeSecondaryData(user, hasPendingNotification, hasPendingChatMessage);
       } else {
         errorMessage(data.error);
       }
@@ -138,14 +138,19 @@ export const onSignOut = (hasPendingNotification) => {
     });
 };
 
-const storeSecondaryData = (user, hasPendingNotification) => {
+const storeSecondaryData = (
+  user,
+  hasPendingNotification,
+  hasPendingChatMessage
+) => {
+  /// ** For Notification remainder data delete
   let oldStoredData = localStorage.getItem(
     process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
   );
 
   if (!oldStoredData) oldStoredData = {};
   else oldStoredData = JSON.parse(oldStoredData);
-  
+
   oldStoredData[user] = hasPendingNotification;
 
   localStorage.setItem(
@@ -153,6 +158,22 @@ const storeSecondaryData = (user, hasPendingNotification) => {
     JSON.stringify(oldStoredData)
   );
 
+  /// ** For Msg reminder data store
+  let oldStoredMsgReminder = localStorage.getItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD
+  );
+
+  if (!oldStoredMsgReminder) oldStoredMsgReminder = {};
+  else oldStoredData = JSON.parse(oldStoredMsgReminder);
+
+  oldStoredMsgReminder[user] = hasPendingChatMessage;
+
+  localStorage.setItem(
+    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD,
+    JSON.stringify(oldStoredMsgReminder)
+  );
+
+  /// ** Remove Active Token
   localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
   window.location.href = "/landing-with-signin";
 };
