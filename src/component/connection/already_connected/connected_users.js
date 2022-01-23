@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { ConnectionType } from "../../../types/types";
 import Waiting from "../../common/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -49,9 +49,15 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
     useState([]);
 
   const [page, setpage] = useState(1);
-
+  const [lastElement, setLastElement] = useState(null);
   const [connectedUsersCollection, setconnectedUsersCollection] = useState([]);
   const [removedConnectionIds, setremovedConnectionIds] = useState([]);
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      entries[0]?.isIntersecting && setpage((no) => no + 1);
+    })
+  );
 
   useEffect(() => {
     if (isLoading) return;
@@ -71,6 +77,13 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
       setsearchResultUsersCollection(connectedUsersCollection);
     }
   }, [searchArgument, isLoading, connectedUsersCollection]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [lastElement]);
 
   useEffect(() => {
     fetchAllSpecificRequestedUsers(page, ConnectionType.AlreadyConnected).then(
@@ -97,12 +110,14 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
           if (removedConnectionIds.includes(user.id))
             return <Fragment key={index}></Fragment>;
           return (
+            <div ref={setLastElement}>
             <ConnectionCollectionItem
               key={index}
               user={user}
               connectionType={ConnectionType.AlreadyConnected}
               setCollectiveIds={setremovedConnectionIds}
             />
+            </div>
           );
         })) || (
         <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">
@@ -115,6 +130,7 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
           </div>
         </h1>
       )}
+      
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { ConnectionType } from "../../../types/types";
 import Waiting from "../../common/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -8,9 +8,15 @@ const ReceivedInvitation = () => {
   const [isLoading, setisLoading] = useState(true);
   const [page, setpage] = useState(1);
   const [receivedInvitationIds, setreceivedInvitationIds] = useState([]);
-
+  const [lastElement, setLastElement] = useState(null);
   const [receivedConnectionRequestList, setreceivedConnectionRequestList] =
     useState([]);
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      entries[0]?.isIntersecting && setpage((no) => no + 1);
+    })
+  );
 
   useEffect(() => {
     fetchAllSpecificRequestedUsers(page, ConnectionType.RequestReceived).then(
@@ -21,6 +27,13 @@ const ReceivedInvitation = () => {
       }
     );
   }, [page]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [lastElement]);
 
   return isLoading ? (
     <Waiting
@@ -37,12 +50,14 @@ const ReceivedInvitation = () => {
           if (receivedInvitationIds.includes(user.id))
             return <Fragment key={index}></Fragment>;
           return (
-            <ConnectionCollectionItem
-              key={index}
-              user={user}
-              connectionType={ConnectionType.RequestReceived}
-              setCollectiveIds={setreceivedInvitationIds}
-            />
+            <div ref={setLastElement}>
+              <ConnectionCollectionItem
+                key={index}
+                user={user}
+                connectionType={ConnectionType.RequestReceived}
+                setCollectiveIds={setreceivedInvitationIds}
+              />
+            </div>
           );
         })) || (
         <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">

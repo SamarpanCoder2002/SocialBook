@@ -13,7 +13,6 @@ import {
   onAcceptButtonClicked,
   onCancelButtonClicked,
   onMessageButtonClicked,
-  onSendRequestButtonClicked,
   onWithdrawConnectionButtonClicked,
   removeConnectionButtonClicked,
 } from "../common/common-button-operation";

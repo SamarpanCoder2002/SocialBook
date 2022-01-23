@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { ConnectionType } from "../../../types/types";
 import Waiting from "../../common/waiting";
 import ConnectionCollectionItem from "../connection-common-layout";
@@ -11,6 +11,13 @@ const SendInvitation = () => {
     []
   );
   const [sentConnectionRequestIds, setsentConnectionRequestIds] = useState([]);
+  const [lastElement, setLastElement] = useState(null);
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      entries[0]?.isIntersecting && setpage((no) => no + 1);
+    })
+  );
 
   useEffect(() => {
     fetchAllSpecificRequestedUsers(page, ConnectionType.RequestSent).then(
@@ -21,6 +28,13 @@ const SendInvitation = () => {
       }
     );
   }, [page]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [lastElement]);
 
   return isLoading ? (
     <Waiting
@@ -37,12 +51,14 @@ const SendInvitation = () => {
           if (sentConnectionRequestIds.includes(user.id))
             return <Fragment key={index}></Fragment>;
           return (
-            <ConnectionCollectionItem
-              key={index}
-              user={user}
-              connectionType={ConnectionType.RequestSent}
-              setCollectiveIds={setsentConnectionRequestIds}
-            />
+            <div ref={setLastElement}>
+              <ConnectionCollectionItem
+                key={index}
+                user={user}
+                connectionType={ConnectionType.RequestSent}
+                setCollectiveIds={setsentConnectionRequestIds}
+              />
+            </div>
           );
         })) || (
         <h1 className="w-full text-center mt-10 tracking-wide text-md md:text-lg lg:text-2xl 2xl:text-3xl">

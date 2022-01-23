@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import Waiting from "../../common/waiting";
 import { fetchAllAvailableUsers } from "../helper/api_call";
 import ProfileCard from "./connection-card";
@@ -10,14 +10,28 @@ const AllUsersCollection = () => {
   const [requestSentConnectionsIds, setrequestSentConnectionsIds] = useState(
     []
   );
+  const [lastElement, setLastElement] = useState(null);
+
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      entries[0]?.isIntersecting && setpage((no) => no + 1);
+    })
+  );
 
   useEffect(() => {
     fetchAllAvailableUsers(page).then((data) => {
-      setuserSuggestions((prev) => (data ? [...prev, ...data] : []));
+      setuserSuggestions((prev) => (data ? [...prev, ...data] : [...prev]));
       setisLoading(false);
       return;
     });
   }, [page]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+    if (currentElement) currentObserver.observe(currentElement);
+    return () => currentElement && currentObserver.unobserve(currentElement);
+  }, [lastElement]);
 
   return isLoading ? (
     <Waiting
@@ -33,11 +47,13 @@ const AllUsersCollection = () => {
         if (requestSentConnectionsIds.includes(user.id))
           return <Fragment key={index}></Fragment>;
         return (
-          <ProfileCard
-            key={index}
-            user={user}
-            setrequestSentConnectionsIds={setrequestSentConnectionsIds}
-          />
+          <div ref={setLastElement}>
+            <ProfileCard
+              key={index}
+              user={user}
+              setrequestSentConnectionsIds={setrequestSentConnectionsIds}
+            />
+          </div>
         );
       })}
     </div>
