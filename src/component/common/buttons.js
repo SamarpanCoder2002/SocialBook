@@ -61,7 +61,7 @@ export const MessageButton = ({
     <button
       className={`${
         darkMode ? "hover:bg-blue-800" : "hover:bg-blue-400"
-      } text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full   ${customClassName}`}
+      } text-lightPrimaryFgColor dark:text-darkPrimaryFgColor px-2 py-1 rounded-3xl border-darkPrimaryFgColor  hover:bg-opacity-30  transition-all duration-300 sm:ml-3 w-full  ${customClassName}`}
       style={{ borderWidth: "0.2px" }}
       onClick={onClickOperation}
     >

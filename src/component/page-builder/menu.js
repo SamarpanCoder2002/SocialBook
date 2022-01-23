@@ -90,7 +90,7 @@ const MenuCollection = ({ isMenuOpen }) => {
   };
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8000");
+    socket.current = io(`ws://${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
   }, []);
 
   useEffect(() => {

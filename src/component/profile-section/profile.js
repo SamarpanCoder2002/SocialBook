@@ -25,7 +25,14 @@ import {
   successMessage,
 } from "../common/desktop-notification";
 import { getChatBoxId } from "../messaging-section/helper/api_call";
-import { onMessageButtonClicked } from "../common/common-button-operation";
+import {
+  onAcceptButtonClicked,
+  onCancelButtonClicked,
+  onConnectButtonClicked,
+  onMessageButtonClicked,
+  onWithdrawConnectionButtonClicked,
+  removeConnectionButtonClicked,
+} from "../common/common-button-operation";
 
 const ProfileSection = () => {
   const { state } = useLocation();
@@ -181,18 +188,23 @@ const ButtonsManagement = ({ darkMode, connectionType }) => {
         <MessageButton
           customClassName={"mt-3 text-sm"}
           darkMode={darkMode}
-          onClickOperation={() =>
+          onClickOperation={() => {
             onMessageButtonClicked(
               connectionId,
               state?.name || "",
               state?.description || "",
               state?.profilePic || ""
-            )
-          }
+            );
+            makeReload();
+          }}
         />
         <RemoveConnectionButton
           customClassName={"mt-3 text-sm"}
           darkMode={darkMode}
+          onClickOperation={() => {
+            removeConnectionButtonClicked(connectionId);
+            makeReload();
+          }}
         />
       </div>
     );
@@ -201,22 +213,53 @@ const ButtonsManagement = ({ darkMode, connectionType }) => {
       <WithDrawConnectionRequestButton
         customClassName={"mt-3 text-sm"}
         darkMode={darkMode}
+        onClickOperation={() => {
+          onWithdrawConnectionButtonClicked(connectionId);
+          makeReload();
+        }}
       />
     );
   } else if (connectionType === ConnectionType.RequestReceived) {
     return (
       <div className="sm:flex justify-center items-center ">
-        <AcceptButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
-        <CancelButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+        <AcceptButton
+          customClassName={"mt-3 text-sm"}
+          darkMode={darkMode}
+          onClickOperation={() => {
+            onAcceptButtonClicked(connectionId);
+            makeReload();
+          }}
+        />
+        <CancelButton
+          customClassName={"mt-3 text-sm"}
+          darkMode={darkMode}
+          onClickOperation={() => {
+            onCancelButtonClicked(connectionId);
+            makeReload();
+          }}
+        />
       </div>
     );
   } else if (connectionType === ConnectionType.notConnected) {
     return (
-      <ConnectButton customClassName={"mt-3 text-sm"} darkMode={darkMode} />
+      <ConnectButton
+        customClassName={"mt-3 text-sm"}
+        darkMode={darkMode}
+        onClickOperation={() => {
+          onConnectButtonClicked(connectionId);
+          makeReload();
+        }}
+      />
     );
   } else {
     return <></>;
   }
+};
+
+const makeReload = () => {
+  setTimeout(() => {
+    window.location.reload();
+  }, 1800);
 };
 
 export default ProfileSection;
