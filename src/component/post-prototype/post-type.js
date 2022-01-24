@@ -1,9 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import Masonry from "react-masonry-css";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import React from "react";
-import { LeafPoll, Result } from "react-leaf-polls";
+import { LeafPoll } from "react-leaf-polls";
 import "react-leaf-polls/dist/index.css";
 import { useSelector } from "react-redux";
 import Linkify from "react-linkify";
@@ -12,11 +12,8 @@ import { updatePollData } from "./helper/api_call";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
 import { infoMessage } from "../common/desktop-notification";
 import parse from "html-react-parser";
-import { postDecryption } from "../../encryption/encryption_mangement";
 
 export const TextPost = ({ postData }) => {
-  const decryptedData = postDecryption(postData.content?.text);
-
   return (
     <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text">
       <Linkify>
@@ -28,7 +25,7 @@ export const TextPost = ({ postData }) => {
           anchorClass="my-anchor-css-class"
           expanded={false}
         >
-          {parse(`${decryptedData}`)}
+          {parse(`${postData.content?.text}`)}
         </ShowMoreText>
       </Linkify>
     </div>

@@ -17,7 +17,6 @@ import {
 } from "./helper/api_call";
 import { useNavigate } from "react-router-dom";
 import { PostTypes } from "../../types/types";
-import { postEncryption } from "../../encryption/encryption_mangement";
 
 const PostScreen = () => {
   const [mediaOptions, setmediaOptions] = useState(-1);
@@ -350,45 +349,43 @@ const CreatePostButtonComponent = ({
   const navigate = useNavigate();
 
   const handleMakePost = async () => {
-    const encrptedPostTextData = postEncryption(
-      textContent.toString().split("\n").join("<br/>")
-    );
+    const formattedPostTextData = textContent.toString().split("\n").join("<br/>");
 
     if (mediaContentInformation.mediaType === PostTypes.Text) {
       if (!textContent || textContent.length === 0) return;
       setisLoading(true);
-      await makeTextPost(encrptedPostTextData);
+      await makeTextPost(formattedPostTextData);
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Video) {
       setisLoading(true);
       await makeVideoPost(
-        encrptedPostTextData,
+        formattedPostTextData,
         mediaContentInformation.mediaData
       );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Pdf) {
       setisLoading(true);
       await makeDocumentPost(
-        encrptedPostTextData,
+        formattedPostTextData,
         mediaContentInformation.mediaData
       );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Poll) {
       setisLoading(true);
       const { question, options } = mediaContentInformation.mediaData;
-      await makePollPost(encrptedPostTextData, question, options);
+      await makePollPost(formattedPostTextData, question, options);
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Image) {
       setisLoading(true);
       await makeImagePost(
-        encrptedPostTextData,
+        formattedPostTextData,
         mediaContentInformation.mediaData.map((file) => file.file)
       );
       afterPostMake();
     } else if (mediaContentInformation.mediaType === PostTypes.Slide) {
       setisLoading(true);
       await makeSlidePost(
-        encrptedPostTextData,
+        formattedPostTextData,
         mediaContentInformation.mediaData
       );
       afterPostMake();
