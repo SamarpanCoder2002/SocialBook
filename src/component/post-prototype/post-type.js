@@ -15,7 +15,7 @@ import parse from "html-react-parser";
 
 export const TextPost = ({ postData }) => {
   return (
-    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text">
+    <div className="bg-lightElevationColor dark:bg-darkElevationColor p-2 special-text text-sm font-thin">
       <Linkify>
         <ShowMoreText
           lines={3}
@@ -136,7 +136,7 @@ export const SliderPost = ({ postData }) => {
 
           return (
             <div
-              className="text-justify px-5 py-8 bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor border border-lightElevationColor dark:border-darkElevationColor"
+              className="text-justify px-5 py-8 bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor border border-lightElevationColor dark:border-darkElevationColor font-thin text-sm"
               key={index}
             >
               {particularSlider.data}

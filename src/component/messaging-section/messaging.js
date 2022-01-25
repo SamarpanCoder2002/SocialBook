@@ -19,7 +19,7 @@ const MessageComponent = () => {
   const [messages, setmessages] = useState([]);
   const { darkMode, socket } = useSelector((state) => state);
   const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState(0);
-  const [clickedChatProfile, setclickedChatProfile] = useState(-1);
+  const [clickedChatBoxId, setclickedChatBoxId] = useState(-1);
   const [isLoading, setisLoading] = useState(true);
   const [isInternalLoading, setisInternalLoading] = useState(false);
   const location = useLocation();
@@ -38,10 +38,10 @@ const MessageComponent = () => {
         );
 
         if (partnerIdQuery && chatFilteredConnection?.length > 0) {
-          setclickedChatProfile(chatFilteredConnection[0].chatBoxId);
+          setclickedChatBoxId(chatFilteredConnection[0].chatBoxId);
           setisEligibleToOpenChatBox(chatFilteredConnection[0]);
         } else {
-          setclickedChatProfile(data[0].chatBoxId);
+          setclickedChatBoxId(data[0].chatBoxId);
           setisEligibleToOpenChatBox(data[0]);
         }
         setisLoading(false);
@@ -93,8 +93,8 @@ const MessageComponent = () => {
                   darkMode={darkMode}
                   isEligibleToOpenChatBox={isEligibleToOpenChatBox}
                   setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
-                  clickedChatProfile={clickedChatProfile}
-                  setclickedChatProfile={setclickedChatProfile}
+                  clickedChatBoxId={clickedChatBoxId}
+                  setclickedChatBoxId={setclickedChatBoxId}
                   setmessages={setmessages}
                   setisLoading={setisInternalLoading}
                 />
@@ -149,8 +149,8 @@ const ProfileConnectionCollection = ({
   darkMode,
   isEligibleToOpenChatBox,
   setisEligibleToOpenChatBox,
-  clickedChatProfile,
-  setclickedChatProfile,
+  clickedChatBoxId,
+  setclickedChatBoxId,
   setmessages,
   setisLoading,
 }) => {
@@ -169,7 +169,7 @@ const ProfileConnectionCollection = ({
             className={`${
               darkMode ? "hover:bg-darkCardColor" : "hover:bg-lightCardColor"
             } flex items-center p-3 transition-all duration-300 cursor-pointer justify-start lg:justify-between focus:outline-none focus:ring focus:ring-violet-300 ${
-              clickedChatProfile === chat.chatBoxId
+              clickedChatBoxId === chat.chatBoxId
                 ? darkMode
                   ? "bg-darkCardColor"
                   : "bg-lightCardColor"
@@ -178,8 +178,15 @@ const ProfileConnectionCollection = ({
                 : "bg-lightElevationColor"
             }`}
             onClick={() => {
-              setclickedChatProfile(chat.chatBoxId);
+              if (
+                clickedChatBoxId === chat.chatBoxId ||
+                isEligibleToOpenChatBox === chat
+              )
+                return;
+
+              setclickedChatBoxId(chat.chatBoxId);
               setisEligibleToOpenChatBox(chat);
+
               setmessages([]);
               setisLoading(true);
             }}
