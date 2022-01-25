@@ -6,6 +6,7 @@ import Linkify from "react-linkify/dist/components/Linkify";
 import {
   getAllChatConnections,
   getAllChatHistoryMessages,
+  getPendingChatMessages,
   sendMessageToSpecificConnection,
 } from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
@@ -31,6 +32,8 @@ const MessageComponent = () => {
     getAllChatConnections()
       .then(async (data) => {
         if (!data) return;
+        console.log("profile data: ", data);
+
         setchatConnectionCollections(data);
 
         const chatFilteredConnection = data.filter(
@@ -154,6 +157,51 @@ const ProfileConnectionCollection = ({
   setmessages,
   setisLoading,
 }) => {
+  const [latestUnreadMsgCollection, setlatestUnreadMsgCollection] = useState(
+    {}
+  );
+
+  useEffect(() => {
+    if (!chatConnectionCollections || chatConnectionCollections.length === 0)
+      return;
+
+    getPendingChatMessages().then((pendingMessages) => {
+      if (!pendingMessages) return;
+
+      pendingMessages.forEach((pendingMessageData) => {
+        setlatestUnreadMsgCollection((prevUnreadMsgCollection) => {
+          return {
+            ...prevUnreadMsgCollection,
+            [pendingMessageData.partnerId]: pendingMessageData,
+          };
+        });
+      });
+    });
+  }, [chatConnectionCollections]);
+
+  useEffect(() => {
+    console.log("Latest Unread Msg Collection: ", latestUnreadMsgCollection);
+  }, [latestUnreadMsgCollection]);
+
+  const getFormattedTime = (epochTime) => {
+    console.log("epochTime: ", epochTime);
+
+    const formattedDate = new Date(Number(epochTime)).toLocaleString("en-US", {
+      weekday: "short", // long, short, narrow
+      day: "numeric", // numeric, 2-digit
+      month: "short", // numeric, 2-digit, long, short, narrow
+    });
+
+    return formattedDate === "Invalid Date" ? "" : formattedDate;
+  };
+
+  const getShowCaseLatestPendingMsg = (particularProfileData) => {
+    if (!particularProfileData) return;
+
+    const { message, type } = particularProfileData;
+    return type === ChatMsgTypes.text ? message : "📸 Image";
+  };
+
   return (
     <div
       className={`h-[90vh] ${
@@ -200,12 +248,20 @@ const ProfileConnectionCollection = ({
                 />
               </div>
               <div className="ml-3">
-                <div className="font-semibold text-lg">{chat.partnerName}</div>
-                <div className="text-sm">Hi, How are you?</div>
+                <div className="text-lg font-thin">{chat.partnerName}</div>
+                <div className="text-xs font-mono tracking-wide">
+                  {getShowCaseLatestPendingMsg(
+                    latestUnreadMsgCollection[chat.partnerId]
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* <div className="hidden lg:block text-sm">Dec 9</div> */}
+            <div className="hidden lg:block text-xs font-thin">
+              {getFormattedTime(
+                `${latestUnreadMsgCollection[chat.partnerId]?.time}`
+              )}
+            </div>
           </div>
         );
       })}
@@ -386,6 +442,7 @@ const ChatBoxLowerSection = ({
       senderId: user,
       message: messageWritten,
       type: ChatMsgTypes.text,
+      time: currTime,
     });
 
     sendMessageToSpecificConnection(
@@ -575,6 +632,7 @@ const Modal = ({
         senderId: user,
         message: imgDataLink,
         type: ChatMsgTypes.image,
+        time: currTime,
       });
     });
   };
