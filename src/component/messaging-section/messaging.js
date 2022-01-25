@@ -456,6 +456,15 @@ const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
 const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
   const { name, profilePic, user } = useSelector((state) => state);
 
+  const estimateDateTime = new Date(message?.time).toLocaleString("en-US", {
+    weekday: "short", // long, short, narrow
+    day: "numeric", // numeric, 2-digit
+    year: "numeric", // numeric, 2-digit
+    month: "short", // numeric, 2-digit, long, short, narrow
+    hour: "numeric", // numeric, 2-digit
+    minute: "numeric", // numeric, 2-digit
+  });
+
   return (
     <div className=" mb-3 flex" ref={messagesEndRef}>
       <div>
@@ -478,11 +487,14 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
         </div>
       </div>
       <div className="ml-3 w-5/6">
-        <div className="font-semibold text-md">
-          {message.holder === MessageHolder.currentUser ||
-          message.holder === user
-            ? name
-            : partnerData?.partnerName}
+        <div className="flex justify-between">
+          <div className="font-semibold text-md">
+            {message.holder === MessageHolder.currentUser ||
+            message.holder === user
+              ? name
+              : partnerData?.partnerName}
+          </div>
+          <div className="text-xs font-thin">{estimateDateTime}</div>
         </div>
 
         {message.type === ChatMsgTypes.text ? (
