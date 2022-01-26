@@ -12,6 +12,7 @@ import { onSignOut } from "../auth/helper/api_call";
 import { io } from "socket.io-client";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
 import { SocketEvents } from "../../types/types";
+import { addPendingMessages } from "./helper/api_call";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);
@@ -119,7 +120,11 @@ const MenuCollection = ({ isMenuOpen }) => {
     );
 
     socket.current.on(SocketEvents.acceptIncomingChatMessage, (messageData) => {
-      messageData && dispatch({ type: UPDATE_NEW_CHAT_ALERT, payload: true });
+      if (!messageData) return;
+
+      dispatch({ type: UPDATE_NEW_CHAT_ALERT, payload: true });
+      const { message, senderId, chatBoxId, type, time } = messageData;
+      addPendingMessages(chatBoxId, message, type, senderId, time);
     });
   }, [dispatch]);
 

@@ -64,7 +64,7 @@ const ProfileSection = () => {
 
   return (
     <BaseCommonPart>
-      <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
+      <div className="h-screen bg-lightBgColor dark:bg-darkBgColor overflow-y-scroll suggested-profiles-container">
         <UserInformationContainer
           darkMode={darkMode}
           userInformation={userInformation}

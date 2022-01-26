@@ -137,3 +137,24 @@ export const getPendingChatMessages = async () => {
 
   return data.pendingMessages;
 }
+
+export const removePendingChatMessages = async (chatBoxId) => {
+  const { token, user } = getDataFromLocalStorage();
+
+  const res = await fetch(`${API}/messaging/deletePendingMessage/${user}/${chatBoxId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+
+  if (data.code !== 200) {
+    errorMessage(data.message);
+    return;
+  }
+
+  return data.code;
+}

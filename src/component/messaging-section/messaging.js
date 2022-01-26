@@ -7,11 +7,13 @@ import {
   getAllChatConnections,
   getAllChatHistoryMessages,
   getPendingChatMessages,
+  removePendingChatMessages,
   sendMessageToSpecificConnection,
 } from "./helper/api_call";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
+import { manageExtraSpace } from "../common/extra-space-management";
 
 const MessageComponent = () => {
   const [chatConnectionCollections, setchatConnectionCollections] = useState(
@@ -25,10 +27,15 @@ const MessageComponent = () => {
   const [isInternalLoading, setisInternalLoading] = useState(false);
   const location = useLocation();
   const partnerIdQuery = new URLSearchParams(location.search).get("partnerId");
-
   const [latestMessage, setlatestMessage] = useState();
 
   useEffect(() => {
+    manageExtraSpace(darkMode);
+  }, [darkMode])
+
+  useEffect(() => {
+    
+
     getAllChatConnections()
       .then(async (data) => {
         if (!data) return;
@@ -109,6 +116,7 @@ const MessageComponent = () => {
                   setmessages={setmessages}
                   isLoading={isInternalLoading}
                   setisLoading={setisInternalLoading}
+                  setclickedChatBoxId={setclickedChatBoxId}
                 />
               </>
             ) : (
@@ -179,27 +187,29 @@ const ProfileConnectionCollection = ({
     });
   }, [chatConnectionCollections]);
 
-  useEffect(() => {
-    console.log("Latest Unread Msg Collection: ", latestUnreadMsgCollection);
-  }, [latestUnreadMsgCollection]);
+  const selectParticularProfile = (chat) => {
+    if (clickedChatBoxId === chat.chatBoxId || isEligibleToOpenChatBox === chat)
+      return;
 
-  const getFormattedTime = (epochTime) => {
-    console.log("epochTime: ", epochTime);
+    setclickedChatBoxId(chat.chatBoxId);
+    setisEligibleToOpenChatBox(chat);
 
-    const formattedDate = new Date(Number(epochTime)).toLocaleString("en-US", {
-      weekday: "short", // long, short, narrow
-      day: "numeric", // numeric, 2-digit
-      month: "short", // numeric, 2-digit, long, short, narrow
-    });
-
-    return formattedDate === "Invalid Date" ? "" : formattedDate;
+    setmessages([]);
+    setisLoading(true);
   };
 
-  const getShowCaseLatestPendingMsg = (particularProfileData) => {
-    if (!particularProfileData) return;
+  const deletePendingMessage = (partnerId, chatBoxId) => {
+    latestUnreadMsgCollection[partnerId] &&
+      removePendingChatMessages(chatBoxId).then((response) => {
+        if (!response) return;
 
-    const { message, type } = particularProfileData;
-    return type === ChatMsgTypes.text ? message : "📸 Image";
+        setlatestUnreadMsgCollection((prevUnreadMsgCollection) => {
+          return {
+            ...prevUnreadMsgCollection,
+            [partnerId]: undefined,
+          };
+        });
+      });
   };
 
   return (
@@ -226,17 +236,8 @@ const ProfileConnectionCollection = ({
                 : "bg-lightElevationColor"
             }`}
             onClick={() => {
-              if (
-                clickedChatBoxId === chat.chatBoxId ||
-                isEligibleToOpenChatBox === chat
-              )
-                return;
-
-              setclickedChatBoxId(chat.chatBoxId);
-              setisEligibleToOpenChatBox(chat);
-
-              setmessages([]);
-              setisLoading(true);
+              selectParticularProfile(chat);
+              deletePendingMessage(chat.partnerId, chat.chatBoxId);
             }}
           >
             <div className="flex">
@@ -247,24 +248,73 @@ const ProfileConnectionCollection = ({
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="ml-3">
-                <div className="text-lg font-thin">{chat.partnerName}</div>
-                <div className="text-xs font-mono tracking-wide">
-                  {getShowCaseLatestPendingMsg(
-                    latestUnreadMsgCollection[chat.partnerId]
-                  )}
-                </div>
-              </div>
+
+              <ProfileUserDataManagement
+                pendingMessageDataCollection={
+                  latestUnreadMsgCollection[chat.partnerId]
+                }
+                partnerName={chat.partnerName}
+              />
             </div>
 
-            <div className="hidden lg:block text-xs font-thin">
-              {getFormattedTime(
-                `${latestUnreadMsgCollection[chat.partnerId]?.time}`
-              )}
-            </div>
+            <ProfileUserDataPendingMsgTimeManagement
+              chat={chat}
+              latestUnreadMsgCollection={latestUnreadMsgCollection}
+            />
           </div>
         );
       })}
+    </div>
+  );
+};
+
+const ProfileUserDataPendingMsgTimeManagement = ({
+  chat,
+  latestUnreadMsgCollection,
+}) => {
+  const getFormattedTime = (epochTime) => {
+    const formattedDate = new Date(Number(epochTime)).toLocaleString("en-US", {
+      day: "numeric", // numeric, 2-digit
+      month: "short", // numeric, 2-digit, long, short, narrow
+    });
+
+    return formattedDate === "Invalid Date" ? "" : formattedDate;
+  };
+
+  return (
+    <div className="hidden lg:block text-xs font-thin">
+      {getFormattedTime(`${latestUnreadMsgCollection[chat.partnerId]?.time}`)}
+    </div>
+  );
+};
+
+const ProfileUserDataManagement = ({
+  pendingMessageDataCollection,
+  partnerName,
+}) => {
+  const getShowCaseLatestPendingMsg = (particularProfileData) => {
+    if (!particularProfileData) return;
+
+    const { message, type } = particularProfileData;
+    return type === ChatMsgTypes.text ? message : "📸 Image";
+  };
+
+  const pendingMsgShow = getShowCaseLatestPendingMsg(
+    pendingMessageDataCollection
+  );
+
+  if (!pendingMsgShow) {
+    return (
+      <div className="flex flex-wrap justify-center items-center">
+        <div className="text-md font-thin ml-3">{partnerName}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="ml-3">
+      <div className="text-md font-thin">{partnerName}</div>
+      <div className="text-xs font-mono tracking-wide">{pendingMsgShow}</div>
     </div>
   );
 };
@@ -276,6 +326,7 @@ const ChatBoxConfig = ({
   setmessages,
   isLoading,
   setisLoading,
+  setclickedChatBoxId,
 }) => {
   const [messageWritten, setmessageWritten] = useState("");
   const [showModal, setshowModal] = useState(false);
@@ -326,10 +377,11 @@ const ChatBoxConfig = ({
       <ChatBoxUpperSection
         setisEligibleToOpenChatBox={setisEligibleToOpenChatBox}
         isEligibleToOpenChatBox={isEligibleToOpenChatBox}
+        setclickedChatBoxId={setclickedChatBoxId}
       />
 
       {/* Chat Messages Collection */}
-      <div className="h-[76%] lg:h-[78%] overflow-y-auto scroller p-3">
+      <div className="h-[76%] overflow-y-auto scroller p-3">
         <ChatMessagesCollection
           messages={messages}
           messagesEndRef={messagesEndRef}
@@ -365,6 +417,7 @@ const ChatBoxConfig = ({
 const ChatBoxUpperSection = ({
   setisEligibleToOpenChatBox,
   isEligibleToOpenChatBox,
+  setclickedChatBoxId,
 }) => {
   const navigate = useNavigate();
 
@@ -375,7 +428,10 @@ const ChatBoxUpperSection = ({
   return (
     <div className="w-full bg-lightElevationColor dark:bg-darkElevationColor p-3 shadow-sm shadow-slate-300 dark:shadow-slate-600 rounded-tr-md flex">
       <div
-        onClick={() => setisEligibleToOpenChatBox()}
+        onClick={() => {
+          setisEligibleToOpenChatBox();
+          setclickedChatBoxId();
+        }}
         className="p-3 cursor-pointer sm:hidden"
       >
         <i className="fas fa-arrow-left"></i>
@@ -387,7 +443,7 @@ const ChatBoxUpperSection = ({
           className="w-12 h-12 object-cover rounded-full"
         />
       </div>
-      <div>
+      <div className="flex md:block flex-wrap justify-center items-center">
         <div
           className="text-base hover:underline cursor-pointer"
           onClick={() =>
@@ -396,7 +452,7 @@ const ChatBoxUpperSection = ({
         >
           {isEligibleToOpenChatBox?.partnerName || ""}
         </div>
-        <div className="text-xs w-10/12">
+        <div className="hidden md:block text-xs w-10/12">
           {`${
             partnerProfileDescription
               ? partnerProfileDescription?.slice(0, 25).join(" ")
@@ -457,7 +513,7 @@ const ChatBoxLowerSection = ({
 
   const sendMessageonEnterPress = (e) => e.key === "Enter" && sendTextMessage();
   return (
-    <div className="w-full mt-3 px-3 py-auto flex">
+    <div className="w-full px-3 py-2 flex">
       <div>
         <input
           type="file"
@@ -530,7 +586,7 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
   });
 
   return (
-    <div className=" mb-3 flex" ref={messagesEndRef}>
+    <div className="mb-3 flex" ref={messagesEndRef}>
       <div>
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
@@ -552,13 +608,13 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
       </div>
       <div className="ml-3 w-5/6">
         <div className="flex justify-between">
-          <div className="font-semibold text-md">
+          <div className="font-semibold text-sm md:text-md tracking-wider">
             {message.holder === MessageHolder.currentUser ||
             message.holder === user
               ? name
               : partnerData?.partnerName}
           </div>
-          <div className="text-xs font-thin">{estimateDateTime}</div>
+          <div className="hidden sm:block text-xs font-thin">{estimateDateTime}</div>
         </div>
 
         {message.type === ChatMsgTypes.text ? (

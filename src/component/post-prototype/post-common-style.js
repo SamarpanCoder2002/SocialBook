@@ -223,6 +223,26 @@ const CommentCollection = ({ postData }) => {
   const [comments, setcomments] = useState(postData?.engagement.comments || []);
   const [commentText, setcommentText] = useState("");
 
+  const onEnterOnCommentSection = () => {
+    if (!commentText || !commentText.length) return;
+
+    const storedData = getDataFromLocalStorage();
+    setcomments([
+      {
+        comment: commentText,
+        name: storedData?.name,
+        description: storedData.description,
+        profilePic: storedData?.profilePic,
+      },
+      ...comments,
+    ]);
+    setcommentText("");
+    insertPostComment(postData.postId, commentText).catch((err) => {
+      infoMessage("Could not comment this post");
+      setcomments(postData.engagement.comments);
+    });
+  };
+
   return (
     <div className="mt-5">
       <div className="relative flex z-50 bg-lightBgColor dark:bg-darkBgColor rounded-full mb-3">
@@ -232,32 +252,10 @@ const CommentCollection = ({ postData }) => {
           className="rounded-full flex-1 px-6 py-4 text-gray-700 dark:text-white focus:outline-none bg-lightBgColor dark:bg-darkBgColor text-sm"
           value={commentText}
           onChange={(e) => setcommentText(e.target.value)}
-        />
-
-        <button
-          className="px-10 bg-indigo-600 text-sm rounded-3xl"
-          onClick={() => {
-            if (commentText.length > 0) {
-              const storedData = getDataFromLocalStorage();
-              setcomments([
-                {
-                  comment: commentText,
-                  name: storedData?.name,
-                  description: storedData.description,
-                  profilePic: storedData?.profilePic,
-                },
-                ...comments,
-              ]);
-              setcommentText("");
-              insertPostComment(postData.postId, commentText).catch((err) => {
-                infoMessage("Could not comment this post");
-                setcomments(postData.engagement.comments);
-              });
-            }
+          onKeyPress={(e) => {
+            if (e.key === "Enter") onEnterOnCommentSection();
           }}
-        >
-          Post
-        </button>
+        />
       </div>
 
       {comments &&

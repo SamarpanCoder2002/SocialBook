@@ -53,7 +53,7 @@ export const deleteParticularNotification = async (id) => {
     const response = await res.json();
 
     if (response?.code === 200) {
-      successMessage(response?.message, 1500);
+      successMessage(response?.message, 1000);
       return true;
     }
     response?.code === 403

@@ -4,12 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { PostCollectionDataTypes } from "../../types/types";
 import { DesktopNotification } from "../common/desktop-notification";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
+import { manageExtraSpace} from "../common/extra-space-management";
 import BaseCommonPart from "../page-builder/base";
 import { fetchUserProfile } from "../profile-section/helper/api-call";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import PostDataShowingContainer from "../post-prototype/post-showing-section";
 
 const HomePage = () => {
+  const {darkMode} = useSelector(state => state);
+
+  useEffect(() => {
+    manageExtraSpace(darkMode);
+  }, [darkMode])
 
   return (
     <BaseCommonPart>

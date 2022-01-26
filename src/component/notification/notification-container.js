@@ -57,7 +57,7 @@ const NotificationContainer = ({
     useState([]);
 
   return (
-    <div className="h-[92vh] bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor p-3">
+    <div className="h-screen bg-lightBgColor dark:bg-darkBgColor text-lightPostTextStyleColor dark:text-darkPostTextStyleColor p-3">
       <div className="h-full container mx-auto sm:px-6 md:px-24 lg:px-52 2xl:px-96 ">
         <div className="h-full bg-lightElevationColor dark:bg-darkElevationColor rounded-lg shadow-md  overflow-y-scroll scroller">
           {deletedNotificationIdContainer.length ===
@@ -107,15 +107,11 @@ const ParticularNotification = ({
   };
 
   const deleteNotification = async () => {
-    setparticularScreenLoading(true);
-
     (await deleteParticularNotification(notification.id)) &&
       setdeletedNotificationIdContainer([
         ...deletedNotificationIdContainer,
         notification.id,
       ]);
-
-    setparticularScreenLoading(false);
   };
 
   return (

@@ -105,8 +105,8 @@ const ConnectionTile = ({ user }) => {
         />
       </div>
       <div className="ml-4">
-        <p className="text-lg font-semibold">{user.name}</p>
-        <p className="text-sm opacity-60">
+        <p className="text-sm md:text-lg md:font-semibold">{user.name}</p>
+        <p className="hidden sm:block sm:text-sm opacity-60">
           {" "}
           {user.description.length > 45
             ? user.description.slice(0, 45) + "..."
