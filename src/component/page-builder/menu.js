@@ -92,7 +92,9 @@ const MenuCollection = ({ isMenuOpen }) => {
   };
 
   useEffect(() => {
-    socket.current = io(`ws://${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
+    console.log(`Socket Backend Root: ${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
+
+    socket.current = io(`${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
   }, []);
 
   useEffect(() => {

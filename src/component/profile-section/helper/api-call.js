@@ -38,7 +38,8 @@ export const isUserProfileCreatedBefore = async () => {
         authTokenResult.description !== data.description ||
         authTokenResult.profilePic !== data.profilePic
       ) {
-        console.log("Local storage Data updated");
+        console.log("Local storage Data updated: ");
+        console.log(data);
         storeDataInLocalStorage(
           token,
           user,

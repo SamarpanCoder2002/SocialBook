@@ -134,6 +134,7 @@ export const onSignOut = (hasPendingNotification, hasPendingChatMessage) => {
       }
     })
     .catch((err) => {
+      console.log(`Sign out Error: ${err}`)
       errorMessage("Server Error... Please Try After some time 😔");
     });
 };
