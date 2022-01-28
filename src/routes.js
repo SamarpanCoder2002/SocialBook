@@ -10,7 +10,6 @@ import { AuthenticatedDecider, EntryPointDecider } from "./decider";
 import SignUp from "./component/auth/signup";
 import PostScreen from "./component/post-prototype/post";
 import UserInformationTakingComponent from "./component/profile-section/take-user-information";
-import Waiting from "./component/common/waiting";
 
 const RoutesEntryPoint = () => {
   return (
@@ -48,9 +47,6 @@ const RoutesEntryPoint = () => {
           path="/messaging"
           element={AuthenticatedDecider(MessageComponent)}
         />
-
-        {/* // ** Temporary Component... Remove Later */}
-        <Route path="/testing" element={<Waiting />} />
 
         <Route
           path="/take-user-information"

@@ -1,0 +1,20 @@
+{
+  "short_name": "SocialBook",
+  "name": "A Social Media Application Powered by React, Designed by tailwind CSS and built with FERN stack helps you to Connect With People Globally and Share Your Thoughts with Enjoying Private Chat Messages.",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "500x500"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
