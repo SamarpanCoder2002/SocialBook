@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ChatMsgTypes, MessageHolder, SocketEvents } from "../../types/types";
 import BaseCommonPart from "../page-builder/base";
 import Linkify from "react-linkify/dist/components/Linkify";
@@ -14,13 +14,18 @@ import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
 import { manageExtraSpace } from "../common/extra-space-management";
+import {
+  isUserProfileCreatedBefore,
+  fetchUserProfile,
+} from "../profile-section/helper/api-call";
+import { UPDATE_USER_PROFILE } from "../../redux/actions";
 
 const MessageComponent = () => {
   const [chatConnectionCollections, setchatConnectionCollections] = useState(
     []
   );
   const [messages, setmessages] = useState([]);
-  const { darkMode, socket } = useSelector((state) => state);
+  const { darkMode, socket, name, user } = useSelector((state) => state);
   const [isEligibleToOpenChatBox, setisEligibleToOpenChatBox] = useState(0);
   const [clickedChatBoxId, setclickedChatBoxId] = useState(-1);
   const [isLoading, setisLoading] = useState(true);
@@ -28,14 +33,13 @@ const MessageComponent = () => {
   const location = useLocation();
   const partnerIdQuery = new URLSearchParams(location.search).get("partnerId");
   const [latestMessage, setlatestMessage] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     manageExtraSpace(darkMode);
-  }, [darkMode])
+  }, [darkMode]);
 
   useEffect(() => {
-    
-
     getAllChatConnections()
       .then(async (data) => {
         if (!data) return;
@@ -88,6 +92,24 @@ const MessageComponent = () => {
 
     setlatestMessage();
   }, [latestMessage, isEligibleToOpenChatBox]);
+
+  useEffect(() => {
+    if (name && name.length) return;
+
+    fetchUserProfile(user).then((data) => {
+      if (!data) return;
+      console.log("profile data when name not found: ", data);
+
+      dispatch({
+        type: UPDATE_USER_PROFILE,
+        payload: {
+          name: data?.name,
+          profilePic: data?.profilePic,
+          description: data?.description,
+        },
+      });
+    });
+  }, [name, dispatch, user]);
 
   return isLoading ? (
     <Waiting />
@@ -614,7 +636,9 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
               ? name
               : partnerData?.partnerName}
           </div>
-          <div className="hidden sm:block text-xs font-thin">{estimateDateTime}</div>
+          <div className="hidden sm:block text-xs font-thin">
+            {estimateDateTime}
+          </div>
         </div>
 
         {message.type === ChatMsgTypes.text ? (

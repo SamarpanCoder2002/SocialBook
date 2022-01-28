@@ -30,7 +30,6 @@ export const onGoogleLogInSuccess = (response, setisLoading) => {
         const { token, user } = data;
         storeDataInLocalStorage(token, user);
 
-        
         setTimeout(() => {
           window.location.replace("/take-user-information");
         }, 1000);
@@ -134,7 +133,7 @@ export const onSignOut = (hasPendingNotification, hasPendingChatMessage) => {
       }
     })
     .catch((err) => {
-      console.log(`Sign out Error: ${err}`)
+      console.log(`Sign out Error: ${err}`);
       errorMessage("Server Error... Please Try After some time 😔");
     });
 };
@@ -144,37 +143,41 @@ const storeSecondaryData = (
   hasPendingNotification,
   hasPendingChatMessage
 ) => {
-  /// ** For Notification remainder data delete
-  let oldStoredData = localStorage.getItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
-  );
+  try {
+    /// ** For Notification remainder data delete
+    let oldStoredData = localStorage.getItem(
+      process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
+    )
 
-  if (!oldStoredData) oldStoredData = {};
-  else oldStoredData = JSON.parse(oldStoredData);
+    if (!oldStoredData) oldStoredData = {};
+    else oldStoredData = JSON.parse(oldStoredData);
 
-  oldStoredData[user] = hasPendingNotification;
+    oldStoredData[user] = hasPendingNotification;
 
-  localStorage.setItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY,
-    JSON.stringify(oldStoredData)
-  );
+    localStorage.setItem(
+      process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY,
+      JSON.stringify(oldStoredData)
+    );
 
-  /// ** For Msg reminder data store
-  let oldStoredMsgReminder = localStorage.getItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD
-  );
+    /// ** For Msg reminder data store
+    let oldStoredMsgReminder = localStorage.getItem(
+      process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD
+    );
 
-  if (!oldStoredMsgReminder) oldStoredMsgReminder = {};
-  else oldStoredData = JSON.parse(oldStoredMsgReminder);
+    if (!oldStoredMsgReminder) oldStoredMsgReminder = {};
+    else oldStoredMsgReminder = JSON.parse(oldStoredMsgReminder);
 
-  oldStoredMsgReminder[user] = hasPendingChatMessage;
+    oldStoredMsgReminder[user] = hasPendingChatMessage;
 
-  localStorage.setItem(
-    process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD,
-    JSON.stringify(oldStoredMsgReminder)
-  );
+    localStorage.setItem(
+      process.env.REACT_APP_SOCIAL_BOOK_TOKEN_THIRD,
+      JSON.stringify(oldStoredMsgReminder)
+    );
 
-  /// ** Remove Active Token
-  localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
-  window.location.href = "/landing-with-signin";
+    /// ** Remove Active Token
+    localStorage.removeItem(process.env.REACT_APP_SOCIAL_BOOK_TOKEN);
+    window.location.href = "/landing-with-signin";
+  } catch (err) {
+    console.log(err);
+  }
 };
