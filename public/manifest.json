@@ -4,16 +4,16 @@
   "icons": [
     {
       "src": "logo.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "400x400",
       "type": "image/x-icon"
     },
     {
       "src": "logo.png",
       "type": "image/png",
-      "sizes": "500x500"
+      "sizes": "400x400"
     }
   ],
-  "start_url": ".",
+  "start_url": "/feed",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
