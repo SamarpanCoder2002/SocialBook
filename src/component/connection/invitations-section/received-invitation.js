@@ -50,9 +50,8 @@ const ReceivedInvitation = () => {
           if (receivedInvitationIds.includes(user.id))
             return <Fragment key={index}></Fragment>;
           return (
-            <div ref={setLastElement}>
+            <div ref={setLastElement} key={index}>
               <ConnectionCollectionItem
-                key={index}
                 user={user}
                 connectionType={ConnectionType.RequestReceived}
                 setCollectiveIds={setreceivedInvitationIds}

@@ -47,9 +47,8 @@ const AllUsersCollection = () => {
         if (requestSentConnectionsIds.includes(user.id))
           return <Fragment key={index}></Fragment>;
         return (
-          <div ref={setLastElement}>
+          <div ref={setLastElement} key={index}>
             <ProfileCard
-              key={index}
               user={user}
               setrequestSentConnectionsIds={setrequestSentConnectionsIds}
             />

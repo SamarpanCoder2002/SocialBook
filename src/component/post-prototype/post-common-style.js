@@ -15,6 +15,7 @@ import NoProfilePic from "../../image/no_profile_picture.png";
 import { insertPostComment, insertPostLove } from "./helper/api_call";
 import { infoMessage } from "../common/desktop-notification";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
+import { useSelector } from "react-redux";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
   return (
@@ -222,17 +223,20 @@ const PostMiddleSection = ({ postData }) => {
 const CommentCollection = ({ postData }) => {
   const [comments, setcomments] = useState(postData?.engagement.comments || []);
   const [commentText, setcommentText] = useState("");
+  const { name, description, profilePic, user } = useSelector((state) => state);
+  const navigate = useNavigate();
 
   const onEnterOnCommentSection = () => {
     if (!commentText || !commentText.length) return;
 
-    const storedData = getDataFromLocalStorage();
+    //const storedData = getDataFromLocalStorage();
     setcomments([
       {
+        uid: user,
         comment: commentText,
-        name: storedData?.name,
-        description: storedData.description,
-        profilePic: storedData?.profilePic,
+        name: name,
+        description: description,
+        profilePic: profilePic,
       },
       ...comments,
     ]);
@@ -274,7 +278,20 @@ const CommentCollection = ({ postData }) => {
               {/* Comment With User Details */}
               <div className="bg-lightBgColor dark:bg-darkBgColor mb-2 p-2 rounded-lg text-sm w-full">
                 {/* User Details */}
-                <div className="font-semibold">{comment.name}</div>
+                <div
+                  className="font-semibold hover:underline cursor-pointer"
+                  onClick={() =>
+                    navigate(`/${comment.uid}/profile`, {
+                      state: {
+                        name: comment.name,
+                        profilePic: comment.profilePic,
+                        description: comment.description,
+                      },
+                    })
+                  }
+                >
+                  {comment.name}
+                </div>
                 <div className="text-xs">{comment.description}</div>
 
                 {/* Post Comment  */}

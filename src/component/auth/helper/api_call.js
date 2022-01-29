@@ -68,7 +68,6 @@ export const onSignUp = (email, password, setisLoading) => {
           window.location.href = "/landing-with-signin";
         }, 8000);
       } else {
-        console.log(data.error);
         errorMessage(data.error, 10000);
       }
     })
@@ -147,7 +146,7 @@ const storeSecondaryData = (
     /// ** For Notification remainder data delete
     let oldStoredData = localStorage.getItem(
       process.env.REACT_APP_SOCIAL_BOOK_TOKEN_SECONDARY
-    )
+    );
 
     if (!oldStoredData) oldStoredData = {};
     else oldStoredData = JSON.parse(oldStoredData);

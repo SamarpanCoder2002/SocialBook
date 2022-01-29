@@ -106,7 +106,6 @@ const MiddleSidePostWritingSection = ({ settextContent, textContent }) => {
       style={{ minHeight: "200px" }}
       onChange={(e) => {
         settextContent(e.target.value);
-        console.log(textContent);
       }}
     ></textarea>
   );
@@ -175,8 +174,6 @@ const PictureSection = ({ maxFiles, setmediaContentInformation }) => {
 
   const updateFiles = (incommingFiles) => {
     setFiles(incommingFiles);
-
-    console.log(incommingFiles);
 
     setmediaContentInformation({
       mediaType: PostTypes.Image,
@@ -349,7 +346,10 @@ const CreatePostButtonComponent = ({
   const navigate = useNavigate();
 
   const handleMakePost = async () => {
-    const formattedPostTextData = textContent.toString().split("\n").join("<br/>");
+    const formattedPostTextData = textContent
+      .toString()
+      .split("\n")
+      .join("<br/>");
 
     if (mediaContentInformation.mediaType === PostTypes.Text) {
       if (!textContent || textContent.length === 0) return;
@@ -450,8 +450,6 @@ const CreateSlide = ({ setmediaContentInformation }) => {
                     setpostData([...postData]);
 
                     setshowImgUploadBtn(false);
-
-                    console.log(postData);
 
                     setmediaContentInformation({
                       mediaType: PostTypes.Slide,
@@ -573,8 +571,6 @@ const SliderTextSection = ({
           /// Add Changed text in postData
           postData[index].text = e.target.value;
           setpostData([...postData]);
-
-          console.log(postData);
 
           setmediaContentInformation({
             mediaType: PostTypes.Slide,

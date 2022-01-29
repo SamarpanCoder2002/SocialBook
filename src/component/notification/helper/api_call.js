@@ -26,7 +26,6 @@ export const fetchAllNotifications = async () => {
 
     return [];
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -62,7 +61,6 @@ export const deleteParticularNotification = async (id) => {
 
     return false;
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000

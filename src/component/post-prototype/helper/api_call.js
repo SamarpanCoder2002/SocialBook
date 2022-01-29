@@ -11,8 +11,6 @@ export const makeTextPost = async (text) => {
   try {
     const storedData = getDataFromLocalStorage();
 
-    console.log("At call text: ", text);
-
     const res = await fetch(`${API}/createTextPost/${storedData?.user}`, {
       method: "POST",
       headers: {
@@ -26,7 +24,6 @@ export const makeTextPost = async (text) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -52,7 +49,6 @@ export const makeVideoPost = async (text, video) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -78,7 +74,6 @@ export const makeDocumentPost = async (text, pdfSrc) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -105,7 +100,6 @@ export const makePollPost = async (text, question, options) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -115,8 +109,6 @@ export const makePollPost = async (text, question, options) => {
 
 export const makeImagePost = async (text, imagesCollection) => {
   try {
-    console.log(imagesCollection);
-
     const storedData = getDataFromLocalStorage();
 
     const postData = new FormData();
@@ -135,7 +127,6 @@ export const makeImagePost = async (text, imagesCollection) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -168,7 +159,6 @@ export const makeSlidePost = async (text, sliderCollection) => {
 
     await apiCallCommonPart(res);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -200,7 +190,6 @@ export const updatePollData = async (newPollData, postId) => {
       return;
     }
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -228,7 +217,6 @@ export const insertPostLove = async (postId) => {
       return;
     }
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -262,7 +250,6 @@ export const insertPostComment = async (postId, comment) => {
       return;
     }
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -288,12 +275,9 @@ export const getParticularPost = async (postId) => {
     }
 
     const data = await res.json();
-    
-    console.log("Data is: ", data);
 
     return data.data;
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000

@@ -1,8 +1,5 @@
 import { API } from "../../common/backend";
-import {
-  errorMessage,
-  infoMessage,
-} from "../../common/desktop-notification";
+import { errorMessage, infoMessage } from "../../common/desktop-notification";
 import { getDataFromLocalStorage } from "../../common/local-storage-management";
 
 export const fetchAllAvailableUsers = async (page) => {
@@ -22,15 +19,12 @@ export const fetchAllAvailableUsers = async (page) => {
 
     const response = await res.json();
 
-    console.log(response);
-
     if (response?.code === 200) return response.data;
     if (response?.code === 403) return errorMessage(response?.message);
     errorMessage(response?.message);
 
     return [];
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -56,16 +50,11 @@ export const fetchAllSpecificRequestedUsers = async (page, connectionType) => {
 
     const response = await res.json();
 
-    console.log(response);
-
-    console.log("Checking it");
-
     if (response?.code === 200) return response.data;
     if (response?.code === 403) infoMessage(response?.message);
 
     return [];
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000
@@ -93,9 +82,7 @@ export const connectionSpecificOperations = async (
     });
 
     const response = await res.json();
-    console.log(response);
   } catch (err) {
-    console.log(err);
     errorMessage(
       "Some error happened... Make sure your internet connection is stable",
       10000

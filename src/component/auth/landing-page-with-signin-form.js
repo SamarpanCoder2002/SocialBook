@@ -139,7 +139,7 @@ const MiddleRightSection = ({ setisLoading, isLoading }) => {
                   if (email !== "" && password !== "") {
                     setisLoading(true);
 
-                    console.log(email, password);
+                    
                     onSignIn(email, password, setisLoading);
                   } else {
                     infoMessage("Please fill all the fields");

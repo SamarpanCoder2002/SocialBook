@@ -18,8 +18,6 @@ export const isUserProfileCreatedBefore = async () => {
     if (!authTokenResult) return authTokenResult;
     const { token, user } = authTokenResult;
 
-    console.log("user is: ", user);
-
     const res = await fetch(`${API}/isUserPresent/${user}`, {
       method: "GET",
       headers: {
@@ -30,16 +28,12 @@ export const isUserProfileCreatedBefore = async () => {
 
     const data = await res.json();
 
-    console.log("checking: ", data);
-
     if (data.code === 200) {
       if (
         authTokenResult.name !== data.name ||
         authTokenResult.description !== data.description ||
         authTokenResult.profilePic !== data.profilePic
       ) {
-        console.log("Local storage Data updated: ");
-        console.log(data);
         storeDataInLocalStorage(
           token,
           user,
@@ -47,9 +41,7 @@ export const isUserProfileCreatedBefore = async () => {
           data?.description,
           data?.profilePic
         );
-      } else {
-        console.log("no need to update local storage");
-      }
+      } 
 
       return true;
     } else {
@@ -61,8 +53,6 @@ export const isUserProfileCreatedBefore = async () => {
       return false;
     }
   } catch (err) {
-    console.log("Error is: ", err);
-
     alert(
       "Some Error Happened. Make Sure Your Network Connection is Stable",
       10000
@@ -119,7 +109,6 @@ export const createUserProfile = async (
       }, 1800);
     })
     .catch((e) => {
-      console.log(e);
       errorMessage(
         "Error In Create Your Profile... Please Try Later 😔",
         10000
@@ -162,7 +151,7 @@ export const updateUserProfile = async (
 
       const { name, description, profilePic } = data;
       successMessage(data.message, 1000);
-      
+
       dispatch({
         type: UPDATE_USER_PROFILE,
         payload: {
@@ -171,7 +160,6 @@ export const updateUserProfile = async (
           profilePic,
         },
       });
-      
 
       setTimeout(() => {
         setisLoading(false);
@@ -202,7 +190,6 @@ export const fetchUserProfile = async (userId) => {
       return;
     }
   } catch (e) {
-    console.log(e);
     return;
   }
 };
@@ -230,7 +217,6 @@ export const particularUserConnectionStatus = async (queryUserId) => {
 
     return data.status;
   } catch (e) {
-    console.log(e);
     return;
   }
 };

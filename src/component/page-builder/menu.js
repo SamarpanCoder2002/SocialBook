@@ -92,8 +92,6 @@ const MenuCollection = ({ isMenuOpen }) => {
   };
 
   useEffect(() => {
-    console.log(`Socket Backend Root: ${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
-
     socket.current = io(`${process.env.REACT_APP_SOCKET_BACKEND_ROOT}`);
   }, []);
 
@@ -103,9 +101,7 @@ const MenuCollection = ({ isMenuOpen }) => {
 
   useEffect(() => {
     socket.current.emit(SocketEvents.addUser, user);
-    socket.current.on(SocketEvents.getUsers, (users) => {
-      console.log(users);
-    });
+    // socket.current.on(SocketEvents.getUsers, (users) => {});
 
     socket.current.emit(SocketEvents.realTimeNotification, {
       userId: user,

@@ -29,7 +29,7 @@ export const fetchFeedPosts = async (page, mainRoot, desiredProfileId) => {
       return data.code === 200 && data.data;
     }
   } catch (error) {
-    console.log("error in fetchFeedPosts", error);
+    
     errorMessage("Something went wrong");
     return [];
   }

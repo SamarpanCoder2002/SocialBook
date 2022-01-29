@@ -28,7 +28,6 @@ const ConnectedUsers = () => {
 
 const SearchBar = ({ setsearchArgument }) => {
   const handleChange = (e) => {
-    console.log(e.target.value);
     setsearchArgument(e.target.value);
   };
 
@@ -88,7 +87,6 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
   useEffect(() => {
     fetchAllSpecificRequestedUsers(page, ConnectionType.AlreadyConnected).then(
       (data) => {
-        console.log("data: ", data);
         setconnectedUsersCollection((prev) => [...prev, ...data]);
         setisLoading(false);
       }
@@ -110,13 +108,12 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
           if (removedConnectionIds.includes(user.id))
             return <Fragment key={index}></Fragment>;
           return (
-            <div ref={setLastElement}>
-            <ConnectionCollectionItem
-              key={index}
-              user={user}
-              connectionType={ConnectionType.AlreadyConnected}
-              setCollectiveIds={setremovedConnectionIds}
-            />
+            <div ref={setLastElement} key={index}>
+              <ConnectionCollectionItem
+                user={user}
+                connectionType={ConnectionType.AlreadyConnected}
+                setCollectiveIds={setremovedConnectionIds}
+              />
             </div>
           );
         })) || (
@@ -130,7 +127,6 @@ const ConnectedUsersList = ({ searchArgument, isLoading, setisLoading }) => {
           </div>
         </h1>
       )}
-      
     </div>
   );
 };

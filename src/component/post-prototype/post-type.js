@@ -207,7 +207,7 @@ export const PollPost = ({ postData }) => {
           theme={customTheme}
           open={false}
           onVote={() => {
-            console.log("on vote");
+            
             if (!postData.voterIds?.includes(storedData?.user))
               vote(null, postData.content?.prevResults);
             else {

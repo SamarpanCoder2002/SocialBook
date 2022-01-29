@@ -14,10 +14,7 @@ import NoProfilePic from "../../image/no_profile_picture.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import Waiting from "../common/waiting";
 import { manageExtraSpace } from "../common/extra-space-management";
-import {
-  isUserProfileCreatedBefore,
-  fetchUserProfile,
-} from "../profile-section/helper/api-call";
+import { fetchUserProfile } from "../profile-section/helper/api-call";
 import { UPDATE_USER_PROFILE } from "../../redux/actions";
 
 const MessageComponent = () => {
@@ -43,7 +40,6 @@ const MessageComponent = () => {
     getAllChatConnections()
       .then(async (data) => {
         if (!data) return;
-        console.log("profile data: ", data);
 
         setchatConnectionCollections(data);
 
@@ -98,7 +94,6 @@ const MessageComponent = () => {
 
     fetchUserProfile(user).then((data) => {
       if (!data) return;
-      console.log("profile data when name not found: ", data);
 
       dispatch({
         type: UPDATE_USER_PROFILE,
@@ -613,10 +608,10 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
         <div className="w-12 h-12 rounded-full overflow-hidden">
           <img
             src={
-              message.holder === MessageHolder.currentUser ||
+              (message.holder === MessageHolder.currentUser ||
               message.holder === user
                 ? profilePic
-                : partnerData?.partnerProfilePic
+                : partnerData?.partnerProfilePic) || NoProfilePic
             }
             alt={`${
               message.holder === MessageHolder.currentUser ||

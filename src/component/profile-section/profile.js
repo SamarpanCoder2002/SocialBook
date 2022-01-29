@@ -58,7 +58,7 @@ const ProfileSection = () => {
         });
       })
       .catch((e) => {
-        console.log("Error in fetch user profile in profile screen ", e);
+        
       });
   }, [state]);
 

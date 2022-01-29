@@ -20,11 +20,9 @@ const ParticularPostShowcase = () => {
         if (!data) return;
         setpostData(data);
 
-        console.log("now gere");
         setisLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setisLoading(false);
       });
   }, [postId, state]);

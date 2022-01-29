@@ -86,8 +86,6 @@ export const sendMessageToSpecificConnection = async (
 
   const data = await res.json();
 
-  console.log(data);
-
   if (data.code !== 200) {
     errorMessage(data.message, 10000);
     return;
@@ -96,16 +94,19 @@ export const sendMessageToSpecificConnection = async (
   return data.data;
 };
 
-export const getAllChatHistoryMessages = async(chatBoxId) => {
+export const getAllChatHistoryMessages = async (chatBoxId) => {
   const { token, user } = getDataFromLocalStorage();
 
-  const res = await fetch(`${API}/messaging/getAllChatMessages/${user}/${chatBoxId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${API}/messaging/getAllChatMessages/${user}/${chatBoxId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   const data = await res.json();
 
@@ -115,7 +116,7 @@ export const getAllChatHistoryMessages = async(chatBoxId) => {
   }
 
   return data.data;
-}
+};
 
 export const getPendingChatMessages = async () => {
   const { token, user } = getDataFromLocalStorage();
@@ -136,18 +137,21 @@ export const getPendingChatMessages = async () => {
   }
 
   return data.pendingMessages;
-}
+};
 
 export const removePendingChatMessages = async (chatBoxId) => {
   const { token, user } = getDataFromLocalStorage();
 
-  const res = await fetch(`${API}/messaging/deletePendingMessage/${user}/${chatBoxId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${API}/messaging/deletePendingMessage/${user}/${chatBoxId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   const data = await res.json();
 
@@ -157,4 +161,4 @@ export const removePendingChatMessages = async (chatBoxId) => {
   }
 
   return data.code;
-}
+};

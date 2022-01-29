@@ -35,8 +35,13 @@ const PostDataShowingContainer = ({
         setisLoading(false);
         return;
       }
+
       setpostDataCollection((prev) => [...prev, ...data]);
       setisLoading(false);
+
+      return () => {
+        observer.current.disconnect();
+      };
     });
   }, [page]);
 
@@ -60,8 +65,8 @@ const PostDataShowingContainer = ({
       )}
 
       {/* Data Show Section */}
-      {!isLoading && postDataCollection.length > 0?
-        (postDataCollection.map((feedData, index) => {
+      {!isLoading && postDataCollection.length > 0 ? (
+        postDataCollection.map((feedData, index) => {
           if (
             postCollectionDataTypes ===
             PostCollectionDataTypes.particularAccPostData
@@ -89,11 +94,14 @@ const PostDataShowingContainer = ({
               allowCommentSection={false}
             />
           );
-        })) : (<div>
+        })
+      ) : (
+        <div>
           <h1 className="text-xl font-semibold text-blue-400 my-5 text-center">
             No Posts Found
           </h1>
-        </div>)}
+        </div>
+      )}
 
       {/* Post Found Based on Pagination */}
       {!isLoading && (
