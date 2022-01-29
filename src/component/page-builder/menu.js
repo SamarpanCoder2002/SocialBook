@@ -16,6 +16,7 @@ import { addPendingMessages } from "./helper/api_call";
 
 const MenuComponent = ({ isLoading }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false);
+
   return (
     <nav
       id="nav"

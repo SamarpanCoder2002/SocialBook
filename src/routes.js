@@ -10,6 +10,7 @@ import { AuthenticatedDecider, EntryPointDecider } from "./decider";
 import SignUp from "./component/auth/signup";
 import PostScreen from "./component/post-prototype/post";
 import UserInformationTakingComponent from "./component/profile-section/take-user-information";
+import { EdgeScreenComponent } from "./edge-screen";
 
 const RoutesEntryPoint = () => {
   return (
@@ -50,12 +51,26 @@ const RoutesEntryPoint = () => {
 
         <Route
           path="/take-user-information"
-          element={AuthenticatedDecider(UserInformationTakingComponent, "/take-user-information")}
+          element={AuthenticatedDecider(
+            UserInformationTakingComponent,
+            "/take-user-information"
+          )}
         />
 
-        <Route path="/update-user-information" element={AuthenticatedDecider(UserInformationTakingComponent)} />
+        <Route
+          path="/update-user-information"
+          element={AuthenticatedDecider(UserInformationTakingComponent)}
+        />
 
-        <Route path="*" element={() => <div>404</div>} />
+        <Route
+          path="*"
+          element={
+            <EdgeScreenComponent
+              title={"404 Error"}
+              subtitle={"This page is not available."}
+            />
+          }
+        />
       </Routes>
     </Router>
   );

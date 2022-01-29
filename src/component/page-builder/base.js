@@ -3,20 +3,15 @@ import { DesktopNotification } from "../common/desktop-notification";
 import MenuComponent from "./menu";
 
 const BaseCommonPart = ({ children, isLoading }) => {
-  const {darkMode} = useSelector(state => state);
+  const { darkMode } = useSelector((state) => state);
 
   return (
-    <div className={darkMode?"dark":""}>
-     
+    <div className={darkMode ? "dark" : ""}>
       <MenuComponent isLoading={isLoading} />
 
-    
       {children}
 
       <DesktopNotification />
-
-
-      
     </div>
   );
 };

@@ -1,6 +1,4 @@
-import { Navigate } from "react-router-dom";
 import { UPDATE_USER_PROFILE } from "../../../redux/actions";
-import { ConnectionType } from "../../../types/types";
 import { onSignOut } from "../../auth/helper/api_call";
 import { API } from "../../common/backend";
 import {

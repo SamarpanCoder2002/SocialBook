@@ -628,7 +628,7 @@ const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
           <div className="font-semibold text-sm md:text-md tracking-wider">
             {message.holder === MessageHolder.currentUser ||
             message.holder === user
-              ? name
+              ? "You"
               : partnerData?.partnerName}
           </div>
           <div className="hidden sm:block text-xs font-thin">
