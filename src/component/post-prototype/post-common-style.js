@@ -1,4 +1,4 @@
-import { PostTypes } from "../../types/types";
+import { ChatMsgTypes, PostTypes, SocketEvents } from "../../types/types";
 import {
   ImagePost,
   PdfPost,
@@ -10,12 +10,18 @@ import {
 import Linkify from "react-linkify";
 import ShowMoreText from "react-show-more-text";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import NoProfilePic from "../../image/no_profile_picture.png";
 import { insertPostComment, insertPostLove } from "./helper/api_call";
-import { infoMessage } from "../common/desktop-notification";
+import { infoMessage, successMessage } from "../common/desktop-notification";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllChatConnections,
+  sendMessageToSpecificConnection,
+} from "../messaging-section/helper/api_call";
+import { START_LOADING, STOP_LOADING } from "../../redux/actions";
+import LoadingBar from "../loading/loadingbar";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
   return (
@@ -97,6 +103,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
   const { user } = getDataFromLocalStorage();
 
   const [likes, setlikes] = useState(postData.engagement.likes);
+  const [showModal, setshowModal] = useState(false);
   const comments = postData.engagement.comments;
 
   const loveReactToPost = () => {
@@ -190,11 +197,13 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
           </button>
         </div> */}
         <div>
-          <button>
+          <button onClick={() => setshowModal(true)}>
             <i className="far fa-paper-plane fa-lg"></i>
             <span className="pl-2 font-semibold">Send</span>
           </button>
         </div>
+
+        {showModal && <Modal setshowModal={setshowModal} postData={postData} />}
       </div>
 
       {allowCommentSection && <CommentCollection postData={postData} />}
@@ -313,6 +322,164 @@ const CommentCollection = ({ postData }) => {
             </div>
           );
         })}
+    </div>
+  );
+};
+
+const Modal = ({ setshowModal, postData }) => {
+  const [chatConnections, setchatConnections] = useState([]);
+  const { socket, user } = useSelector((state) => state);
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    if (chatConnections && chatConnections.length) return;
+
+    getAllChatConnections().then((data) => {
+      if (!data) return;
+
+      data.forEach((connection) => {
+        setchatConnections((prev) => [
+          ...prev,
+          { ...connection, checked: false },
+        ]);
+      });
+    });
+  }, []);
+
+  const sendPostMessage = () => {
+    const newConnections = [...chatConnections];
+    const checkedConnections = newConnections.filter(
+      (connection) => connection.checked
+    );
+
+    if (!checkedConnections.length) return;
+
+    setisLoading(true);
+
+    for (let index in checkedConnections) {
+      const { partnerId, chatBoxId } = checkedConnections[index];
+
+      sendMessageToSpecificConnection(
+        partnerId,
+        `${window.location.origin}/post/${postData.postId}`,
+        chatBoxId,
+        ChatMsgTypes.text
+      );
+
+      socket.emit(SocketEvents.sendChatMessage, {
+        chatBoxId: chatBoxId,
+        receiverId: partnerId,
+        senderId: user,
+        message: `${window.location.origin}/post/${postData.postId}`,
+        type: ChatMsgTypes.text,
+        time: Date.now(),
+      });
+    }
+
+    setTimeout(() => {
+      setisLoading(false);
+      setshowModal(false);
+      successMessage("Post Send to Connections", 1200);
+    }, 4000);
+  };
+
+  return (
+    <>
+      <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none m-4 md:m-0">
+        <div className="relative w-1/2 lg:w-1/4 my-6 max-w-3xl">
+          {/*content*/}
+          <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-lightBgColor dark:bg-darkBgColor outline-none focus:outline-none">
+            {/*body*/}
+            <div>
+              <LoadingBar isLoading={isLoading} />
+            </div>
+            <div className="relative py-2 flex-auto max-h-[80vh] overflow-y-scroll scroller">
+              {chatConnections &&
+                chatConnections.map((profile, index) => {
+                  return (
+                    <ConnectedProfile
+                      profileConnection={profile}
+                      key={index}
+                      index={index}
+                      setchatConnections={setchatConnections}
+                      chatConnections={chatConnections}
+                    />
+                  );
+                })}
+            </div>
+            {/*footer*/}
+            {!isLoading && (
+              <div className="flex items-center justify-between p-3 rounded-b">
+                <button
+                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={() => setshowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-[#6DCC11] text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={sendPostMessage}
+                >
+                  Send
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+    </>
+  );
+};
+
+const ConnectedProfile = ({
+  profileConnection,
+  index,
+  setchatConnections,
+  chatConnections,
+}) => {
+  const { darkMode } = useSelector((state) => state);
+
+  const checkOrUncheckManagement = () => {
+    const newConnections = [...chatConnections];
+    newConnections[index].checked = !newConnections[index].checked;
+    setchatConnections(newConnections);
+  };
+
+  return (
+    <div
+      className={`${
+        darkMode ? "hover:bg-darkCardColor" : "hover:bg-lightCardColor"
+      } flex items-center mb-3 justify-between cursor-pointer px-2 py-1`}
+      onClick={checkOrUncheckManagement}
+    >
+      <div className="flex items-center">
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <img
+            src={profileConnection.partnerProfilePic || NoProfilePic}
+            alt="profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="ml-3">
+          <div className="text-md font-semibold dark:font-normal text-lightPostTextStyleColor dark:text-darkPostTextStyleColor">
+            {profileConnection.partnerName}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        {profileConnection.checked ? (
+          <i
+            className="far fa-check-circle fa-lg"
+            style={{ color: "#46F80C" }}
+          ></i>
+        ) : (
+          <i className="far fa-circle fa-lg"></i>
+        )}
+      </div>
     </div>
   );
 };

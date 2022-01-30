@@ -41,6 +41,8 @@ const MessageComponent = () => {
       .then(async (data) => {
         if (!data) return;
 
+        console.log("Data is: ", data);
+
         setchatConnectionCollections(data);
 
         const chatFilteredConnection = data.filter(
