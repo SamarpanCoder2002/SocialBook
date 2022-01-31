@@ -28,17 +28,17 @@ const HeaderSection = () => {
   return (
     <div className="p-2 flex justify-between pt-3">
       <div
-        className="text-xl px-2 py-1 font-semibold tracking-wider cursor-pointer"
+        className="text-xl px-2 pt-1 font-semibold tracking-wider cursor-pointer"
         onClick={() => {
           navigate("/feed");
         }}
       >
-        Socialbook
+        SocialBook
       </div>
 
       <div>
         <button
-          className="px-2 py-1 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
+          className="px-2 pt-1 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
           onClick={() => {
             navigate("/signup");
           }}
@@ -68,6 +68,7 @@ const MiddleLeftSection = () => {
 
       <div className="text-lg md:text-lg lg:text-xl mt-10">
         Connect With More People Frequently and Share Your Valuable Thoughts
+        With Enjoying Private Chat Messages
       </div>
     </div>
   );
@@ -97,7 +98,7 @@ const MiddleRightSection = ({ setisLoading, isLoading }) => {
             <input
               className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 bg-darkBgColor"
               type="email"
-              placeholder="mike@gmail.com"
+              placeholder="samarpan@gmail.com"
               required
               name="email"
               onChange={handleChange}
@@ -139,7 +140,6 @@ const MiddleRightSection = ({ setisLoading, isLoading }) => {
                   if (email !== "" && password !== "") {
                     setisLoading(true);
 
-                    
                     onSignIn(email, password, setisLoading);
                   } else {
                     infoMessage("Please fill all the fields");

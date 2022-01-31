@@ -20,12 +20,6 @@ import {
   WithDrawConnectionRequestButton,
 } from "../common/buttons";
 import {
-  errorMessage,
-  infoMessage,
-  successMessage,
-} from "../common/desktop-notification";
-import { getChatBoxId } from "../messaging-section/helper/api_call";
-import {
   onAcceptButtonClicked,
   onCancelButtonClicked,
   onConnectButtonClicked,
@@ -57,9 +51,7 @@ const ProfileSection = () => {
           profilePic: data?.profilePic || "",
         });
       })
-      .catch((e) => {
-        
-      });
+      .catch((e) => {});
   }, [state]);
 
   return (
@@ -95,7 +87,10 @@ const UserInformationContainer = ({ darkMode, userInformation }) => {
       <h1 className="text-xl font-semibold mt-3">{name}</h1>
       <h2 className="text-sm mt-3 text-center">{description}</h2>
 
-      <ProfileRelatedButtons darkMode={darkMode} />
+      <ProfileRelatedButtons
+        darkMode={darkMode}
+        userInformation={userInformation}
+      />
     </div>
   );
 };
@@ -129,7 +124,7 @@ const UserActivityContainer = ({ darkMode, userInformation }) => {
   );
 };
 
-const ProfileRelatedButtons = ({ darkMode }) => {
+const ProfileRelatedButtons = ({ darkMode, userInformation }) => {
   const { connectionId } = useParams();
   const profileData = getDataFromLocalStorage();
   const [connectionType, setconnectionType] = useState();
@@ -147,9 +142,11 @@ const ProfileRelatedButtons = ({ darkMode }) => {
   const handleOwnProfileEdit = () => {
     navigate("/update-user-information", {
       state: {
-        name: profileData?.name || "",
-        description: profileData?.description || "",
-        profilePic: profileData?.profilePic || "",
+        name: profileData?.name || userInformation?.name || "",
+        description:
+          profileData?.description || userInformation?.description || "",
+        profilePic:
+          profileData?.profilePic || userInformation?.profilePic || "",
       },
     });
   };
@@ -172,15 +169,15 @@ const ProfileRelatedButtons = ({ darkMode }) => {
         <ButtonsManagement
           darkMode={darkMode}
           connectionType={connectionType}
+          userInformation={userInformation}
         />
       </div>
     );
   }
 };
 
-const ButtonsManagement = ({ darkMode, connectionType }) => {
+const ButtonsManagement = ({ darkMode, connectionType, userInformation }) => {
   const { connectionId } = useParams();
-  const { state } = useLocation();
 
   if (connectionType === ConnectionType.AlreadyConnected) {
     return (
@@ -191,11 +188,10 @@ const ButtonsManagement = ({ darkMode, connectionType }) => {
           onClickOperation={() => {
             onMessageButtonClicked(
               connectionId,
-              state?.name || "",
-              state?.description || "",
-              state?.profilePic || ""
+              userInformation?.name || "",
+              userInformation?.description || "",
+              userInformation?.profilePic || ""
             );
-            makeReload();
           }}
         />
         <RemoveConnectionButton

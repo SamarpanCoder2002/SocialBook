@@ -77,7 +77,7 @@ const LeftProfileShortSection = () => {
       <div className="mt-1">
         <div className="flex flex-col justify-center items-center">
           <div className="text-center">
-            <h1 className="text-xl font-semibold">{name}</h1>
+            <h1 className="xl:text-lg 2xl:text-xl font-semibold">{name}</h1>
             <h2 className="text-sm mt-3">{description}</h2>
           </div>
         </div>

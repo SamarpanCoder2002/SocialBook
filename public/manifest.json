@@ -3,7 +3,7 @@
   "name": "SocialBook",
   "author": "Samarpan Dasgupta",
   "version": "1.0",
-  "description": "A Social Media Application Powered by FERN Stack.",
+  "description": "Connect With More People Frequently and Share Your Valuable Thoughts.",
   "icons": [
     {
       "src": "logo.png",
@@ -18,10 +18,11 @@
   ],
   "start_url": "/feed",
   "display": "standalone",
-  "theme_color": "#fff",
+  "theme_color": "#192428",
   "background_color": "#192428",
   "developer": {
     "name": "Samarpan Dasgupta",
     "url": "https://www.samarpandasgupta.com/"
-  }
+  },
+  "manifest_version": 3
 }
