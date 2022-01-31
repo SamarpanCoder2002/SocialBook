@@ -47,7 +47,7 @@ const HeaderSection = () => {
 
       <div>
         <button
-          className="px-2 pt-3 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
+          className="px-2 pt-2.5 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
           onClick={() => {
             navigate("/signup");
           }}
