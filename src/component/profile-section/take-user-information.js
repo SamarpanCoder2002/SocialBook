@@ -6,7 +6,7 @@ import {
 } from "../common/desktop-notification";
 import NoProfileImage from "../../image/no_profile_picture.png";
 import { createUserProfile, updateUserProfile } from "./helper/api-call";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 const UserInformationTakingComponent = () => {
