@@ -420,14 +420,14 @@ const Modal = ({ setshowModal, postData }) => {
             {!isLoading && (
               <div className="flex items-center justify-between p-3 rounded-b">
                 <button
-                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  className="text-red-500 background-transparent font-bold px-2 py-1 md:px-6 md:py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150  tracking-wider"
                   type="button"
                   onClick={() => setshowModal(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-[#6DCC11] text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  className="bg-[#15c429] text-white active:bg-emerald-600 font-bold text-sm px-2 py-1 md:px-6 md:py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 tracking-wider"
                   type="button"
                   onClick={sendPostMessage}
                 >

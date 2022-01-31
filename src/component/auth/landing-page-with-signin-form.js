@@ -7,6 +7,7 @@ import {
   infoMessage,
 } from "../common/desktop-notification";
 import LoadingBar from "../loading/loadingbar";
+import AppLogo from "../../image/logo.png";
 
 const LandingPageWithSignInFragment = () => {
   const [isLoading, setisLoading] = useState(false);
@@ -33,7 +34,15 @@ const HeaderSection = () => {
           navigate("/feed");
         }}
       >
-        SocialBook
+        <div className="flex">
+          <div>
+            <img src={AppLogo} alt="app logo" width={35} />
+          </div>
+          <div className="mt-1 ml-3">
+          SocialBook
+          </div>
+        </div>
+        
       </div>
 
       <div>
