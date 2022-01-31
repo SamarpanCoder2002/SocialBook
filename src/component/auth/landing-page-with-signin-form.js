@@ -14,7 +14,7 @@ const LandingPageWithSignInFragment = () => {
 
   return (
     <div className="h-screen dark">
-      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll">
+      <div className="dark:bg-darkBgColor dark:text-darkPostTextStyleColor h-full overflow-y-scroll scroller">
         <LoadingBar isLoading={isLoading} />
         <HeaderSection />
         <MiddleSection setisLoading={setisLoading} isLoading={isLoading} />
@@ -47,7 +47,7 @@ const HeaderSection = () => {
 
       <div>
         <button
-          className="px-2 pt-1 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
+          className="px-2 pt-3 rounded-lg mr-5 hover:bg-gray-800 transition-all duration-300"
           onClick={() => {
             navigate("/signup");
           }}
