@@ -39,7 +39,7 @@ export const isUserProfileCreatedBefore = async () => {
           data?.description,
           data?.profilePic
         );
-      } 
+      }
 
       return true;
     } else {
@@ -162,7 +162,7 @@ export const updateUserProfile = async (
       setTimeout(() => {
         setisLoading(false);
         window.location.replace("/feed");
-      }, 1000);
+      }, 800);
     });
 };
 

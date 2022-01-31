@@ -8,11 +8,13 @@ import Waiting from "../common/waiting";
 const ParticularPostShowcase = () => {
   const { postId } = useParams();
   const { state } = useLocation();
-  const [postData, setpostData] = useState(state?.postData);
+  
+
+  const [postData, setpostData] = useState(state && state.postData);
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-    if (state.postData) return;
+    if (state && state.postData) return;
     setisLoading(true);
 
     getParticularPost(postId)

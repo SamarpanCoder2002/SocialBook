@@ -15,13 +15,13 @@ import NoProfilePic from "../../image/no_profile_picture.png";
 import { insertPostComment, insertPostLove } from "./helper/api_call";
 import { infoMessage, successMessage } from "../common/desktop-notification";
 import { getDataFromLocalStorage } from "../common/local-storage-management";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   getAllChatConnections,
   sendMessageToSpecificConnection,
 } from "../messaging-section/helper/api_call";
-import { START_LOADING, STOP_LOADING } from "../../redux/actions";
 import LoadingBar from "../loading/loadingbar";
+import Waiting from "../common/waiting";
 
 const CommonPostStyle = ({ item, allowCommentSection }) => {
   return (
@@ -151,7 +151,7 @@ const PostLowerSection = ({ allowCommentSection, postData }) => {
                   });
               }}
             >
-              {comments.length} Comments
+              {comments.length} {comments.length > 1 ? " Comments" : " Comment"}
             </div>
           ) : (
             ""
@@ -376,11 +376,14 @@ const Modal = ({ setshowModal, postData }) => {
       });
     }
 
-    setTimeout(() => {
-      setisLoading(false);
-      setshowModal(false);
-      successMessage("Post Send to Connections", 1200);
-    }, 4000);
+    setTimeout(
+      () => {
+        setisLoading(false);
+        setshowModal(false);
+        successMessage("Post Send to Connections", 1200);
+      },
+      checkedConnections.length <= 4 ? 1000 * checkedConnections.length : 4000
+    );
   };
 
   return (
@@ -393,8 +396,9 @@ const Modal = ({ setshowModal, postData }) => {
             <div>
               <LoadingBar isLoading={isLoading} />
             </div>
-            <div className="relative py-2 flex-auto max-h-[80vh] overflow-y-scroll scroller">
-              {chatConnections &&
+            <div className="relative py-2 flex-auto min-h-[35vh] max-h-[70vh] overflow-y-scroll scroller">
+              {(chatConnections &&
+                chatConnections.length &&
                 chatConnections.map((profile, index) => {
                   return (
                     <ConnectedProfile
@@ -405,7 +409,12 @@ const Modal = ({ setshowModal, postData }) => {
                       chatConnections={chatConnections}
                     />
                   );
-                })}
+                })) || (
+                <Waiting
+                  showName={"Chat Connections Fetching"}
+                  largeScreenPadding="lg:px-20"
+                />
+              )}
             </div>
             {/*footer*/}
             {!isLoading && (
@@ -456,7 +465,7 @@ const ConnectedProfile = ({
       onClick={checkOrUncheckManagement}
     >
       <div className="flex items-center">
-        <div className="w-12 h-12 rounded-full overflow-hidden">
+        <div className="w-12 h-12 rounded-full overflow-hidden bg-lightCardColor dark:bg-darkCardColor">
           <img
             src={profileConnection.partnerProfilePic || NoProfilePic}
             alt="profile"

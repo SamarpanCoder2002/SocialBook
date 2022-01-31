@@ -41,8 +41,6 @@ const MessageComponent = () => {
       .then(async (data) => {
         if (!data) return;
 
-        console.log("Data is: ", data);
-
         setchatConnectionCollections(data);
 
         const chatFilteredConnection = data.filter(
@@ -593,7 +591,7 @@ const ChatMessagesCollection = ({ messages, messagesEndRef, partnerData }) => {
 };
 
 const CommonMessageFormat = ({ message, messagesEndRef, partnerData }) => {
-  const { name, profilePic, user } = useSelector((state) => state);
+  const { profilePic, user } = useSelector((state) => state);
 
   const estimateDateTime = new Date(message?.time).toLocaleString("en-US", {
     weekday: "short", // long, short, narrow

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Waiting from "../common/waiting";
@@ -68,7 +68,7 @@ const NotificationContainer = ({
               return deletedNotificationIdContainer?.includes(
                 notification.id
               ) ? (
-                <></>
+                <Fragment key={index}></Fragment>
               ) : (
                 <ParticularNotification
                   notification={notification}

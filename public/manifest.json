@@ -1,6 +1,9 @@
 {
   "short_name": "SocialBook",
-  "name": "A Social Media Application Powered by React, Designed by tailwind CSS and built with FERN stack helps you to Connect With People Globally and Share Your Thoughts with Enjoying Private Chat Messages.",
+  "name": "SocialBook",
+  "author": "Samarpan Dasgupta",
+  "version": "1.0",
+  "description": "A Social Media Application Powered by FERN Stack.",
   "icons": [
     {
       "src": "logo.png",
@@ -15,6 +18,10 @@
   ],
   "start_url": "/feed",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#fff",
+  "background_color": "#192428",
+  "developer": {
+    "name": "Samarpan Dasgupta",
+    "url": "https://www.samarpandasgupta.com/"
+  }
 }
