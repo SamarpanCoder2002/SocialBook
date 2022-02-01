@@ -2,6 +2,13 @@
 
 ![socialbook-landing-page](https://user-images.githubusercontent.com/66327336/151983119-1fb5b9cf-2398-450d-a922-9749078c3b5f.png)
 
+![feed](https://user-images.githubusercontent.com/66327336/151984123-5940e9fa-8717-47b9-908c-2bd1f9715a0a.png)
+
+![chat](https://user-images.githubusercontent.com/66327336/151984136-da8ad6b8-eb48-4b9a-9d8b-6055bf699c26.png)
+
+
+![connection screen](https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
