@@ -1,5 +1,8 @@
 # Getting Started with Create React App
 
+![socialbook-landing-page](https://user-images.githubusercontent.com/66327336/151983119-1fb5b9cf-2398-450d-a922-9749078c3b5f.png)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
