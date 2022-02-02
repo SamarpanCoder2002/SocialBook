@@ -6,9 +6,9 @@
 ![socialbook-landing-page](https://user-images.githubusercontent.com/66327336/151983119-1fb5b9cf-2398-450d-a922-9749078c3b5f.png)
 
 <p>
-    <img src="https://user-images.githubusercontent.com/66327336/151984123-5940e9fa-8717-47b9-908c-2bd1f9715a0a.png" alt="feed-pic" width="500" />
-    <img src="https://user-images.githubusercontent.com/66327336/151984136-da8ad6b8-eb48-4b9a-9d8b-6055bf699c26.png" alt="chat-section-pic" width="500" />
-    <img src="https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png" alt="connection-screen-pic" width="500" />
+    <img src="https://user-images.githubusercontent.com/66327336/151984123-5940e9fa-8717-47b9-908c-2bd1f9715a0a.png" alt="feed-pic" />
+    <img src="https://user-images.githubusercontent.com/66327336/151984136-da8ad6b8-eb48-4b9a-9d8b-6055bf699c26.png" alt="chat-section-pic" />
+    <img src="https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png" alt="connection-screen-pic" />
 </p>
 
 # Getting Started with Create React App
