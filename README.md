@@ -1,14 +1,17 @@
-# Getting Started with Create React App
+<h1 align="center">Introducing SocialBook</h1>
+<h3 align="center">A Social Media Application made with 💖 by FERN Stack</h3>
+<h3 align="center">Connect With More People Frequently and Share Your Valuable Thoughts With Enjoying Private Chat Messages.</p>
+
 
 ![socialbook-landing-page](https://user-images.githubusercontent.com/66327336/151983119-1fb5b9cf-2398-450d-a922-9749078c3b5f.png)
 
-![feed](https://user-images.githubusercontent.com/66327336/151984123-5940e9fa-8717-47b9-908c-2bd1f9715a0a.png)
+<p>
+    <img src="https://user-images.githubusercontent.com/66327336/151984123-5940e9fa-8717-47b9-908c-2bd1f9715a0a.png" alt="feed-pic" width="500" />
+    <img src="https://user-images.githubusercontent.com/66327336/151984136-da8ad6b8-eb48-4b9a-9d8b-6055bf699c26.png" alt="chat-section-pic" width="500" />
+    <img src="https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png" alt="connection-screen-pic" width="500" />
+</p>
 
-![chat](https://user-images.githubusercontent.com/66327336/151984136-da8ad6b8-eb48-4b9a-9d8b-6055bf699c26.png)
-
-
-![connection screen](https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png)
-
+# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
