@@ -2,7 +2,6 @@
 <h3 align="center">A Social Media Application made with 💖 by FERN Stack</h3>
 <h3 align="center">Connect With More People Frequently and Share Your Valuable Thoughts With Enjoying Private Chat Messages.</p>
 
-
 ![socialbook-landing-page](https://user-images.githubusercontent.com/66327336/151983119-1fb5b9cf-2398-450d-a922-9749078c3b5f.png)
 
 <p>
@@ -11,73 +10,47 @@
     <img src="https://user-images.githubusercontent.com/66327336/151984249-8537cff2-be33-49fa-9cc9-7c68809716b1.png" alt="connection-screen-pic" />
 </p>
 
-# Getting Started with Create React App
+### [<p align="center"> See the Video Demo of that Website</p>](https://youtu.be/Dhf0oTQDP-0)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h3>👉 Features Added:-</h3>
+<ul>
+<li>Google Sign in</li>
+<li>Email and Password Authentication</li>
+<li>Create and Update Account with Profile Pic, Name, Description</li>
+<li>Create Post with Text, Image, Youtube Video, Website or Document Live Share, Slide and Poll</li>
+<li>Love, Comment, Share The Post</li>
+<li>Infinite Scroll in Many Screens</li>
+<li>Connection Request Sent, Accept, Withdraw, Remove Connected User Management</li>
+<li>Search Facility for Connected Users</li>
+<li>Visit profile of own and other users</li>
+<li>See Post of particular user</li>
+<li>Pagination Concept used in many screens</li>
+<li>Getting Realtime Notification</li>
+<li>Delete Notification</li>
+<li>Direct Navigation to a content or profile by clicking Notification</li>
+<li>Private Chat with connected users enjoy with Text and Image Messages</li>
+<li>Realtime Chat Notification with Realtime Messaging</li>
+<li>Fully Mobile Responsive Design</li>
+<li>Perfect for to post in Social Media to share</li>
+<li>Infinite Time Login Persistance</li>
+<li>Dark and Light Mode Instant Switch</li>
+</ul>
 
-## Available Scripts
+### [<p align="center"> Click Here to Experience that Beautiful Social Media Website</p>](https://socialbook.samarpandasgupta.com/)
 
-In the project directory, you can run:
+### 👉 Technology Used:-
 
-### `npm start`
+<ul>
+    <li>React</li>
+    <li>Express</li>
+    <li>Node</li>
+    <li>Tailwind Css</li>
+    <li>Firebase</li>
+    <li>Socket.io</li>
+</ul>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### [<p align="center"> Click Here to See Server-Side Repo</p>](https://github.com/SamarpanCoder2002/Socialbook-Backend)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<br/>
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### <p align="center"> Show some 💖 by staring this repo </p>
