@@ -16,7 +16,10 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
       {/* Profile Image */}
       <div className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full">
         <img
-          src={user.profilePic || NoProfileImage}
+          src={
+            (user.profilePic !== "undefined" && user.profilePic) ||
+            NoProfileImage
+          }
           alt="profile"
           className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
         />
@@ -36,13 +39,13 @@ const ProfileCard = ({ user, setrequestSentConnectionsIds }) => {
             });
           }}
         >
-          {user.name}
+          {user.name.length > 20 ? user.name.slice(0, 20) + "..." : user.name}
         </h4>
 
         {/* User description */}
         <p className="text-sm mt-1">
-          {user.description.length > 50
-            ? user.description.slice(0, 50) + "..."
+          {user.description.length > 25
+            ? user.description.slice(0, 25) + "..."
             : user.description}
         </p>
       </div>

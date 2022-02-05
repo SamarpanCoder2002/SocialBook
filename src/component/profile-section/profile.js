@@ -78,7 +78,7 @@ const UserInformationContainer = ({ darkMode, userInformation }) => {
       {/* Profile Image */}
       <div className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 bg-lightElevationColor dark:bg-darkElevationColor rounded-full mx-auto">
         <img
-          src={profilePic || NoProfilePic}
+          src={(profilePic !== "undefined" && profilePic) || NoProfilePic}
           alt="profile"
           className="rounded-full h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-cover"
         />

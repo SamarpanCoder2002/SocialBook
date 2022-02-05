@@ -161,6 +161,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
           name="userName"
           value={userName}
           onChange={handleChange}
+          maxLength="40"
         />
       </div>
       <div className="mt-8">
@@ -177,6 +178,7 @@ const UserInformationForm = ({ isLoading, setisLoading }) => {
           name="description"
           value={description}
           onChange={handleChange}
+          maxLength="300"
         />
       </div>
 

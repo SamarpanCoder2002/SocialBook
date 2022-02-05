@@ -100,12 +100,15 @@ const ConnectionTile = ({ user }) => {
       <div className="w-10 h-10 md:w-16 md:h-16 bg-lightCardColor dark:bg-darkCardColor rounded-full">
         <img
           className="rounded-full w-10 h-10 md:w-16 md:h-16 object-cover"
-          src={user.profilePic || NoProfileImage}
+          src={
+            (user.profilePic !== "undefined" && user.profilePic) ||
+            NoProfileImage
+          }
           alt="profile"
         />
       </div>
       <div className="ml-4">
-        <p className="text-sm md:text-lg md:font-semibold">{user.name}</p>
+        <p className="text-sm md:text-lg md:font-semibold">{user.name.length > 20 ? user.name.slice(0, 20) + "..." : user.name}</p>
         <p className="hidden sm:block sm:text-sm opacity-60">
           {" "}
           {user.description.length > 45
