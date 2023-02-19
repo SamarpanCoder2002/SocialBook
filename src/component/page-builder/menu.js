@@ -176,7 +176,7 @@ const MenuCollection = ({ isMenuOpen }) => {
           </Link>
         </li>
 
-        <li className={`py-3`}>
+        {/* <li className={`py-3`}>
           <Link className={menuStatus("/messaging")} to="/messaging">
             <div className="flex text-center w-full justify-center">
               <div className="">
@@ -192,7 +192,7 @@ const MenuCollection = ({ isMenuOpen }) => {
               Chat
             </div>
           </Link>
-        </li>
+        </li> */}
 
         <li
           className={`py-3 text-red-600 dark:text-red-500 font-semibold text-center md:ml-3 cursor-pointer`}

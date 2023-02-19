@@ -44,10 +44,10 @@ const RoutesEntryPoint = () => {
           path="/:connectionId/profile"
           element={AuthenticatedDecider(ProfileSection)}
         />
-        <Route
+        {/* <Route
           path="/messaging"
           element={AuthenticatedDecider(MessageComponent)}
-        />
+        /> */}
 
         <Route
           path="/take-user-information"
